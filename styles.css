@@ -27,9 +27,10 @@ body{
   margin:0;
   font-family:"Space Grotesk",ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif;
   color:var(--text);
-  background:radial-gradient(1100px 700px at 15% 18%, rgba(246,193,119,.10), transparent 60%),
-             radial-gradient(1100px 760px at 85% 22%, rgba(156,207,216,.10), transparent 62%),
-             radial-gradient(1200px 800px at 70% 85%, rgba(203,166,247,.08), transparent 58%),
+  /* Lower background wash so the animated blobs read more clearly. */
+  background:radial-gradient(1100px 700px at 15% 18%, rgba(246,193,119,.07), transparent 60%),
+             radial-gradient(1100px 760px at 85% 22%, rgba(156,207,216,.07), transparent 62%),
+             radial-gradient(1200px 800px at 70% 85%, rgba(203,166,247,.05), transparent 58%),
              linear-gradient(180deg, var(--bg1), var(--bg0));
   overflow-x:hidden;
 }
@@ -603,4 +604,3 @@ canvas#skills{
   .pill,.tile,.nav__links a,.contactCard{transition:none}
   .chat__spark{animation:none}
 }
-

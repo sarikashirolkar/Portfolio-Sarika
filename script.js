@@ -481,13 +481,15 @@ function initBackground() {
   window.addEventListener("resize", resize);
 
   const colors = [
-    { r: 246, g: 193, b: 119, a: 0.16 },
-    { r: 156, g: 207, b: 216, a: 0.14 },
-    { r: 203, g: 166, b: 247, a: 0.10 },
-    { r: 166, g: 227, b: 161, a: 0.10 },
+    // Brighter alphas so blobs read clearly against the background.
+    { r: 246, g: 193, b: 119, a: 0.28 },
+    { r: 156, g: 207, b: 216, a: 0.24 },
+    { r: 203, g: 166, b: 247, a: 0.18 },
+    { r: 166, g: 227, b: 161, a: 0.18 },
   ];
 
-  const N = Math.floor((w * h) / 52000);
+  // Fewer, larger blobs look more intentional than many tiny ones.
+  const N = Math.floor((w * h) / 72000);
   const objs = new Array(clamp(N, 16, 38)).fill(0).map((_, i) => {
     const c = colors[i % colors.length];
     return {
@@ -495,7 +497,8 @@ function initBackground() {
       y: Math.random() * h,
       vx: (Math.random() - 0.5) * 0.35,
       vy: (Math.random() - 0.5) * 0.35,
-      r: 34 + Math.random() * 62,
+      // Bigger radius = more visible.
+      r: 70 + Math.random() * 110,
       c,
       spin: (Math.random() - 0.5) * 0.015,
       phase: Math.random() * Math.PI * 2,
@@ -505,12 +508,19 @@ function initBackground() {
   function drawBlob(o) {
     const grad = ctx.createRadialGradient(o.x, o.y, 0, o.x, o.y, o.r);
     const { r, g, b, a } = o.c;
+    // Add a mid-stop so the edge feels sharper (less "washed out").
     grad.addColorStop(0, `rgba(${r},${g},${b},${a})`);
+    grad.addColorStop(0.58, `rgba(${r},${g},${b},${a * 0.55})`);
     grad.addColorStop(1, `rgba(${r},${g},${b},0)`);
     ctx.fillStyle = grad;
     ctx.beginPath();
     ctx.arc(o.x, o.y, o.r, 0, Math.PI * 2);
     ctx.fill();
+
+    // Subtle crisp outline so shapes don't disappear on bright gradients.
+    ctx.strokeStyle = `rgba(255,255,255,0.08)`;
+    ctx.lineWidth = 1;
+    ctx.stroke();
   }
 
   function step() {
@@ -525,9 +535,11 @@ function initBackground() {
 
     const px = pointer.x;
     const py = pointer.y;
-    const repelR = 140;
+    const repelR = 190;
     const repelR2 = repelR * repelR;
 
+    // Make overlaps pop a bit (more visible) while drawing blobs.
+    ctx.globalCompositeOperation = "lighter";
     for (const o of objs) {
       // cursor dodge / repulsion
       if (pointer.active) {
@@ -562,10 +574,11 @@ function initBackground() {
 
       drawBlob(o);
     }
+    ctx.globalCompositeOperation = "source-over";
 
     // faint connecting lines for a "network" feel
     ctx.lineWidth = 1;
-    ctx.strokeStyle = "rgba(255,255,255,0.06)";
+    ctx.strokeStyle = "rgba(255,255,255,0.10)";
     for (let i = 0; i < objs.length; i++) {
       for (let j = i + 1; j < objs.length; j++) {
         const a = objs[i];
@@ -575,7 +588,7 @@ function initBackground() {
         const d2 = dx * dx + dy * dy;
         if (d2 > 120 * 120) continue;
         const alpha = 1 - Math.sqrt(d2) / 120;
-        ctx.globalAlpha = alpha * 0.55;
+        ctx.globalAlpha = alpha * 0.85;
         ctx.beginPath();
         ctx.moveTo(a.x, a.y);
         ctx.lineTo(b.x, b.y);
@@ -805,4 +818,3 @@ document.addEventListener("DOMContentLoaded", () => {
   initChat();
   initSkillsBubble();
 });
-
