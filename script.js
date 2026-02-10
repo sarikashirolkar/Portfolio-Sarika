@@ -637,6 +637,14 @@ function initBackground() {
     maxSpeed: 520,
   };
 
+  // Make the background less prominent.
+  const LOOK = {
+    opacity: 0.62,
+    auraAlpha: 0.14,
+    rimAlpha: 0.34,
+    vignetteAlpha: 0.14,
+  };
+
   let w = 0;
   let h = 0;
   let dpr = 1;
@@ -693,7 +701,7 @@ function initBackground() {
     // Outer aura / rim glow.
     const aura = c.createRadialGradient(cx, cy, qr * 0.85, cx, cy, qr + pad);
     aura.addColorStop(0, `rgba(${col.rim[0]},${col.rim[1]},${col.rim[2]},0.00)`);
-    aura.addColorStop(1, `rgba(${col.rim[0]},${col.rim[1]},${col.rim[2]},0.22)`);
+    aura.addColorStop(1, `rgba(${col.rim[0]},${col.rim[1]},${col.rim[2]},${LOOK.auraAlpha})`);
     c.fillStyle = aura;
     c.beginPath();
     c.arc(cx, cy, qr + pad, 0, Math.PI * 2);
@@ -739,7 +747,7 @@ function initBackground() {
 
     // Rim light stroke.
     c.globalCompositeOperation = "source-over";
-    c.strokeStyle = `rgba(${col.rim[0]},${col.rim[1]},${col.rim[2]},0.55)`;
+    c.strokeStyle = `rgba(${col.rim[0]},${col.rim[1]},${col.rim[2]},${LOOK.rimAlpha})`;
     c.lineWidth = Math.max(2, Math.round(qr * 0.06));
     c.beginPath();
     c.arc(cx, cy, qr - c.lineWidth * 0.4, 0, Math.PI * 2);
@@ -764,18 +772,19 @@ function initBackground() {
       Math.min(w, h) * 0.9
     );
     g.addColorStop(0, "rgba(255,255,255,0)");
-    g.addColorStop(1, "rgba(255,255,255,0.20)");
+    g.addColorStop(1, `rgba(255,255,255,${LOOK.vignetteAlpha})`);
     vignette = g;
   }
 
   function initCircles() {
     // Cluster bias (like the reference): mostly around right/center.
-    const count = clamp(Math.floor((w * h) / 82000), 12, 22);
+    const count = clamp(Math.floor((w * h) / 78000), 14, 26);
     const fx = w * 0.68;
     const fy = h * 0.48;
 
     circles = new Array(count).fill(0).map((_, i) => {
-      const r = 60 + Math.pow(Math.random(), 1.75) * 150;
+      // Slightly smaller spheres so they don't overpower the UI.
+      const r = 42 + Math.pow(Math.random(), 1.8) * 112;
       const a = Math.random() * Math.PI * 2;
       const m = (0.10 + Math.random() * 0.22) * Math.min(w, h);
       const x0 = clamp(fx + Math.cos(a) * m + (Math.random() - 0.5) * 60, r + 8, w - r - 8);
@@ -793,6 +802,10 @@ function initBackground() {
         hoverPhase: Math.random() * Math.PI * 2,
         hoverSpd: 0.55 + Math.random() * 0.55,
         hoverAmp: 5 + Math.random() * 10,
+        // Ambient drift: very slow, small amplitude, always on.
+        driftPhase: Math.random() * Math.PI * 2,
+        driftSpd: 0.07 + Math.random() * 0.10,
+        driftAmp: 6 + Math.random() * 10,
       };
     });
   }
@@ -844,7 +857,7 @@ function initBackground() {
     for (const c of circles) {
       const sp = getSprite(c.ci, c.r);
       if (!sp) continue;
-      ctx.globalAlpha = 0.92;
+      ctx.globalAlpha = LOOK.opacity;
       const s = (c.r * 2) / sp.r;
       const drawR = sp.r * s;
       ctx.drawImage(sp.canvas, c.x - drawR, c.y - drawR, drawR * 2, drawR * 2);
@@ -882,10 +895,12 @@ function initBackground() {
     const px = pointer.x;
     const py = pointer.y;
 
-    // Update physics.
-    let anyAwake = false;
-
     for (const c of circles) {
+      // Ambient drift target (always on).
+      c.driftPhase += dt * c.driftSpd;
+      const ax = Math.cos(c.driftPhase * 0.90) * c.driftAmp;
+      const ay = Math.sin(c.driftPhase * 1.03) * c.driftAmp * 0.72;
+
       // Hover activation: spheres are perfectly still until you're close.
       let hoverTarget = 0;
       if (pointer.active) {
@@ -904,8 +919,8 @@ function initBackground() {
       const oy = Math.sin(c.hoverPhase * 0.9) * c.hoverAmp * 0.72 * c.hover;
 
       // Spring towards rest (+ hover offset).
-      const tx = c.x0 + ox;
-      const ty = c.y0 + oy;
+      const tx = c.x0 + ax + ox;
+      const ty = c.y0 + ay + oy;
       c.vx += (tx - c.x) * (MOTION.springK * 16) * dt;
       c.vy += (ty - c.y) * (MOTION.springK * 16) * dt;
 
@@ -944,24 +959,10 @@ function initBackground() {
       // Keep within bounds.
       c.x = clamp(c.x, c.r + 6, w - c.r - 6);
       c.y = clamp(c.y, c.r + 6, h - c.r - 6);
-
-      const spdNow = Math.hypot(c.vx, c.vy);
-      const off = Math.hypot(c.x - c.x0, c.y - c.y0);
-      if (spdNow > 3 || off > 0.35 || c.hover > 0.02) anyAwake = true;
     }
 
     // Draw.
     drawAll();
-
-    // Sleep if idle: no hover, no motion, and no recent pointer movement near the cluster.
-    const t = Number.isFinite(pointer.t) ? pointer.t : 0;
-    const recentlyMoved = now - t < 380;
-    if (!anyAwake && !recentlyMoved) {
-      running = false;
-      rafId = 0;
-      drawStatic();
-      return;
-    }
 
     rafId = requestAnimationFrame(step);
   }
@@ -973,8 +974,8 @@ function initBackground() {
     return;
   }
 
-  // Start in a truly still state; we only animate once the user interacts.
-  drawStatic();
+  // Start immediately: slow ambient drift is always on.
+  start();
 }
 
 function initSkillsBubble() {
