@@ -18,24 +18,28 @@ const RESUME_CHUNKS = [
     title: `Junior Machine Learning Engineer — ${COMPANY.name} (Oct 2025 – Present)`,
     text:
       "Currently developing an AI voice scheduling agent for a France-based dental clinic using Retell AI, n8n, and Google Calendar. Enables automated appointment booking, rescheduling, cancellation, and availability checks via phone calls with real-time calendar updates.",
+    url: COMPANY.url,
   },
   {
     id: "exp_jmle_models",
     title: `Junior Machine Learning Engineer — ${COMPANY.name}`,
     text:
       "Developed ML models (scikit-learn) to predict key business drivers from historical data, supporting forecasting and decision-making for U.S. stakeholders.",
+    url: COMPANY.url,
   },
   {
     id: "exp_jmle_pipelines",
     title: `Junior Machine Learning Engineer — ${COMPANY.name}`,
     text:
       "Built automated data pipelines (web scraping + SQL) to collect, clean, and preprocess structured datasets for ML and analytics workflows. Owned end-to-end ML execution: framing, feature engineering, training, evaluation (metrics, error analysis), and delivery into dashboards.",
+    url: COMPANY.url,
   },
   {
     id: "exp_cloud_azure",
     title: `Software Engineer (Cloud Applications) — ${COMPANY.name} (Mar 2025 – Sep 2025)`,
     text:
       "Designed, deployed, and maintained Python applications on Microsoft Azure (Linux VMs, App Services) focusing on scalability, reliability, and secure configuration. Standardized deployment practices to reduce operational issues.",
+    url: COMPANY.url,
   },
   {
     id: "exp_bel",
@@ -386,7 +390,23 @@ function initNavActive() {
 
 function initReveal() {
   const reduce = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-  const els = $all("[data-reveal]");
+  const rootEl = $(".snap");
+  const rootStyle = rootEl ? getComputedStyle(rootEl) : null;
+  const root =
+    rootEl && rootStyle && rootStyle.overflowY !== "visible" && rootStyle.overflowY !== "unset" ? rootEl : null;
+  const marked = $all("[data-reveal]");
+  const els = marked.length
+    ? marked
+    : [
+        ...$all(".hero__copy"),
+        ...$all(".chat"),
+        ...$all(".panel"),
+        ...$all(".sectionHead"),
+        ...$all(".card"),
+        ...$all(".tile"),
+        ...$all(".skillStage"),
+        ...$all(".contactCard"),
+      ];
   if (!els.length) return;
 
   els.forEach((el) => el.classList.add("reveal"));
@@ -404,7 +424,7 @@ function initReveal() {
         io.unobserve(e.target);
       }
     },
-    { root: null, threshold: 0.12, rootMargin: "0px 0px -12% 0px" }
+    { root, threshold: 0.12, rootMargin: "0px 0px -12% 0px" }
   );
   els.forEach((el) => io.observe(el));
 }
@@ -573,14 +593,16 @@ function initBackground() {
 
   function initCircles() {
     const area = w * h;
-    const count = clamp(Math.floor(area / 65000), 14, 30);
+    // Density scales with screen area. Keep a hard cap to avoid jank on 4K screens.
+    const count = clamp(Math.floor(area / 52000), 18, 40);
     circles = new Array(count).fill(0).map((_, i) => {
-      const r = 60 + Math.random() * 120;
+      // Many small, a few large.
+      const r = 32 + Math.pow(Math.random(), 1.85) * 170;
       return {
         x: Math.random() * w,
         y: Math.random() * h,
-        vx: (Math.random() - 0.5) * 0.22,
-        vy: (Math.random() - 0.5) * 0.22,
+        vx: (Math.random() - 0.5) * 0.30,
+        vy: (Math.random() - 0.5) * 0.30,
         r,
         ci: i % colors.length,
         phase: Math.random() * Math.PI * 2,
@@ -648,8 +670,8 @@ function initBackground() {
       c.vx *= 0.985;
       c.vy *= 0.985;
 
-      c.x += c.vx * 60;
-      c.y += c.vy * 60;
+      c.x += c.vx * 70;
+      c.y += c.vy * 70;
 
       // wrap around edges
       const m = c.r + 40;

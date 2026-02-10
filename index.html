@@ -9,213 +9,66 @@
 
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,650;9..144,750&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet" />
 </head>
 <body>
-  <a class="skip" href="#howto">Skip to content</a>
+  <a class="skip" href="#page-2">Skip to content</a>
 
+  <!-- Ambient background -->
+  <canvas id="bg" aria-hidden="true"></canvas>
+
+  <!-- Floating nav -->
   <nav class="nav" aria-label="Site">
-    <a class="nav__brand" href="#top">
+    <a class="nav__brand" href="#page-1">
+      <span class="nav__dot"></span>
       <span class="nav__brandText">Sarika</span>
     </a>
-    <div class="nav__links" aria-label="Sections">
-      <a href="#benefits">Benefits</a>
-      <a href="#specs">Specifications</a>
-      <a href="#howto">How-to</a>
-      <a href="#contact">Contact</a>
+    <div class="nav__links">
+      <a href="#page-1">Chat</a>
+      <a href="#page-2">Profile</a>
+      <a href="#page-3">Companies</a>
+      <a href="#page-4">Projects</a>
+      <a href="#page-5">Skills</a>
+      <a href="#page-6">Education</a>
+      <a href="#page-7">Contact</a>
     </div>
-    <a class="nav__cta" href="resume.pdf" target="_blank" rel="noreferrer">Resume</a>
+    <a class="nav__cta" href="resume.pdf" target="_blank" rel="noreferrer">Resume (PDF)</a>
   </nav>
 
   <main class="snap" id="top" aria-label="Content">
-    <!-- HERO -->
-    <header class="hero wrap" aria-label="Intro">
-      <div class="hero__grid">
-        <div class="hero__copy" data-reveal>
-          <div class="kicker">Portfolio</div>
-          <h1 class="h1">Browse everything.</h1>
-          <p class="sub">
-            Junior Machine Learning Engineer focused on ML systems, AI agents, and Azure deployments.
-            Ask a question and get answers grounded in my resume.
+    <!-- PAGE 1: Chat -->
+    <section class="page" id="page-1" aria-label="Resume Chat">
+      <div class="wrap hero">
+        <header class="hero__copy">
+          <p class="eyebrow">Resume-first portfolio</p>
+          <h1 class="title">
+            Ask about my work.
+            <span class="title__accent">Get answers grounded in my resume.</span>
+          </h1>
+          <p class="lede">
+            I build ML systems, AI agents, and Azure deployments.
+            This chat is limited to my resume and projects I worked on.
           </p>
-          <div class="ctaRow">
-            <a class="btn" href="#howto">Try the Resume Chat</a>
-            <a class="btn btn--ghost" href="mailto:sarikashirolkar@gmail.com">Email Me</a>
+          <div class="hero__pills">
+            <button class="pill" data-q="What are you working on right now?">What I'm doing now</button>
+            <button class="pill" data-q="Summarize your ML experience in 5 bullets.">ML experience</button>
+            <button class="pill" data-q="Which projects have GitHub links?">Projects with repos</button>
+            <button class="pill" data-q="What did you do on Azure?">Azure work</button>
           </div>
-          <div class="metaRow">
-            <div class="metaRow__item"><span class="metaRow__k">Location</span><span class="metaRow__v">Bengaluru, KA</span></div>
-            <div class="metaRow__item"><span class="metaRow__k">Now</span><span class="metaRow__v">Junior ML Engineer (Oct 2025 – Present)</span></div>
-          </div>
-        </div>
-
-        <div class="hero__media" data-reveal aria-label="Featured">
-          <div class="mediaBg" aria-hidden="true"></div>
-          <div class="device">
-            <div class="device__top">
-              <div class="device__dot"></div>
-              <div class="device__dot"></div>
-              <div class="device__dot"></div>
-            </div>
-            <div class="device__screen" aria-label="Featured project preview">
-              <img src="assets/projects/research-agent.svg" alt="Preview of an AI research agent project" />
-            </div>
-          </div>
-          <div class="trusted" aria-label="Trusted by">
-            <div class="trusted__k">Worked with</div>
-            <div class="trusted__row">
-              <span class="logoText">AI Workflow Automation</span>
-              <span class="logoText">Bharat Electronics Limited</span>
-              <span class="logoText">IEEE IAMPro'25</span>
-            </div>
-          </div>
-        </div>
-      </div>
-    </header>
-
-    <!-- BENEFITS -->
-    <section class="section wrap" id="benefits" aria-label="Benefits">
-      <div class="section__head" data-reveal>
-        <div class="kicker">Benefits</div>
-        <h2 class="h2">We’ve cracked the code.</h2>
-        <p class="sub">A concise view of what you get when you work with me: clarity, speed, and deployable outcomes.</p>
-      </div>
-
-      <div class="benefits" data-reveal>
-        <article class="bcard">
-          <div class="bcard__k">Amplify Insights</div>
-          <div class="bcard__t">ML models that drive decisions</div>
-          <p class="bcard__p">scikit-learn models, clean evaluation, and stakeholder-ready outputs.</p>
-        </article>
-        <article class="bcard">
-          <div class="bcard__k">Global Presence</div>
-          <div class="bcard__t">Azure deployments that hold up</div>
-          <p class="bcard__p">Linux VMs, App Services, secure config, and stable operations.</p>
-        </article>
-        <article class="bcard">
-          <div class="bcard__k">Language Barriers</div>
-          <div class="bcard__t">AI agents that actually automate</div>
-          <p class="bcard__p">Tool-driven workflows and structured outputs (Retell AI, n8n, webhooks).</p>
-        </article>
-        <article class="bcard">
-          <div class="bcard__k">Visualize Growth</div>
-          <div class="bcard__t">Pipelines, dashboards, and reporting</div>
-          <p class="bcard__p">From scraping + SQL to delivery into BI workflows.</p>
-        </article>
-      </div>
-    </section>
-
-    <!-- BIG MEDIA -->
-    <section class="section wrap" aria-label="Life outside work">
-      <div class="bigMedia" data-reveal>
-        <div class="bigMedia__head">
-          <div class="kicker">Life</div>
-          <h2 class="h2">Outside work, I show up.</h2>
-          <p class="sub">Events, hackathons, teams, internships, and trekking.</p>
-        </div>
-        <div class="carousel bigMedia__media" id="carousel" aria-label="Photo carousel">
-          <div class="carousel__stage">
-            <img class="carousel__img" src="assets/events/event-1.svg" alt="Event photo 1" />
-            <img class="carousel__img" src="assets/events/event-2.svg" alt="Event photo 2" />
-            <img class="carousel__img" src="assets/events/event-3.svg" alt="Event photo 3" />
-            <img class="carousel__img" src="assets/events/event-4.svg" alt="Event photo 4" />
-            <img class="carousel__img" src="assets/events/event-5.svg" alt="Trekking / hobby photo" />
-          </div>
-          <div class="carousel__dots" aria-hidden="true"></div>
-        </div>
-      </div>
-    </section>
-
-    <!-- SPECIFICATIONS -->
-    <section class="section wrap" id="specs" aria-label="Specifications">
-      <div class="section__head" data-reveal>
-        <div class="kicker">Specifications</div>
-        <h2 class="h2">Everything I use to ship.</h2>
-        <p class="sub">Tools and systems I’m comfortable taking to production.</p>
-      </div>
-
-      <div class="specGrid" data-reveal>
-        <div class="specCopy">
-          <div class="specList">
-            <div class="specItem"><span class="specItem__k">AI/ML</span><span class="specItem__v">classification, regression, clustering, feature engineering, metrics, error analysis</span></div>
-            <div class="specItem"><span class="specItem__k">GenAI</span><span class="specItem__v">LangChain, prompt workflows, tool integration</span></div>
-            <div class="specItem"><span class="specItem__k">Deep Learning/CV</span><span class="specItem__v">CNNs, YOLOv8, Transformers, OpenCV</span></div>
-            <div class="specItem"><span class="specItem__k">Cloud</span><span class="specItem__v">Azure (VMs, App Services, Blob Storage), Linux</span></div>
-            <div class="specItem"><span class="specItem__k">Data</span><span class="specItem__v">SQL, web scraping, preprocessing, Power BI, Tableau</span></div>
-          </div>
-
-          <div class="table" aria-label="Capabilities comparison">
-            <div class="table__head">
-              <div></div>
-              <div>Models</div>
-              <div>Agents</div>
-              <div>Cloud</div>
-            </div>
-            <div class="table__row">
-              <div class="table__k">Production mindset</div>
-              <div class="table__v">✓</div>
-              <div class="table__v">✓</div>
-              <div class="table__v">✓</div>
-            </div>
-            <div class="table__row">
-              <div class="table__k">Python + SQL</div>
-              <div class="table__v">✓</div>
-              <div class="table__v">✓</div>
-              <div class="table__v">✓</div>
-            </div>
-            <div class="table__row">
-              <div class="table__k">Evaluation + error analysis</div>
-              <div class="table__v">✓</div>
-              <div class="table__v">✓</div>
-              <div class="table__v">·</div>
-            </div>
-            <div class="table__row">
-              <div class="table__k">Azure deployments</div>
-              <div class="table__v">·</div>
-              <div class="table__v">·</div>
-              <div class="table__v">✓</div>
-            </div>
-          </div>
-        </div>
-
-        <div class="specViz">
-          <div class="vizCard">
-            <div class="vizCard__k">Interactive</div>
-            <div class="vizCard__t">Skill Bubble</div>
-            <p class="vizCard__p">Tap a skill to open official documentation.</p>
-            <canvas id="skills" aria-label="Skills bubble visualization"></canvas>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- HOW TO -->
-    <section class="section wrap" id="howto" aria-label="How-to">
-      <div class="section__head" data-reveal>
-        <div class="kicker">How-to</div>
-        <h2 class="h2">Ask my resume, get grounded answers.</h2>
-        <p class="sub">This chat answers using my resume excerpts by default. You can optionally connect a real AI endpoint.</p>
-      </div>
-
-      <div class="howGrid" data-reveal>
-        <div class="howCopy">
-          <div class="howSteps">
-            <div class="howStep"><span class="howStep__n">01</span><span class="howStep__t">Ask about roles, projects, Azure, skills, or education</span></div>
-            <div class="howStep"><span class="howStep__n">02</span><span class="howStep__t">Get matched resume excerpts with links</span></div>
-            <div class="howStep"><span class="howStep__n">03</span><span class="howStep__t">Enable endpoint/BYOK if you want AI generation</span></div>
-            <div class="howStep"><span class="howStep__n">04</span><span class="howStep__t">Download the PDF resume anytime</span></div>
-          </div>
-          <div class="ctaRow">
-            <a class="btn" href="resume.pdf" target="_blank" rel="noreferrer">Open Resume PDF</a>
-            <button class="btn btn--ghost" id="chat-settings" type="button">Chat Settings</button>
-          </div>
-        </div>
+          <p class="fine">
+            Tip: You can enable AI-generated answers by setting a chat endpoint or bringing your own API key. Without it, the chat still returns relevant resume excerpts.
+          </p>
+        </header>
 
         <section class="chat" aria-label="Chat">
           <div class="chat__top">
             <div class="chat__badge">
-              <span>Resume Chat</span>
-              <span class="chat__pill" id="chat-mode">Resume-only (local)</span>
+              <span class="chat__spark"></span>
+              <span>Resume RAG Chat</span>
             </div>
+            <button class="chat__gear" id="chat-settings" type="button" aria-label="Chat settings">
+              Settings
+            </button>
           </div>
 
           <div class="chat__log" id="chat-log" role="log" aria-live="polite" aria-relevant="additions"></div>
@@ -232,101 +85,250 @@
           </form>
 
           <div class="chat__foot">
-            <button class="pill" type="button" data-q="What are you working on right now?">What I'm doing now</button>
-            <button class="pill" type="button" data-q="Summarize your ML experience in 5 bullets.">ML experience</button>
-            <button class="pill" type="button" data-q="Which projects have GitHub links?">Projects with repos</button>
-            <button class="pill" type="button" data-q="What did you do on Azure?">Azure work</button>
+            <span class="chat__hint" id="chat-mode">Mode: Resume-only (local)</span>
+            <span class="chat__hint">No phone number is shown on this website.</span>
           </div>
         </section>
       </div>
     </section>
 
-    <!-- PROJECTS -->
-    <section class="section wrap" id="projects" aria-label="Projects">
-      <div class="section__head" data-reveal>
-        <div class="kicker">Projects</div>
-        <h2 class="h2">Selected builds.</h2>
-        <p class="sub">A few projects with GitHub links (or verification) you can open instantly.</p>
-      </div>
+    <!-- PAGE 2: Profile + Carousel -->
+    <section class="page" id="page-2" aria-label="Profile">
+      <div class="wrap two">
+        <section class="panel">
+          <header class="panel__head">
+            <h2 class="h2">Profile</h2>
+            <p class="muted">Bengaluru, KA</p>
+          </header>
 
-      <div class="proj" data-reveal>
-        <a class="tile" href="https://github.com/sarikashirolkar/Secure-Identification-of-Autonomous-Vehicles" target="_blank" rel="noreferrer">
-          <img src="assets/projects/yolo.svg" alt="Secure Object Identification project screenshot" />
-          <div class="tile__meta">
-            <div class="tile__title">Secure Object Identification (YOLOv8)</div>
-            <div class="tile__sub">IEEE Publication · GitHub</div>
-          </div>
-        </a>
+          <div class="stack">
+            <div class="summary">
+              <h3 class="h3">Summary</h3>
+              <p>
+                Junior Machine Learning Engineer with experience building ML models, automated data pipelines, AI agents, and cloud deployments on Azure.
+                I focus on turning ambiguous requirements into measurable objectives and deployable solutions.
+              </p>
+            </div>
 
-        <a class="tile" href="https://drive.google.com/file/d/1e5rg6Ll0rzpui_2mAxQJ2MkeFIDcRYk8/view?usp=sharing" target="_blank" rel="noreferrer">
-          <img src="assets/projects/voice-agent.svg" alt="AI voice scheduling agent project screenshot" />
-          <div class="tile__meta">
-            <div class="tile__title">AI Voice Scheduling Agent</div>
-            <div class="tile__sub">Verification link</div>
+            <div class="now">
+              <h3 class="h3">Current Position</h3>
+              <p>
+                Junior Machine Learning Engineer at
+                <a class="link" href="https://aiworkflowautomate.com" target="_blank" rel="noreferrer">AI Workflow Automation</a>
+                (Oct 2025 – Present).
+              </p>
+              <ul class="bullets">
+                <li>Developing an AI voice scheduling agent (Retell AI, n8n, Google Calendar).</li>
+                <li>Building scikit-learn models to predict key business drivers for stakeholders.</li>
+                <li>Automating data collection and preprocessing (web scraping + SQL).</li>
+              </ul>
+            </div>
           </div>
-        </a>
+        </section>
 
-        <a class="tile" href="https://github.com/sarikashirolkar/Amazon-Business-Risk-Prediction-Model" target="_blank" rel="noreferrer">
-          <img src="assets/projects/risk.svg" alt="Business risk prediction model screenshot" />
-          <div class="tile__meta">
-            <div class="tile__title">Business Risk Prediction Model</div>
-            <div class="tile__sub">GitHub</div>
-          </div>
-        </a>
+        <section class="panel">
+          <header class="panel__head">
+            <h2 class="h2">Life Outside Work</h2>
+            <p class="muted">Events, hackathons, teams, internships, and trekking.</p>
+          </header>
 
-        <a class="tile" href="https://github.com/sarikashirolkar/AI-Research-Agent" target="_blank" rel="noreferrer">
-          <img src="assets/projects/research-agent.svg" alt="AI research agent screenshot" />
-          <div class="tile__meta">
-            <div class="tile__title">AI Research Agent (LangChain + Streamlit)</div>
-            <div class="tile__sub">GitHub</div>
+          <div class="carousel" id="carousel" aria-label="Photo carousel">
+            <div class="carousel__stage">
+              <!-- Replace these SVGs with your real photos (same filenames, .jpg/.webp works too) -->
+              <img class="carousel__img" src="assets/events/event-1.svg" alt="Event photo 1" />
+              <img class="carousel__img" src="assets/events/event-2.svg" alt="Event photo 2" />
+              <img class="carousel__img" src="assets/events/event-3.svg" alt="Event photo 3" />
+              <img class="carousel__img" src="assets/events/event-4.svg" alt="Event photo 4" />
+              <img class="carousel__img" src="assets/events/event-5.svg" alt="Trekking / hobby photo" />
+            </div>
+            <div class="carousel__dots" aria-hidden="true"></div>
           </div>
-        </a>
-
-        <a class="tile" href="https://github.com/sarikashirolkar/Resume-Builder" target="_blank" rel="noreferrer">
-          <img src="assets/projects/resume-builder.svg" alt="Resume builder deployment screenshot" />
-          <div class="tile__meta">
-            <div class="tile__title">Resume Builder (Azure App Service)</div>
-            <div class="tile__sub">GitHub</div>
-          </div>
-        </a>
-
-        <a class="tile" href="https://github.com/sarikashirolkar/Crater-Detection" target="_blank" rel="noreferrer">
-          <img src="assets/projects/crater.svg" alt="Crater detection model screenshot" />
-          <div class="tile__meta">
-            <div class="tile__title">Crater Detection Model</div>
-            <div class="tile__sub">GitHub</div>
-          </div>
-        </a>
+        </section>
       </div>
     </section>
 
-    <!-- CONTACT -->
-    <section class="section wrap" id="contact" aria-label="Contact">
-      <div class="section__head" data-reveal>
-        <div class="kicker">Contact</div>
-        <h2 class="h2">Let’s talk.</h2>
-        <p class="sub">Email, LinkedIn, and resume download.</p>
-      </div>
+    <!-- PAGE 3: Companies -->
+    <section class="page" id="page-3" aria-label="Companies">
+      <div class="wrap">
+        <header class="sectionHead">
+          <h2 class="h2">Companies I've Worked With</h2>
+          <p class="muted">A snapshot of the teams and environments where I shipped work.</p>
+        </header>
 
-      <div class="contactGrid" data-reveal>
-        <a class="contactCard" href="mailto:sarikashirolkar@gmail.com">
-          <div class="contactCard__k">Email</div>
-          <div class="contactCard__v">sarikashirolkar@gmail.com</div>
-        </a>
-        <a class="contactCard" href="https://www.linkedin.com/in/sarikashirolkar/" target="_blank" rel="noreferrer">
-          <div class="contactCard__k">LinkedIn</div>
-          <div class="contactCard__v">linkedin.com/in/sarikashirolkar</div>
-        </a>
-        <a class="contactCard" href="resume.pdf" target="_blank" rel="noreferrer">
-          <div class="contactCard__k">Resume</div>
-          <div class="contactCard__v">Open PDF</div>
-        </a>
-      </div>
+        <div class="cards">
+          <article class="card">
+            <h3 class="h3">
+              <a class="link" href="https://aiworkflowautomate.com" target="_blank" rel="noreferrer">AI Workflow Automation</a>
+            </h3>
+            <p class="muted">Junior Machine Learning Engineer (Oct 2025 – Present), Software Engineer (Cloud Applications) (Mar 2025 – Sep 2025)</p>
+            <ul class="bullets">
+              <li>AI voice scheduling agent (Retell AI, n8n, Google Calendar).</li>
+              <li>scikit-learn models to predict key business drivers.</li>
+              <li>Automated pipelines: web scraping + SQL + preprocessing.</li>
+              <li>Azure deployments (Linux VMs, App Services) with secure configuration.</li>
+            </ul>
+          </article>
 
-      <footer class="footer" data-reveal>
-        <span class="muted">&copy; <span id="year"></span> Sarika S Shirolkar</span>
-        <a class="muted link" href="#top">Back to top</a>
-      </footer>
+          <article class="card">
+            <h3 class="h3">Bharat Electronics Limited</h3>
+            <p class="muted">AI &amp; ML Intern (Jul 2025 – Sep 2025)</p>
+            <ul class="bullets">
+              <li>Built and evaluated deep learning computer vision systems.</li>
+              <li>Dataset preprocessing, training/validation, and error analysis for real-world robustness.</li>
+            </ul>
+          </article>
+
+          <article class="card">
+            <h3 class="h3">IEEE IAMPro'25</h3>
+            <p class="muted">Project Intern (Apr 2025 – Sep 2025)</p>
+            <ul class="bullets">
+              <li>Worked on project execution with IEEE team and timelines.</li>
+            </ul>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- PAGE 4: Projects -->
+    <section class="page" id="page-4" aria-label="Projects">
+      <div class="wrap">
+        <header class="sectionHead">
+          <h2 class="h2">Projects</h2>
+          <p class="muted">Tap a project tile to open its GitHub repo (or verification link).</p>
+        </header>
+
+        <div class="proj">
+          <a class="tile" href="https://github.com/sarikashirolkar/Secure-Identification-of-Autonomous-Vehicles" target="_blank" rel="noreferrer">
+            <img src="assets/projects/yolo.svg" alt="Secure Object Identification project screenshot" />
+            <div class="tile__meta">
+              <div class="tile__title">Secure Object Identification (YOLOv8)</div>
+              <div class="tile__sub">IEEE Publication · GitHub</div>
+            </div>
+          </a>
+
+          <a class="tile" href="https://drive.google.com/file/d/1e5rg6Ll0rzpui_2mAxQJ2MkeFIDcRYk8/view?usp=sharing" target="_blank" rel="noreferrer">
+            <img src="assets/projects/voice-agent.svg" alt="AI voice scheduling agent project screenshot" />
+            <div class="tile__meta">
+              <div class="tile__title">AI Voice Scheduling Agent</div>
+              <div class="tile__sub">Verification link</div>
+            </div>
+          </a>
+
+          <a class="tile" href="https://github.com/sarikashirolkar/Amazon-Business-Risk-Prediction-Model" target="_blank" rel="noreferrer">
+            <img src="assets/projects/risk.svg" alt="Business risk prediction model screenshot" />
+            <div class="tile__meta">
+              <div class="tile__title">Business Risk Prediction Model</div>
+              <div class="tile__sub">GitHub</div>
+            </div>
+          </a>
+
+          <a class="tile" href="https://github.com/sarikashirolkar/AI-Research-Agent" target="_blank" rel="noreferrer">
+            <img src="assets/projects/research-agent.svg" alt="AI research agent screenshot" />
+            <div class="tile__meta">
+              <div class="tile__title">AI Research Agent (LangChain + Streamlit)</div>
+              <div class="tile__sub">GitHub</div>
+            </div>
+          </a>
+
+          <a class="tile" href="https://github.com/sarikashirolkar/Resume-Builder" target="_blank" rel="noreferrer">
+            <img src="assets/projects/resume-builder.svg" alt="Resume builder deployment screenshot" />
+            <div class="tile__meta">
+              <div class="tile__title">Resume Builder (Azure App Service)</div>
+              <div class="tile__sub">GitHub</div>
+            </div>
+          </a>
+
+          <a class="tile" href="https://github.com/sarikashirolkar/Crater-Detection" target="_blank" rel="noreferrer">
+            <img src="assets/projects/crater.svg" alt="Crater detection model screenshot" />
+            <div class="tile__meta">
+              <div class="tile__title">Crater Detection Model</div>
+              <div class="tile__sub">GitHub</div>
+            </div>
+          </a>
+        </div>
+
+        <p class="note">
+          When you send your real screenshots, I’ll drop them into <code>assets/projects/</code> and the tiles will automatically look like a proper portfolio grid.
+        </p>
+      </div>
+    </section>
+
+    <!-- PAGE 5: Skills Bubble -->
+    <section class="page" id="page-5" aria-label="Skills">
+      <div class="wrap">
+        <header class="sectionHead">
+          <h2 class="h2">Skills</h2>
+          <p class="muted">A moving skill bubble. Tap a skill to open official documentation.</p>
+        </header>
+
+        <section class="skillStage">
+          <canvas id="skills" aria-label="Skills bubble visualization"></canvas>
+          <div class="skillLegend">
+            <div class="skillLegend__k">How it works</div>
+            <div class="skillLegend__v">Skills dodge your cursor. Click a node to open docs.</div>
+            <div class="skillLegend__k">Icons</div>
+            <div class="skillLegend__v">Loaded from Simple Icons CDN. If you want all icons local, tell me and I’ll vendor them.</div>
+          </div>
+        </section>
+      </div>
+    </section>
+
+    <!-- PAGE 6: Education -->
+    <section class="page" id="page-6" aria-label="Education">
+      <div class="wrap">
+        <header class="sectionHead">
+          <h2 class="h2">Education</h2>
+          <p class="muted">Academic milestones.</p>
+        </header>
+
+        <div class="cards">
+          <article class="card">
+            <h3 class="h3">B.E (CSE — AI &amp; ML) <span class="muted">2026</span></h3>
+            <p>Visvesvaraya Technological University - Sai Vidya Institute of Technology</p>
+            <p class="muted">CGPA 9.1</p>
+          </article>
+          <article class="card">
+            <h3 class="h3">Science (PCMC, CBSE) <span class="muted">2022</span></h3>
+            <p>Kendriya Vidyalaya CRPF</p>
+            <p class="muted">77.7%</p>
+          </article>
+          <article class="card">
+            <h3 class="h3">10th Grade <span class="muted">2020</span></h3>
+            <p>St. John's School Kempapura</p>
+            <p class="muted">96.1%</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- PAGE 7: Contact -->
+    <section class="page" id="page-7" aria-label="Contact">
+      <div class="wrap">
+        <header class="sectionHead">
+          <h2 class="h2">Contact</h2>
+          <p class="muted">Email, LinkedIn, and resume download.</p>
+        </header>
+
+        <div class="contactGrid">
+          <a class="contactCard" href="mailto:sarikashirolkar@gmail.com">
+            <div class="contactCard__k">Email</div>
+            <div class="contactCard__v">sarikashirolkar@gmail.com</div>
+          </a>
+          <a class="contactCard" href="https://www.linkedin.com/in/sarikashirolkar/" target="_blank" rel="noreferrer">
+            <div class="contactCard__k">LinkedIn</div>
+            <div class="contactCard__v">linkedin.com/in/sarikashirolkar</div>
+          </a>
+          <a class="contactCard" href="resume.pdf" target="_blank" rel="noreferrer">
+            <div class="contactCard__k">Resume</div>
+            <div class="contactCard__v">Open PDF</div>
+          </a>
+        </div>
+
+        <footer class="footer">
+          <span class="muted">&copy; <span id="year"></span> Sarika S Shirolkar</span>
+          <a class="muted link" href="#page-1">Back to top</a>
+        </footer>
+      </div>
     </section>
   </main>
 
@@ -365,3 +367,4 @@
   <script src="script.js"></script>
 </body>
 </html>
+
