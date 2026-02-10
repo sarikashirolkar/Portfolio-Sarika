@@ -3,6 +3,7 @@
 const STORAGE = {
   endpoint: "rag_endpoint",
   openaiKey: "rag_openai_key",
+  theme: "theme_preference",
 };
 
 const COMPANY = {
@@ -1054,8 +1055,55 @@ function initYear() {
   if (y) y.textContent = String(new Date().getFullYear());
 }
 
+function initThemeToggle() {
+  const root = document.documentElement;
+
+  const read = () => (localStorage.getItem(STORAGE.theme) || "").trim();
+  const write = (v) => localStorage.setItem(STORAGE.theme, v);
+
+  function apply(theme) {
+    const t = theme === "light" ? "light" : "dark";
+    root.setAttribute("data-theme", t);
+    return t;
+  }
+
+  // Default is dark.
+  const initial = read();
+  const active = apply(initial || "dark");
+
+  const nav = $(".nav");
+  if (!nav) return;
+
+  // Progressive enhancement: inject toggle without changing HTML layout/content structure.
+  const toggle = document.createElement("button");
+  toggle.type = "button";
+  toggle.className = "nav__toggle";
+  toggle.setAttribute("aria-label", "Toggle theme");
+  toggle.setAttribute("aria-pressed", String(active === "light"));
+
+  const setLabel = (theme) => {
+    // Label shows the action: what you'll switch to.
+    toggle.textContent = theme === "light" ? "Dark" : "Light";
+    toggle.setAttribute("aria-pressed", String(theme === "light"));
+  };
+  setLabel(active);
+
+  const cta = $(".nav__cta", nav);
+  if (cta && cta.parentNode) cta.parentNode.insertBefore(toggle, cta);
+  else nav.appendChild(toggle);
+
+  toggle.addEventListener("click", () => {
+    const current = root.getAttribute("data-theme") || "dark";
+    const next = current === "light" ? "dark" : "light";
+    write(next);
+    const t = apply(next);
+    setLabel(t);
+  });
+}
+
 document.addEventListener("DOMContentLoaded", () => {
   initYear();
+  initThemeToggle();
   initReveal();
   initBackground();
   initNavActive();
