@@ -32,11 +32,12 @@ body{
   margin:0;
   font-family:"Space Grotesk",ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif;
   color:var(--ink);
+  /* Darker base so the paint canvas reads like an "ink in water" background. */
   background:
-    radial-gradient(1100px 760px at 10% 10%, rgba(234,230,247,.92), transparent 60%),
-    radial-gradient(1000px 720px at 86% 14%, rgba(255,255,255,.84), transparent 62%),
-    radial-gradient(1000px 760px at 78% 92%, rgba(243,240,240,.92), transparent 58%),
-    linear-gradient(180deg, var(--paper3), var(--paper));
+    radial-gradient(900px 520px at 20% 14%, rgba(55, 118, 160, .55), transparent 62%),
+    radial-gradient(900px 580px at 76% 18%, rgba(108, 82, 186, .45), transparent 62%),
+    radial-gradient(900px 620px at 64% 88%, rgba(30, 155, 175, .40), transparent 62%),
+    linear-gradient(180deg, #070A12, #070A10 40%, #06060B);
   overflow-x:hidden;
 }
 

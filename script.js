@@ -498,14 +498,30 @@ function initBackground() {
   const ctx = canvas.getContext("2d", { alpha: true });
   if (!ctx) return;
 
+  // "Paint" sim at reduced resolution, then upscale.
+  // This is a cheap, stable feedback + flow-field system (not full fluid sim),
+  // but it gives the same marbled / ink-in-water feeling and reacts to the cursor.
   let w = 0;
   let h = 0;
   let dpr = 1;
 
-  const pointer = { x: 0, y: 0, active: false };
+  const sim = document.createElement("canvas");
+  const sctx = sim.getContext("2d", { alpha: true });
+  if (!sctx) return;
+
+  const pointer = { x: 0, y: 0, vx: 0, vy: 0, active: false, lastX: 0, lastY: 0, t: 0 };
   window.addEventListener("pointermove", (e) => {
-    pointer.x = e.clientX;
-    pointer.y = e.clientY;
+    const now = performance.now();
+    const dt = Math.max(8, now - (pointer.t || now));
+    const nx = e.clientX;
+    const ny = e.clientY;
+    pointer.vx = (nx - (pointer.lastX || nx)) / dt;
+    pointer.vy = (ny - (pointer.lastY || ny)) / dt;
+    pointer.lastX = nx;
+    pointer.lastY = ny;
+    pointer.x = nx;
+    pointer.y = ny;
+    pointer.t = now;
     pointer.active = true;
   });
   window.addEventListener("pointerleave", () => (pointer.active = false));
@@ -519,138 +535,209 @@ function initBackground() {
     canvas.style.width = `${w}px`;
     canvas.style.height = `${h}px`;
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+
+    const scale = w < 720 ? 0.7 : 0.58; // a bit higher res on phones
+    sim.width = Math.max(320, Math.floor(w * scale));
+    sim.height = Math.max(240, Math.floor(h * scale));
   }
   resize();
   window.addEventListener("resize", resize);
 
-  // Light theme: softer pigments with multiply blending so the paper background still reads.
-  const colors = [
-    { r: 202, g: 160, b: 90, a: 0.12 }, // warm gold
-    { r: 90, g: 167, b: 179, a: 0.11 }, // ice teal
-    { r: 127, g: 109, b: 184, a: 0.11 }, // violet
-    { r: 90, g: 160, b: 122, a: 0.09 }, // mint
-  ];
-
-  // Fewer, larger blobs look more intentional than many tiny ones.
-  const N = Math.floor((w * h) / 72000);
-  const objs = new Array(clamp(N, 16, 38)).fill(0).map((_, i) => {
-    const c = colors[i % colors.length];
-    return {
-      x: Math.random() * w,
-      y: Math.random() * h,
-      vx: (Math.random() - 0.5) * 0.35,
-      vy: (Math.random() - 0.5) * 0.35,
-      // Bigger radius = more visible.
-      r: 70 + Math.random() * 110,
-      c,
-      spin: (Math.random() - 0.5) * 0.015,
-      phase: Math.random() * Math.PI * 2,
-    };
-  });
-
-  function drawBlob(o) {
-    const grad = ctx.createRadialGradient(o.x, o.y, 0, o.x, o.y, o.r);
-    const { r, g, b, a } = o.c;
-    // Add a mid-stop so the edge feels sharper (less "washed out").
-    grad.addColorStop(0, `rgba(${r},${g},${b},${a})`);
-    grad.addColorStop(0.58, `rgba(${r},${g},${b},${a * 0.55})`);
-    grad.addColorStop(1, `rgba(${r},${g},${b},0)`);
-    ctx.fillStyle = grad;
-    ctx.beginPath();
-    ctx.arc(o.x, o.y, o.r, 0, Math.PI * 2);
-    ctx.fill();
-
-    // Subtle outline so shapes don't disappear on bright paper gradients.
-    ctx.strokeStyle = `rgba(22,18,30,0.06)`;
-    ctx.lineWidth = 1;
-    ctx.stroke();
+  // Fast hash/value-noise (deterministic) for a flow field.
+  function hash2(ix, iy) {
+    // integer hash -> [0,1)
+    let x = (ix | 0) * 374761393 + (iy | 0) * 668265263;
+    x = (x ^ (x >> 13)) * 1274126177;
+    x = x ^ (x >> 16);
+    return (x >>> 0) / 4294967296;
+  }
+  function smoothstep(t) {
+    return t * t * (3 - 2 * t);
+  }
+  function lerp(a, b, t) {
+    return a + (b - a) * t;
+  }
+  function noise2(x, y) {
+    const x0 = Math.floor(x);
+    const y0 = Math.floor(y);
+    const x1 = x0 + 1;
+    const y1 = y0 + 1;
+    const sx = smoothstep(x - x0);
+    const sy = smoothstep(y - y0);
+    const n00 = hash2(x0, y0);
+    const n10 = hash2(x1, y0);
+    const n01 = hash2(x0, y1);
+    const n11 = hash2(x1, y1);
+    const ix0 = lerp(n00, n10, sx);
+    const ix1 = lerp(n01, n11, sx);
+    return lerp(ix0, ix1, sy);
+  }
+  function fbm(x, y) {
+    let v = 0;
+    let a = 0.55;
+    let f = 1;
+    for (let i = 0; i < 4; i++) {
+      v += a * noise2(x * f, y * f);
+      f *= 2.02;
+      a *= 0.52;
+    }
+    return v;
+  }
+  function curl(x, y) {
+    const e = 0.75;
+    const n1 = fbm(x, y + e);
+    const n2 = fbm(x, y - e);
+    const a = (n1 - n2) / (2 * e);
+    const n3 = fbm(x + e, y);
+    const n4 = fbm(x - e, y);
+    const b = (n3 - n4) / (2 * e);
+    // Perp of gradient => rotational field
+    return { x: a, y: -b };
   }
 
+  const pigments = [
+    { r: 67, g: 201, b: 224 }, // aqua
+    { r: 96, g: 118, b: 255 }, // periwinkle
+    { r: 142, g: 89, b: 255 }, // violet
+    { r: 42, g: 148, b: 188 }, // teal-blue
+    { r: 210, g: 212, b: 230 }, // mist
+  ];
+
+  const particles = [];
+  function initParticles() {
+    particles.length = 0;
+    const count = clamp(Math.floor((sim.width * sim.height) / 6500), 60, 160);
+    for (let i = 0; i < count; i++) {
+      const c = pigments[i % pigments.length];
+      particles.push({
+        x: Math.random() * sim.width,
+        y: Math.random() * sim.height,
+        vx: (Math.random() - 0.5) * 0.3,
+        vy: (Math.random() - 0.5) * 0.3,
+        r: 18 + Math.random() * 34,
+        c,
+        a: 0.12 + Math.random() * 0.08,
+      });
+    }
+  }
+  initParticles();
+
+  function drawInkDot(x, y, rad, c, alpha) {
+    const g = sctx.createRadialGradient(x, y, 0, x, y, rad);
+    g.addColorStop(0, `rgba(${c.r},${c.g},${c.b},${alpha})`);
+    g.addColorStop(0.55, `rgba(${c.r},${c.g},${c.b},${alpha * 0.45})`);
+    g.addColorStop(1, `rgba(${c.r},${c.g},${c.b},0)`);
+    sctx.fillStyle = g;
+    sctx.beginPath();
+    sctx.arc(x, y, rad, 0, Math.PI * 2);
+    sctx.fill();
+  }
+
+  let t = 0;
   function step() {
-    ctx.clearRect(0, 0, w, h);
+    t += 0.0075;
 
-    // Soft paper vignette (lightly brightens edges for a "gallery" feel).
-    const vg = ctx.createRadialGradient(
-      w / 2,
-      h / 2,
-      Math.min(w, h) * 0.12,
-      w / 2,
-      h / 2,
-      Math.min(w, h) * 0.78
-    );
-    vg.addColorStop(0, "rgba(255,255,255,0)");
-    vg.addColorStop(1, "rgba(255,255,255,0.16)");
-    ctx.fillStyle = vg;
-    ctx.fillRect(0, 0, w, h);
+    const sw = sim.width;
+    const sh = sim.height;
+    const sx = sw / Math.max(1, w);
+    const sy = sh / Math.max(1, h);
 
-    const px = pointer.x;
-    const py = pointer.y;
-    const repelR = 190;
-    const repelR2 = repelR * repelR;
+    // Feedback "advection": re-draw the previous frame slightly offset + scaled
+    // to create flowy smears (cheap fluid illusion).
+    const px = pointer.x * sx;
+    const py = pointer.y * sy;
+    const mv = Math.min(1.6, Math.hypot(pointer.vx, pointer.vy) * 22);
+    const drift = pointer.active ? mv : 0.35;
+    const ox = (pointer.active ? pointer.vx : 0.02) * drift * 6;
+    const oy = (pointer.active ? pointer.vy : 0.01) * drift * 6;
 
-    // Multiply keeps pigments subtle on a light background.
-    ctx.globalCompositeOperation = "multiply";
-    for (const o of objs) {
-      // cursor dodge / repulsion
+    sctx.save();
+    sctx.globalCompositeOperation = "source-over";
+    sctx.globalAlpha = 0.985;
+    sctx.translate(ox, oy);
+    sctx.scale(1.004, 1.004);
+    sctx.translate(-sw * 0.002, -sh * 0.002);
+    sctx.drawImage(sim, 0, 0);
+    sctx.restore();
+
+    // Gentle fade so it doesn't saturate forever.
+    sctx.fillStyle = "rgba(7, 8, 16, 0.045)";
+    sctx.fillRect(0, 0, sw, sh);
+
+    // Paint deposition: always some ambient "ink", more near the cursor.
+    sctx.globalCompositeOperation = "screen";
+    for (let i = 0; i < particles.length; i++) {
+      const p = particles[i];
+      const nx = (p.x / sw) * 6.2;
+      const ny = (p.y / sh) * 6.2;
+      const f = curl(nx + t * 0.55, ny - t * 0.42);
+
+      // Cursor swirl (perpendicular) + push
       if (pointer.active) {
-        const dx = o.x - px;
-        const dy = o.y - py;
+        const dx = p.x - px;
+        const dy = p.y - py;
         const d2 = dx * dx + dy * dy;
-        if (d2 < repelR2) {
+        const rr = 220 * 220;
+        if (d2 < rr) {
           const d = Math.max(1, Math.sqrt(d2));
-          const force = (1 - d / repelR) * 0.85;
-          o.vx += (dx / d) * force;
-          o.vy += (dy / d) * force;
+          const fall = 1 - d / 220;
+          // whirl
+          p.vx += (-dy / d) * fall * (1.9 + mv);
+          p.vy += (dx / d) * fall * (1.9 + mv);
+          // slight attraction to keep the paint "following"
+          p.vx += (-dx / d) * fall * 0.25;
+          p.vy += (-dy / d) * fall * 0.25;
         }
       }
 
-      // gentle drift + swirl
-      o.phase += o.spin;
-      o.vx += Math.cos(o.phase) * 0.0022;
-      o.vy += Math.sin(o.phase) * 0.0022;
+      p.vx += f.x * 0.95;
+      p.vy += f.y * 0.95;
+      p.vx *= 0.88;
+      p.vy *= 0.88;
+      p.x += p.vx;
+      p.y += p.vy;
 
-      // friction
-      o.vx *= 0.985;
-      o.vy *= 0.985;
+      // wrap
+      if (p.x < -60) p.x = sw + 60;
+      if (p.x > sw + 60) p.x = -60;
+      if (p.y < -60) p.y = sh + 60;
+      if (p.y > sh + 60) p.y = -60;
 
-      o.x += o.vx;
-      o.y += o.vy;
-
-      // wrap around edges
-      if (o.x < -o.r) o.x = w + o.r;
-      if (o.x > w + o.r) o.x = -o.r;
-      if (o.y < -o.r) o.y = h + o.r;
-      if (o.y > h + o.r) o.y = -o.r;
-
-      drawBlob(o);
+      // base dot
+      drawInkDot(p.x, p.y, p.r, p.c, p.a);
     }
-    ctx.globalCompositeOperation = "source-over";
 
-    // faint connecting lines for a "network" feel
-    ctx.lineWidth = 1;
-    ctx.strokeStyle = "rgba(22,18,30,0.08)";
-    for (let i = 0; i < objs.length; i++) {
-      for (let j = i + 1; j < objs.length; j++) {
-        const a = objs[i];
-        const b = objs[j];
-        const dx = a.x - b.x;
-        const dy = a.y - b.y;
-        const d2 = dx * dx + dy * dy;
-        if (d2 > 120 * 120) continue;
-        const alpha = 1 - Math.sqrt(d2) / 120;
-        ctx.globalAlpha = alpha * 0.85;
-        ctx.beginPath();
-        ctx.moveTo(a.x, a.y);
-        ctx.lineTo(b.x, b.y);
-        ctx.stroke();
-      }
+    // Stronger pigment bloom under cursor motion.
+    if (pointer.active) {
+      const c = pigments[Math.floor((t * 1000) % pigments.length)];
+      const r = 70 + mv * 24;
+      drawInkDot(px, py, r, c, 0.16);
+      drawInkDot(px + 26, py - 22, r * 0.75, pigments[(pigments.indexOf(c) + 2) % pigments.length], 0.11);
     }
-    ctx.globalAlpha = 1;
+
+    // Composite to the full-res canvas with a soft blur pass.
+    ctx.clearRect(0, 0, w, h);
+    ctx.save();
+    ctx.globalAlpha = 0.95;
+    ctx.filter = "blur(16px)";
+    ctx.drawImage(sim, 0, 0, w, h);
+    ctx.restore();
+    ctx.save();
+    ctx.globalAlpha = 0.88;
+    ctx.filter = "none";
+    ctx.drawImage(sim, 0, 0, w, h);
+    ctx.restore();
+
+    // Subtle vignette to match the reference.
+    const vg = ctx.createRadialGradient(w / 2, h / 2, Math.min(w, h) * 0.18, w / 2, h / 2, Math.min(w, h) * 0.9);
+    vg.addColorStop(0, "rgba(255,255,255,0)");
+    vg.addColorStop(1, "rgba(0,0,0,0.26)");
+    ctx.fillStyle = vg;
+    ctx.fillRect(0, 0, w, h);
 
     requestAnimationFrame(step);
   }
 
-  // Motion reduction
   const reduce = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   if (!reduce) requestAnimationFrame(step);
 }
