@@ -628,22 +628,9 @@ function initBackground() {
   const ctx = canvas.getContext("2d", { alpha: true });
   if (!ctx) return;
 
-  // Glossy spheres: mostly still; they only react when the cursor gets close.
-  const MOTION = {
-    repelRadiusPad: 150,
-    repelStrength: 420, // impulse scale (keep gentle)
-    springK: 1.45,
-    damping: 6.0,
-    maxSpeed: 520,
-  };
-
-  // Make the background less prominent.
-  const LOOK = {
-    opacity: 0.62,
-    auraAlpha: 0.14,
-    rimAlpha: 0.34,
-    vignetteAlpha: 0.14,
-  };
+  // "Ink in water" blobs: large, blurred gradients that gently morph/drift.
+  // Cursor creates a subtle ripple/shift (no harsh dodge).
+  const reduce = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
   let w = 0;
   let h = 0;
@@ -654,328 +641,189 @@ function initBackground() {
     pointer.x = e.clientX;
     pointer.y = e.clientY;
     pointer.active = true;
-    pointer.t = performance.now();
-    start();
   });
-  window.addEventListener("pointerleave", () => {
-    pointer.active = false;
-    pointer.t = performance.now();
-    start(); // let spheres settle back, then we can sleep
-  });
+  window.addEventListener("pointerleave", () => (pointer.active = false));
 
-  // Palette aimed at the glossy reference: black/white/magenta with a cool rim light.
-  const colors = [
-    { base: [18, 18, 22], hi: [64, 74, 98], rim: [124, 176, 255] }, // graphite
-    { base: [226, 228, 234], hi: [255, 255, 255], rim: [140, 190, 255] }, // pearl
-    { base: [154, 16, 78], hi: [255, 96, 164], rim: [126, 178, 255] }, // magenta
-    { base: [20, 22, 34], hi: [38, 50, 86], rim: [120, 176, 255] }, // midnight
-    { base: [8, 58, 132], hi: [92, 172, 255], rim: [160, 220, 255] }, // cobalt
-    { base: [6, 86, 86], hi: [112, 228, 216], rim: [168, 252, 255] }, // teal
-    { base: [118, 92, 10], hi: [244, 210, 120], rim: [255, 244, 186] }, // gold
+  // Render on a smaller offscreen canvas for performance, then scale up.
+  const off = document.createElement("canvas");
+  const offCtx = off.getContext("2d", { alpha: true });
+  if (!offCtx) return;
+
+  const LOOK = {
+    renderScale: 0.55,
+    blurPx: 56,
+    alpha: 0.85,
+    vignette: 0.18,
+  };
+
+  const palettes = [
+    // teal / violet / gold
+    [
+      [156, 207, 216],
+      [203, 166, 247],
+      [246, 193, 119],
+      [166, 227, 161],
+      [120, 176, 255],
+    ],
+    // ocean
+    [
+      [120, 176, 255],
+      [112, 228, 216],
+      [90, 167, 179],
+      [64, 74, 98],
+      [203, 166, 247],
+    ],
+    // warm
+    [
+      [246, 193, 119],
+      [255, 120, 160],
+      [203, 166, 247],
+      [166, 227, 161],
+      [156, 207, 216],
+    ],
   ];
 
-  const spriteCache = new Map();
-  function qRadius(r) {
-    return clamp(Math.round(r / 10) * 10, 50, 200);
-  }
-  function spriteKey(ci, r) {
-    return `${ci}:${r}`;
-  }
-  function getSprite(ci, radius) {
-    const qr = qRadius(radius);
-    const k = spriteKey(ci, qr);
-    if (spriteCache.has(k)) return spriteCache.get(k);
+  const blobs = [];
+  const N = 5; // 4–6
 
-    const s = document.createElement("canvas");
-    const pad = 14;
-    const size = (qr + pad) * 2;
-    s.width = size;
-    s.height = size;
-    const c = s.getContext("2d");
-    if (!c) return null;
-
-    const col = colors[ci % colors.length];
-    const cx = size / 2;
-    const cy = size / 2;
-
-    // Outer aura / rim glow.
-    const aura = c.createRadialGradient(cx, cy, qr * 0.85, cx, cy, qr + pad);
-    aura.addColorStop(0, `rgba(${col.rim[0]},${col.rim[1]},${col.rim[2]},0.00)`);
-    aura.addColorStop(1, `rgba(${col.rim[0]},${col.rim[1]},${col.rim[2]},${LOOK.auraAlpha})`);
-    c.fillStyle = aura;
-    c.beginPath();
-    c.arc(cx, cy, qr + pad, 0, Math.PI * 2);
-    c.fill();
-
-    // Sphere body (clipped).
-    c.save();
-    c.beginPath();
-    c.arc(cx, cy, qr, 0, Math.PI * 2);
-    c.clip();
-
-    // Base shading.
-    const g = c.createRadialGradient(cx - qr * 0.35, cy - qr * 0.35, 0, cx, cy, qr * 1.15);
-    g.addColorStop(0.0, `rgb(${col.hi[0]},${col.hi[1]},${col.hi[2]})`);
-    g.addColorStop(
-      0.45,
-      `rgb(${Math.round((col.hi[0] + col.base[0]) / 2)},${Math.round((col.hi[1] + col.base[1]) / 2)},${Math.round(
-        (col.hi[2] + col.base[2]) / 2
-      )})`
-    );
-    g.addColorStop(1.0, `rgb(${col.base[0]},${col.base[1]},${col.base[2]})`);
-    c.fillStyle = g;
-    c.fillRect(cx - qr, cy - qr, qr * 2, qr * 2);
-
-    // Shadow falloff (bottom-right).
-    const sg = c.createRadialGradient(cx + qr * 0.45, cy + qr * 0.45, qr * 0.1, cx + qr * 0.45, cy + qr * 0.45, qr * 1.05);
-    sg.addColorStop(0.0, "rgba(0,0,0,0)");
-    sg.addColorStop(1.0, "rgba(0,0,0,0.62)");
-    c.globalCompositeOperation = "multiply";
-    c.fillStyle = sg;
-    c.fillRect(cx - qr, cy - qr, qr * 2, qr * 2);
-
-    // Specular highlight.
-    const hg = c.createRadialGradient(cx - qr * 0.33, cy - qr * 0.33, 0, cx - qr * 0.22, cy - qr * 0.22, qr * 0.65);
-    hg.addColorStop(0.0, "rgba(255,255,255,0.70)");
-    hg.addColorStop(0.35, "rgba(255,255,255,0.22)");
-    hg.addColorStop(1.0, "rgba(255,255,255,0)");
-    c.globalCompositeOperation = "screen";
-    c.fillStyle = hg;
-    c.beginPath();
-    c.ellipse(cx - qr * 0.22, cy - qr * 0.28, qr * 0.44, qr * 0.30, -0.55, 0, Math.PI * 2);
-    c.fill();
-
-    // Rim light stroke.
-    c.globalCompositeOperation = "source-over";
-    c.strokeStyle = `rgba(${col.rim[0]},${col.rim[1]},${col.rim[2]},${LOOK.rimAlpha})`;
-    c.lineWidth = Math.max(2, Math.round(qr * 0.06));
-    c.beginPath();
-    c.arc(cx, cy, qr - c.lineWidth * 0.4, 0, Math.PI * 2);
-    c.stroke();
-
-    c.restore();
-
-    spriteCache.set(k, { canvas: s, r: qr + pad });
-    return spriteCache.get(k);
+  function rand(a, b) {
+    return a + Math.random() * (b - a);
   }
 
-  let circles = [];
-  let vignette = null;
-
-  function makeVignette() {
-    const g = ctx.createRadialGradient(
-      w / 2,
-      h / 2,
-      Math.min(w, h) * 0.15,
-      w / 2,
-      h / 2,
-      Math.min(w, h) * 0.9
-    );
-    g.addColorStop(0, "rgba(255,255,255,0)");
-    g.addColorStop(1, `rgba(255,255,255,${LOOK.vignetteAlpha})`);
-    vignette = g;
+  function initBlobs() {
+    blobs.length = 0;
+    const minSide = Math.min(w, h);
+    for (let i = 0; i < N; i++) {
+      blobs.push({
+        x0: rand(w * 0.18, w * 0.88),
+        y0: rand(h * 0.12, h * 0.88),
+        ampX: rand(minSide * 0.035, minSide * 0.075),
+        ampY: rand(minSide * 0.03, minSide * 0.07),
+        spdX: rand(0.045, 0.09),
+        spdY: rand(0.04, 0.085),
+        phX: rand(0, Math.PI * 2),
+        phY: rand(0, Math.PI * 2),
+        r0: rand(minSide * 0.22, minSide * 0.34),
+        rWob: rand(0.08, 0.14),
+        rSpd: rand(0.05, 0.11),
+        rPh: rand(0, Math.PI * 2),
+        ci: i,
+      });
+    }
   }
 
-  function initCircles() {
-    // Cluster bias (like the reference): mostly around right/center.
-    const count = clamp(Math.floor((w * h) / 78000), 14, 26);
-    const fx = w * 0.68;
-    const fy = h * 0.48;
-
-    circles = new Array(count).fill(0).map((_, i) => {
-      // Slightly smaller spheres so they don't overpower the UI.
-      const r = 42 + Math.pow(Math.random(), 1.8) * 112;
-      const a = Math.random() * Math.PI * 2;
-      const m = (0.10 + Math.random() * 0.22) * Math.min(w, h);
-      const x0 = clamp(fx + Math.cos(a) * m + (Math.random() - 0.5) * 60, r + 8, w - r - 8);
-      const y0 = clamp(fy + Math.sin(a) * m + (Math.random() - 0.5) * 60, r + 8, h - r - 8);
-      return {
-        x0,
-        y0,
-        x: x0,
-        y: y0,
-        vx: 0,
-        vy: 0,
-        r,
-        ci: i % colors.length,
-        hover: 0,
-        hoverPhase: Math.random() * Math.PI * 2,
-        hoverSpd: 0.55 + Math.random() * 0.55,
-        hoverAmp: 5 + Math.random() * 10,
-        // Ambient drift: very slow, small amplitude, always on.
-        driftPhase: Math.random() * Math.PI * 2,
-        driftSpd: 0.07 + Math.random() * 0.10,
-        driftAmp: 6 + Math.random() * 10,
-      };
-    });
-  }
+  let offCssW = 0;
+  let offCssH = 0;
 
   function resize() {
     dpr = Math.max(1, Math.min(2, window.devicePixelRatio || 1));
     w = Math.floor(window.innerWidth);
     h = Math.floor(window.innerHeight);
+
     canvas.width = Math.floor(w * dpr);
     canvas.height = Math.floor(h * dpr);
     canvas.style.width = `${w}px`;
     canvas.style.height = `${h}px`;
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-    initCircles();
-    makeVignette();
-    drawStatic();
+
+    const scale = clamp(LOOK.renderScale, 0.35, 0.75);
+    offCssW = Math.max(320, Math.floor(w * scale));
+    offCssH = Math.max(240, Math.floor(h * scale));
+    off.width = Math.floor(offCssW * dpr);
+    off.height = Math.floor(offCssH * dpr);
+    offCtx.setTransform(dpr, 0, 0, dpr, 0, 0);
+
+    initBlobs();
   }
   resize();
   window.addEventListener("resize", resize);
 
-  // Click: cycle sphere color (only when clicking a sphere).
-  canvas.addEventListener("pointerdown", (e) => {
-    const rect = canvas.getBoundingClientRect();
-    const x = e.clientX - rect.left;
-    const y = e.clientY - rect.top;
-    let hit = null;
-    let bestD2 = Infinity;
-    for (const c of circles) {
-      const dx = x - c.x;
-      const dy = y - c.y;
-      const d2 = dx * dx + dy * dy;
-      if (d2 <= c.r * c.r && d2 < bestD2) {
-        bestD2 = d2;
-        hit = c;
-      }
-    }
-    if (!hit) return;
-    hit.ci = (hit.ci + 1) % colors.length;
-    // tiny kick so the change feels alive
-    hit.vx += (Math.random() - 0.5) * 120;
-    hit.vy += (Math.random() - 0.5) * 120;
-    start();
-  });
-
-  function drawAll() {
-    ctx.clearRect(0, 0, w, h);
-    ctx.globalCompositeOperation = "source-over";
-
-    for (const c of circles) {
-      const sp = getSprite(c.ci, c.r);
-      if (!sp) continue;
-      ctx.globalAlpha = LOOK.opacity;
-      const s = (c.r * 2) / sp.r;
-      const drawR = sp.r * s;
-      ctx.drawImage(sp.canvas, c.x - drawR, c.y - drawR, drawR * 2, drawR * 2);
-    }
-
-    ctx.globalAlpha = 1;
-    ctx.globalCompositeOperation = "source-over";
-    if (vignette) {
-      ctx.fillStyle = vignette;
-      ctx.fillRect(0, 0, w, h);
-    }
+  function drawVignette() {
+    const g = ctx.createRadialGradient(w / 2, h / 2, Math.min(w, h) * 0.18, w / 2, h / 2, Math.min(w, h) * 0.86);
+    g.addColorStop(0, "rgba(0,0,0,0)");
+    g.addColorStop(1, `rgba(0,0,0,${LOOK.vignette})`);
+    ctx.fillStyle = g;
+    ctx.fillRect(0, 0, w, h);
   }
 
-  function drawStatic() {
-    // Render a static frame without burning CPU when idle.
-    if (!circles.length) return;
-    drawAll();
-  }
+  function drawFrame(now) {
+    const t = now / 1000;
 
-  let last = performance.now();
-  let rafId = 0;
-  let running = false;
+    // theme-aware palette choice (dark + light both work fine)
+    const pal = palettes[0];
 
-  function start() {
-    if (running) return;
-    running = true;
-    last = performance.now();
-    rafId = requestAnimationFrame(step);
-  }
+    // Render blobs on offscreen canvas.
+    offCtx.clearRect(0, 0, offCssW, offCssH);
+    offCtx.globalCompositeOperation = "source-over";
+    offCtx.filter = `blur(${Math.max(14, Math.round(LOOK.blurPx * (offCssW / Math.max(1, w))))}px)`;
+    offCtx.globalAlpha = LOOK.alpha;
 
-  function step(now) {
-    const dt = clamp((now - last) / 1000, 0.0, 0.05);
-    last = now;
+    const px = pointer.x * (offCssW / Math.max(1, w));
+    const py = pointer.y * (offCssH / Math.max(1, h));
+    const infl = Math.min(offCssW, offCssH) * 0.48;
 
-    const px = pointer.x;
-    const py = pointer.y;
+    for (const b of blobs) {
+      const x0 = b.x0 * (offCssW / Math.max(1, w));
+      const y0 = b.y0 * (offCssH / Math.max(1, h));
 
-    for (const c of circles) {
-      // Ambient drift target (always on).
-      c.driftPhase += dt * c.driftSpd;
-      const ax = Math.cos(c.driftPhase * 0.90) * c.driftAmp;
-      const ay = Math.sin(c.driftPhase * 1.03) * c.driftAmp * 0.72;
+      // gentle morph/drift
+      const bx = x0 + Math.sin(t * b.spdX + b.phX) * b.ampX * (offCssW / Math.max(1, w)) + Math.sin(t * (b.spdX * 0.62) + b.phY) * 8;
+      const by = y0 + Math.cos(t * b.spdY + b.phY) * b.ampY * (offCssH / Math.max(1, h)) + Math.cos(t * (b.spdY * 0.58) + b.phX) * 6;
+      const rr = b.r0 * (0.92 + Math.sin(t * b.rSpd + b.rPh) * b.rWob) * (offCssW / Math.max(1, w));
 
-      // Hover activation: spheres are perfectly still until you're close.
-      let hoverTarget = 0;
+      // cursor ripple/shift: a soft push + slight swirl
+      let ox = 0;
+      let oy = 0;
       if (pointer.active) {
-        const dx = c.x - px;
-        const dy = c.y - py;
-        const rr = c.r + 52;
-        if (dx * dx + dy * dy < rr * rr) hoverTarget = 1;
-      }
-      // Smooth hover easing.
-      const ease = 1 - Math.exp(-7.5 * dt);
-      c.hover += (hoverTarget - c.hover) * ease;
-
-      // Subtle "alive" motion only while hovered.
-      c.hoverPhase += dt * c.hoverSpd;
-      const ox = Math.cos(c.hoverPhase) * c.hoverAmp * c.hover;
-      const oy = Math.sin(c.hoverPhase * 0.9) * c.hoverAmp * 0.72 * c.hover;
-
-      // Spring towards rest (+ hover offset).
-      const tx = c.x0 + ax + ox;
-      const ty = c.y0 + ay + oy;
-      c.vx += (tx - c.x) * (MOTION.springK * 16) * dt;
-      c.vy += (ty - c.y) * (MOTION.springK * 16) * dt;
-
-      // Cursor repel (only near).
-      if (pointer.active && c.hover > 0.001) {
-        const dx = c.x - px;
-        const dy = c.y - py;
-        const rr = c.r + MOTION.repelRadiusPad;
+        const dx = bx - px;
+        const dy = by - py;
         const d2 = dx * dx + dy * dy;
-        if (d2 < rr * rr) {
+        if (d2 < infl * infl) {
           const d = Math.max(1, Math.sqrt(d2));
-          const fall = 1 - d / rr;
-          const f = fall * fall * MOTION.repelStrength;
-          c.vx += (dx / d) * f * dt;
-          c.vy += (dy / d) * f * dt;
+          const k = 1 - d / infl;
+          const f = k * k * 34; // subtle
+          ox += (dx / d) * f;
+          oy += (dy / d) * f;
+          // swirl component
+          ox += (-dy / d) * f * 0.16;
+          oy += (dx / d) * f * 0.16;
         }
       }
 
-      // Damping (stable across frame rate).
-      const damp = Math.exp(-MOTION.damping * dt);
-      c.vx *= damp;
-      c.vy *= damp;
+      const col = pal[b.ci % pal.length];
+      const g = offCtx.createRadialGradient(bx + ox - rr * 0.18, by + oy - rr * 0.22, rr * 0.1, bx + ox, by + oy, rr);
+      g.addColorStop(0.0, `rgba(${col[0]},${col[1]},${col[2]},0.62)`);
+      g.addColorStop(0.55, `rgba(${col[0]},${col[1]},${col[2]},0.24)`);
+      g.addColorStop(1.0, `rgba(${col[0]},${col[1]},${col[2]},0)`);
 
-      // Clamp speed.
-      const spd = Math.hypot(c.vx, c.vy);
-      if (spd > MOTION.maxSpeed) {
-        const s = MOTION.maxSpeed / spd;
-        c.vx *= s;
-        c.vy *= s;
-      }
-
-      // Integrate.
-      c.x += c.vx * dt;
-      c.y += c.vy * dt;
-
-      // Keep within bounds.
-      c.x = clamp(c.x, c.r + 6, w - c.r - 6);
-      c.y = clamp(c.y, c.r + 6, h - c.r - 6);
+      offCtx.fillStyle = g;
+      offCtx.beginPath();
+      offCtx.arc(bx + ox, by + oy, rr, 0, Math.PI * 2);
+      offCtx.fill();
     }
 
-    // Draw.
-    drawAll();
+    offCtx.filter = "none";
+    offCtx.globalAlpha = 1;
 
-    rafId = requestAnimationFrame(step);
+    // Composite to main canvas.
+    ctx.clearRect(0, 0, w, h);
+    ctx.globalCompositeOperation = "source-over";
+    ctx.drawImage(off, 0, 0, offCssW, offCssH, 0, 0, w, h);
+
+    // A bit of depth so the center stays readable.
+    drawVignette();
   }
 
-  const reduce = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   if (reduce) {
-    // Render a static frame.
-    drawStatic();
+    drawFrame(performance.now());
     return;
   }
 
-  // Start immediately: slow ambient drift is always on.
-  start();
+  function loop(now) {
+    drawFrame(now);
+    requestAnimationFrame(loop);
+  }
+  requestAnimationFrame(loop);
 }
 
 function initSkillsBubble() {
