@@ -32,12 +32,12 @@ body{
   margin:0;
   font-family:"Space Grotesk",ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif;
   color:var(--ink);
-  /* Darker base so the paint canvas reads like an "ink in water" background. */
+  /* Light editorial "paper" base (orbs render on top via canvas). */
   background:
-    radial-gradient(980px 620px at 18% 16%, rgba(44, 186, 203, .42), transparent 64%),
-    radial-gradient(980px 700px at 78% 18%, rgba(142, 89, 255, .34), transparent 64%),
-    radial-gradient(980px 760px at 64% 88%, rgba(60, 120, 255, .18), transparent 66%),
-    linear-gradient(180deg, #0A0E1C, #070A14 35%, #050712);
+    radial-gradient(1200px 820px at 14% 16%, rgba(234,230,247,.95), transparent 60%),
+    radial-gradient(1200px 820px at 86% 24%, rgba(255,255,255,.82), transparent 62%),
+    radial-gradient(1100px 760px at 68% 92%, rgba(243,240,240,.92), transparent 58%),
+    linear-gradient(180deg, var(--paper3), var(--paper));
   overflow-x:hidden;
 }
 
@@ -50,9 +50,9 @@ body::before{
   position:fixed;
   inset:0;
   pointer-events:none;
-  opacity:.07;
+  opacity:.06;
   background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='260' height='260'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='260' height='260' filter='url(%23n)' opacity='.75'/%3E%3C/svg%3E");
-  mix-blend-mode:soft-light;
+  mix-blend-mode:multiply;
 }
 
 code{font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,"Liberation Mono","Courier New",monospace}
@@ -69,7 +69,7 @@ canvas#bg{
   position:fixed;inset:0;
   width:100vw;height:100vh;
   z-index:-1;
-  opacity:0.95;
+  opacity:1;
 }
 
 /* Nav */

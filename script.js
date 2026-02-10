@@ -498,35 +498,111 @@ function initBackground() {
   const ctx = canvas.getContext("2d", { alpha: true });
   if (!ctx) return;
 
-  // Metallic paint: low-res shader (heightfield + lighting/specular) + cursor-driven flow.
+  // Floating orbs: performance-first (sprite cache), cursor-dodge, soft drift.
   let w = 0;
   let h = 0;
   let dpr = 1;
 
-  const sim = document.createElement("canvas");
-  const sctx = sim.getContext("2d", { willReadFrequently: true });
-  if (!sctx) return;
-
-  const pointer = { x: 0, y: 0, vx: 0, vy: 0, active: false, lastX: 0, lastY: 0, t: 0 };
+  const pointer = { x: 0, y: 0, active: false };
   window.addEventListener("pointermove", (e) => {
-    const now = performance.now();
-    const dt = Math.max(10, now - (pointer.t || now));
-    const nx = e.clientX;
-    const ny = e.clientY;
-    pointer.vx = (nx - (pointer.lastX || nx)) / dt;
-    pointer.vy = (ny - (pointer.lastY || ny)) / dt;
-    pointer.lastX = nx;
-    pointer.lastY = ny;
-    pointer.x = nx;
-    pointer.y = ny;
-    pointer.t = now;
+    pointer.x = e.clientX;
+    pointer.y = e.clientY;
     pointer.active = true;
   });
   window.addEventListener("pointerleave", () => (pointer.active = false));
 
-  let dispX = new Float32Array(0);
-  let dispY = new Float32Array(0);
-  let heightBuf = new Float32Array(0);
+  const colors = [
+    { r: 202, g: 160, b: 90 }, // warm gold
+    { r: 90, g: 167, b: 179 }, // ice teal
+    { r: 127, g: 109, b: 184 }, // violet
+    { r: 90, g: 160, b: 122 }, // mint
+  ];
+
+  const spriteCache = new Map();
+  function qRadius(r) {
+    return clamp(Math.round(r / 10) * 10, 50, 200);
+  }
+  function spriteKey(ci, r) {
+    return `${ci}:${r}`;
+  }
+  function getSprite(ci, radius) {
+    const qr = qRadius(radius);
+    const k = spriteKey(ci, qr);
+    if (spriteCache.has(k)) return spriteCache.get(k);
+
+    const s = document.createElement("canvas");
+    const pad = 10;
+    const size = (qr + pad) * 2;
+    s.width = size;
+    s.height = size;
+    const c = s.getContext("2d");
+    if (!c) return null;
+
+    const col = colors[ci % colors.length];
+    const cx = size / 2;
+    const cy = size / 2;
+
+    // Soft pigment blob with an offset highlight to feel "dimensional".
+    const g = c.createRadialGradient(cx - qr * 0.25, cy - qr * 0.25, 0, cx, cy, qr + pad);
+    g.addColorStop(0.0, `rgba(${col.r},${col.g},${col.b},0.40)`);
+    g.addColorStop(0.45, `rgba(${col.r},${col.g},${col.b},0.18)`);
+    g.addColorStop(1.0, `rgba(${col.r},${col.g},${col.b},0)`);
+    c.fillStyle = g;
+    c.beginPath();
+    c.arc(cx, cy, qr + pad, 0, Math.PI * 2);
+    c.fill();
+
+    // Highlight ring.
+    const hg = c.createRadialGradient(cx - qr * 0.32, cy - qr * 0.34, 0, cx - qr * 0.2, cy - qr * 0.22, qr);
+    hg.addColorStop(0.0, "rgba(255,255,255,0.28)");
+    hg.addColorStop(0.55, "rgba(255,255,255,0.10)");
+    hg.addColorStop(1.0, "rgba(255,255,255,0)");
+    c.globalCompositeOperation = "screen";
+    c.fillStyle = hg;
+    c.beginPath();
+    c.arc(cx, cy, qr * 0.95, 0, Math.PI * 2);
+    c.fill();
+
+    c.globalCompositeOperation = "source-over";
+    spriteCache.set(k, { canvas: s, r: qr + pad });
+    return spriteCache.get(k);
+  }
+
+  let circles = [];
+  let vignette = null;
+
+  function makeVignette() {
+    const g = ctx.createRadialGradient(
+      w / 2,
+      h / 2,
+      Math.min(w, h) * 0.15,
+      w / 2,
+      h / 2,
+      Math.min(w, h) * 0.9
+    );
+    g.addColorStop(0, "rgba(255,255,255,0)");
+    g.addColorStop(1, "rgba(255,255,255,0.20)");
+    vignette = g;
+  }
+
+  function initCircles() {
+    const area = w * h;
+    const count = clamp(Math.floor(area / 65000), 14, 30);
+    circles = new Array(count).fill(0).map((_, i) => {
+      const r = 60 + Math.random() * 120;
+      return {
+        x: Math.random() * w,
+        y: Math.random() * h,
+        vx: (Math.random() - 0.5) * 0.22,
+        vy: (Math.random() - 0.5) * 0.22,
+        r,
+        ci: i % colors.length,
+        phase: Math.random() * Math.PI * 2,
+        spin: (Math.random() - 0.5) * 0.012,
+        drift: 0.9 + Math.random() * 0.8,
+      };
+    });
+  }
 
   function resize() {
     dpr = Math.max(1, Math.min(2, window.devicePixelRatio || 1));
@@ -537,279 +613,108 @@ function initBackground() {
     canvas.style.width = `${w}px`;
     canvas.style.height = `${h}px`;
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-
-    // Keep the shader cheap and stable.
-    const maxW = 520;
-    const minW = 260;
-    const target = Math.floor(w * (w < 720 ? 0.62 : 0.44));
-    const sw = clamp(target, minW, maxW);
-    const sh = Math.floor((sw * h) / Math.max(1, w));
-    sim.width = sw;
-    sim.height = clamp(sh, 220, 420);
-
-    const n = sim.width * sim.height;
-    dispX = new Float32Array(n);
-    dispY = new Float32Array(n);
-    heightBuf = new Float32Array(n);
+    initCircles();
+    makeVignette();
   }
   resize();
   window.addEventListener("resize", resize);
 
-  // Deterministic value noise (fast enough for CPU shader).
-  function hash2(ix, iy) {
-    let x = (ix | 0) * 374761393 + (iy | 0) * 668265263;
-    x = (x ^ (x >> 13)) * 1274126177;
-    x = x ^ (x >> 16);
-    return (x >>> 0) / 4294967296;
-  }
-  function smoothstep(t) {
-    return t * t * (3 - 2 * t);
-  }
-  function lerp(a, b, t) {
-    return a + (b - a) * t;
-  }
-  function noise2(x, y) {
-    const x0 = Math.floor(x);
-    const y0 = Math.floor(y);
-    const x1 = x0 + 1;
-    const y1 = y0 + 1;
-    const sx = smoothstep(x - x0);
-    const sy = smoothstep(y - y0);
-    const n00 = hash2(x0, y0);
-    const n10 = hash2(x1, y0);
-    const n01 = hash2(x0, y1);
-    const n11 = hash2(x1, y1);
-    const ix0 = lerp(n00, n10, sx);
-    const ix1 = lerp(n01, n11, sx);
-    return lerp(ix0, ix1, sy);
-  }
-  function fbm(x, y) {
-    let v = 0;
-    let a = 0.54;
-    let f = 1;
-    for (let i = 0; i < 5; i++) {
-      v += a * noise2(x * f, y * f);
-      f *= 2.02;
-      a *= 0.5;
-    }
-    return v;
-  }
-  function saturate(x) {
-    return Math.max(0, Math.min(1, x));
-  }
-  function mix(a, b, t) {
-    return a + (b - a) * t;
-  }
+  let last = performance.now();
+  function step(now) {
+    const dt = clamp((now - last) / 1000, 0.0, 0.05);
+    last = now;
 
-  function impulseAt(px, py, dvx, dvy) {
-    const sw = sim.width;
-    const sh = sim.height;
-    const rad = Math.floor(Math.min(sw, sh) * 0.17);
-    const r2 = rad * rad;
-    const ix0 = clamp(Math.floor(px - rad), 1, sw - 2);
-    const ix1 = clamp(Math.floor(px + rad), 1, sw - 2);
-    const iy0 = clamp(Math.floor(py - rad), 1, sh - 2);
-    const iy1 = clamp(Math.floor(py + rad), 1, sh - 2);
-
-    for (let y = iy0; y <= iy1; y++) {
-      for (let x = ix0; x <= ix1; x++) {
-        const dx = x - px;
-        const dy = y - py;
-        const d2 = dx * dx + dy * dy;
-        if (d2 > r2) continue;
-        const fall = 1 - Math.sqrt(d2) / rad;
-        const i = y * sw + x;
-
-        // Push + gentle vortex.
-        dispX[i] += dvx * fall * 92 + (-dy / (1 + Math.sqrt(d2))) * fall * 14;
-        dispY[i] += dvy * fall * 92 + (dx / (1 + Math.sqrt(d2))) * fall * 14;
-      }
-    }
-  }
-
-  let t = 0;
-  function step() {
-    t += 0.012;
-    const sw = sim.width;
-    const sh = sim.height;
-    const n = sw * sh;
-
-    // Cursor -> sim coords.
-    const px = (pointer.x / Math.max(1, w)) * sw;
-    const py = (pointer.y / Math.max(1, h)) * sh;
-    const mv = Math.min(1.6, Math.hypot(pointer.vx, pointer.vy) * 28);
-
-    // Decay + slight diffusion of displacement (keeps motion "liquid").
-    for (let i = 0; i < n; i++) {
-      dispX[i] *= 0.92;
-      dispY[i] *= 0.92;
-    }
-    for (let y = 1; y < sh - 1; y++) {
-      for (let x = 1; x < sw - 1; x++) {
-        const i = y * sw + x;
-        const a = 0.12;
-        const ax =
-          (dispX[i - 1] + dispX[i + 1] + dispX[i - sw] + dispX[i + sw]) * 0.25;
-        const ay =
-          (dispY[i - 1] + dispY[i + 1] + dispY[i - sw] + dispY[i + sw]) * 0.25;
-        dispX[i] = dispX[i] * (1 - a) + ax * a;
-        dispY[i] = dispY[i] * (1 - a) + ay * a;
-      }
-    }
-
-    if (pointer.active) {
-      impulseAt(px, py, pointer.vx * (1.2 + mv), pointer.vy * (1.2 + mv));
-    }
-
-    // Heightfield (marble) in [0,1].
-    for (let y = 0; y < sh; y++) {
-      const v = y / sh;
-      for (let x = 0; x < sw; x++) {
-        const u = x / sw;
-        const i = y * sw + x;
-        const du = dispX[i] / sw;
-        const dv = dispY[i] / sh;
-
-        const uu = u + du * 0.55;
-        const vv = v + dv * 0.55;
-
-        // Two-scale marble with ridges (gives "metallic flakes" structure).
-        const n1 = fbm(uu * 3.15 + t * 0.18, vv * 3.05 - t * 0.14);
-        const n2 = fbm(uu * 8.2 - t * 0.12, vv * 7.8 + t * 0.16);
-        const ridge = 1 - Math.abs(2 * n2 - 1);
-        heightBuf[i] = saturate(n1 * 0.78 + ridge * 0.48);
-      }
-    }
-
-    // Lighting vectors (cursor steers highlight).
-    const lx = -0.28 + (pointer.x / Math.max(1, w) - 0.5) * 0.85;
-    const ly = -0.18 + (pointer.y / Math.max(1, h) - 0.5) * 0.65;
-    let lz = 0.92;
-    const ll = Math.hypot(lx, ly, lz) || 1;
-    const Lx = lx / ll;
-    const Ly = ly / ll;
-    const Lz = lz / ll;
-
-    // v = (0,0,1); h = normalize(L + v)
-    const hx = Lx;
-    const hy = Ly;
-    const hz = Lz + 1;
-    const hl = Math.hypot(hx, hy, hz) || 1;
-    const Hx = hx / hl;
-    const Hy = hy / hl;
-    const Hz = hz / hl;
-
-    const img = sctx.createImageData(sw, sh);
-    const data = img.data;
-
-    const deep = { r: 10, g: 14, b: 30 };
-    const teal = { r: 44, g: 186, b: 203 };
-    const periw = { r: 96, g: 118, b: 255 };
-    const vio = { r: 142, g: 89, b: 255 };
-
-    // Shading + color.
-    for (let y = 0; y < sh; y++) {
-      for (let x = 0; x < sw; x++) {
-        const i = y * sw + x;
-        const idx = i * 4;
-
-        const h0 = heightBuf[i];
-        const hL = heightBuf[y * sw + Math.max(0, x - 1)];
-        const hR = heightBuf[y * sw + Math.min(sw - 1, x + 1)];
-        const hU = heightBuf[Math.max(0, y - 1) * sw + x];
-        const hD = heightBuf[Math.min(sh - 1, y + 1) * sw + x];
-        const dhx = (hR - hL) * 1.35;
-        const dhy = (hD - hU) * 1.35;
-
-        // Normal from height gradient.
-        let nx = -dhx * 2.2;
-        let ny = -dhy * 2.2;
-        let nz = 1;
-        const nl = Math.hypot(nx, ny, nz) || 1;
-        nx /= nl;
-        ny /= nl;
-        nz /= nl;
-
-        const diff = Math.max(0, nx * Lx + ny * Ly + nz * Lz);
-        const ndh = Math.max(0, nx * Hx + ny * Hy + nz * Hz);
-        const spec = Math.pow(ndh, 56 + mv * 18);
-        const fres = Math.pow(1 - Math.max(0, nz), 3) * 0.42;
-
-        // Color ramp via height + a second noise (adds iridescent mixing).
-        const tintN = noise2(x * 0.11 + t * 0.2, y * 0.11 - t * 0.18);
-        const m1 = saturate((h0 - 0.22) * 1.55);
-        const m2 = saturate((tintN - 0.3) * 1.35);
-
-        const aR = mix(teal.r, periw.r, m2);
-        const aG = mix(teal.g, periw.g, m2);
-        const aB = mix(teal.b, periw.b, m2);
-
-        const bR = mix(periw.r, vio.r, m1);
-        const bG = mix(periw.g, vio.g, m1);
-        const bB = mix(periw.b, vio.b, m1);
-
-        let r = mix(aR, bR, m1);
-        let g = mix(aG, bG, m1);
-        let b = mix(aB, bB, m1);
-
-        // Depth (shadows in the "folds").
-        const shade = 0.32 + diff * 0.78;
-        r = mix(deep.r, r, 0.78) * shade;
-        g = mix(deep.g, g, 0.78) * shade;
-        b = mix(deep.b, b, 0.78) * shade;
-
-        // Metallic sheen.
-        const sheen = spec * 255;
-        r += sheen * 0.92 + fres * 28;
-        g += sheen * 0.98 + fres * 24;
-        b += sheen * 1.04 + fres * 34;
-
-        // Glitter flakes: high-freq noise gated by spec/diff.
-        const flk = noise2(x * 1.35 + t * 0.6, y * 1.35 - t * 0.5);
-        const sparkle = saturate((flk - 0.86) * 6.5) * (0.25 + diff * 0.6) * (0.35 + spec * 0.9);
-        r += sparkle * 240;
-        g += sparkle * 260;
-        b += sparkle * 320;
-
-        // Film grain (subtle).
-        const gr = (noise2(x * 2.7 + t * 3.0, y * 2.7 + t * 2.2) - 0.5) * 14;
-        r += gr;
-        g += gr;
-        b += gr;
-
-        data[idx] = clamp(Math.floor(r), 0, 255);
-        data[idx + 1] = clamp(Math.floor(g), 0, 255);
-        data[idx + 2] = clamp(Math.floor(b), 0, 255);
-        data[idx + 3] = 255;
-      }
-    }
-
-    sctx.putImageData(img, 0, 0);
-
-    // Upscale with a soft pass so it feels like photographed paint.
     ctx.clearRect(0, 0, w, h);
-    ctx.save();
-    ctx.globalAlpha = 0.9;
-    ctx.filter = "blur(18px) saturate(1.12) contrast(1.06)";
-    ctx.drawImage(sim, 0, 0, w, h);
-    ctx.restore();
-    ctx.save();
-    ctx.globalAlpha = 0.92;
-    ctx.filter = "none";
-    ctx.drawImage(sim, 0, 0, w, h);
-    ctx.restore();
 
-    const vg = ctx.createRadialGradient(w / 2, h / 2, Math.min(w, h) * 0.12, w / 2, h / 2, Math.min(w, h) * 0.92);
-    vg.addColorStop(0, "rgba(255,255,255,0)");
-    vg.addColorStop(1, "rgba(0,0,0,0.22)");
-    ctx.fillStyle = vg;
+    // A gentle "glass" wash so the orbs feel integrated.
+    ctx.globalCompositeOperation = "source-over";
+    ctx.fillStyle = "rgba(255,255,255,0.06)";
     ctx.fillRect(0, 0, w, h);
+
+    const px = pointer.x;
+    const py = pointer.y;
+
+    // Multiply keeps pigments subtle on a light background.
+    ctx.globalCompositeOperation = "multiply";
+
+    for (const c of circles) {
+      // cursor dodge
+      if (pointer.active) {
+        const dx = c.x - px;
+        const dy = c.y - py;
+        const rr = c.r * 0.95 + 120;
+        const d2 = dx * dx + dy * dy;
+        if (d2 < rr * rr) {
+          const d = Math.max(1, Math.sqrt(d2));
+          const fall = 1 - d / rr;
+          const force = fall * (3.4 + c.drift) * 60;
+          c.vx += (dx / d) * force * dt;
+          c.vy += (dy / d) * force * dt;
+        }
+      }
+
+      // gentle drift + swirl
+      c.phase += c.spin;
+      c.vx += Math.cos(c.phase * 1.3) * 0.02 * dt;
+      c.vy += Math.sin(c.phase * 1.1) * 0.02 * dt;
+
+      // friction
+      c.vx *= 0.985;
+      c.vy *= 0.985;
+
+      c.x += c.vx * 60;
+      c.y += c.vy * 60;
+
+      // wrap around edges
+      const m = c.r + 40;
+      if (c.x < -m) c.x = w + m;
+      if (c.x > w + m) c.x = -m;
+      if (c.y < -m) c.y = h + m;
+      if (c.y > h + m) c.y = -m;
+
+      const sp = getSprite(c.ci, c.r);
+      if (!sp) continue;
+
+      // Slight per-orb alpha variation for depth.
+      ctx.globalAlpha = 0.78;
+      const s = (c.r * 2) / sp.r;
+      const drawR = sp.r * s;
+      ctx.drawImage(sp.canvas, c.x - drawR, c.y - drawR, drawR * 2, drawR * 2);
+    }
+
+    ctx.globalAlpha = 1;
+    ctx.globalCompositeOperation = "source-over";
+    if (vignette) {
+      ctx.fillStyle = vignette;
+      ctx.fillRect(0, 0, w, h);
+    }
 
     requestAnimationFrame(step);
   }
 
   const reduce = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-  if (!reduce) requestAnimationFrame(step);
+  if (reduce) {
+    // Render a static frame.
+    ctx.clearRect(0, 0, w, h);
+    ctx.globalCompositeOperation = "multiply";
+    for (const c of circles) {
+      const sp = getSprite(c.ci, c.r);
+      if (!sp) continue;
+      ctx.globalAlpha = 0.7;
+      const s = (c.r * 2) / sp.r;
+      const drawR = sp.r * s;
+      ctx.drawImage(sp.canvas, c.x - drawR, c.y - drawR, drawR * 2, drawR * 2);
+    }
+    ctx.globalAlpha = 1;
+    ctx.globalCompositeOperation = "source-over";
+    if (vignette) {
+      ctx.fillStyle = vignette;
+      ctx.fillRect(0, 0, w, h);
+    }
+    return;
+  }
+
+  requestAnimationFrame(step);
 }
 
 function initSkillsBubble() {
