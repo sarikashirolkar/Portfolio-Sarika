@@ -50,10 +50,13 @@
             This chat is limited to my resume and projects I worked on.
           </p>
           <div class="hero__pills">
-            <button class="pill" data-q="What are you working on right now?">What I'm doing now</button>
-            <button class="pill" data-q="Summarize your ML experience in 5 bullets.">ML experience</button>
-            <button class="pill" data-q="Which projects have GitHub links?">Projects with repos</button>
-            <button class="pill" data-q="What did you do on Azure?">Azure work</button>
+            <button class="pill pill--prime" data-intent="professional_summary">Professional summary</button>
+            <button class="pill" data-intent="ml_projects">ML projects</button>
+            <button class="pill" data-intent="azure_projects">Azure projects</button>
+            <button class="pill" data-intent="agentic_ai_projects">Agentic AI projects</button>
+            <button class="pill" data-intent="ieee_publications">IEEE paper publications</button>
+            <button class="pill" data-intent="chair_ieee_cis_svit">Chair, IEEE CIS SVIT</button>
+            <button class="pill" data-intent="outside_resume">Outside the resume</button>
           </div>
           <p class="fine">
             Tip: You can enable AI-generated answers by setting a chat endpoint or bringing your own API key. Without it, the chat still returns relevant resume excerpts.
@@ -367,4 +370,3 @@
   <script src="script.js"></script>
 </body>
 </html>
-

@@ -294,6 +294,14 @@ canvas#bg{
   cursor:pointer;
   transition: transform 160ms ease, background 160ms ease, border-color 160ms ease;
 }
+.pill--prime{
+  border-color:rgba(202,160,90,.30);
+  background:rgba(202,160,90,.14);
+}
+.pill--prime:hover{
+  background:rgba(202,160,90,.18);
+  border-color:rgba(202,160,90,.34);
+}
 .pill:hover{transform:translateY(-1px);background:rgba(127,109,184,.10);border-color:rgba(127,109,184,.18)}
 .pill:active{transform:translateY(0)}
 

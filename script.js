@@ -53,6 +53,28 @@ const RESUME_CHUNKS = [
     text: "Project internship with IEEE IAMPro'25.",
   },
   {
+    id: "lead_ieee_pub",
+    title: "IEEE Publication",
+    text:
+      "First author of a peer-reviewed paper published at an IEEE International Conference on applied object detection for autonomous systems.",
+  },
+  {
+    id: "lead_ieee_cis_chair",
+    title: "Chair, IEEE CIS SVIT",
+    text: "Led ML workshops and hackathons; mentored peers on applied ML pipelines and experimentation.",
+  },
+  {
+    id: "lead_ui_team_lead",
+    title: "U&I Team Leader",
+    text:
+      "Raised 10,000 and taught Mathematics, Science, and soft skills to underprivileged communities.",
+  },
+  {
+    id: "award_ideathon",
+    title: "Ideathon (E-Cell SVIT) — 3rd Place (Oct 21, 2022)",
+    text: "Placed 3rd at E-Cell SVIT Ideathon (Oct 21, 2022).",
+  },
+  {
     id: "proj_yolo_ieee",
     title: "Secure Object Identification for Autonomous Systems (YOLOv8) — IEEE Publication",
     text:
@@ -207,6 +229,77 @@ function formatCitations(chunks) {
   return `<div class="cite"><div style="font-weight:900; margin-bottom:6px;">Matched resume excerpts</div>${items}</div>`;
 }
 
+function answerFromChunks(opts) {
+  const title = opts && opts.title ? String(opts.title) : "";
+  const chunks = (opts && opts.chunks) || [];
+  const intro = opts && opts.intro ? String(opts.intro) : "";
+  const body = chunks
+    .map((c) => `<p>${escapeHtml(c.text)}</p>`)
+    .join("");
+  const head = title ? `<p style="font-weight:950; margin:0 0 10px;">${escapeHtml(title)}</p>` : "";
+  const pre = intro ? `<p>${escapeHtml(intro)}</p>` : "";
+  return { html: `${head}${pre}${body}${formatCitations(chunks)}`, citations: chunks };
+}
+
+function intentLabel(intent) {
+  const m = {
+    professional_summary: "Professional summary",
+    outside_resume: "Outside the resume",
+    ml_projects: "ML projects",
+    azure_projects: "Azure projects",
+    agentic_ai_projects: "Agentic AI projects",
+    ieee_publications: "IEEE paper publications",
+    chair_ieee_cis_svit: "Chair, IEEE CIS SVIT",
+  };
+  return m[intent] || intent;
+}
+
+function localIntent(intent) {
+  const byId = new Map(RESUME_CHUNKS.map((c) => [c.id, c]));
+  const pick = (ids) => ids.map((id) => byId.get(id)).filter(Boolean);
+
+  switch (intent) {
+    case "professional_summary":
+      return answerFromChunks({
+        title: "Professional summary (from resume)",
+        chunks: pick(["exp_jmle_now", "exp_jmle_pipelines", "exp_cloud_azure", "exp_bel", "lead_ieee_cis_chair"]),
+      });
+    case "ml_projects":
+      return answerFromChunks({
+        title: "ML projects",
+        chunks: pick(["proj_yolo_ieee", "proj_risk", "proj_crater"]),
+      });
+    case "azure_projects":
+      return answerFromChunks({
+        title: "Azure work and projects",
+        chunks: pick(["exp_cloud_azure", "proj_resume_builder", "exp_jmle_pipelines"]),
+      });
+    case "agentic_ai_projects":
+      return answerFromChunks({
+        title: "Agentic AI projects",
+        chunks: pick(["exp_jmle_now", "proj_voice_agent", "proj_research_agent"]),
+      });
+    case "ieee_publications":
+      return answerFromChunks({
+        title: "IEEE publications",
+        chunks: pick(["lead_ieee_pub", "proj_yolo_ieee"]),
+      });
+    case "chair_ieee_cis_svit":
+      return answerFromChunks({
+        title: "Leadership: Chair, IEEE CIS SVIT",
+        chunks: pick(["lead_ieee_cis_chair"]),
+      });
+    case "outside_resume":
+      return {
+        html:
+          "<p>I can only answer using your resume + this portfolio. For \"outside the resume\", check the Profile section for photos (events, hackathons, teams, internships, and trekking).</p>",
+        citations: [],
+      };
+    default:
+      return null;
+  }
+}
+
 function localAnswer(q) {
   const top = retrieve(q, 5);
   if (!top.length) {
@@ -343,6 +436,28 @@ function initChat() {
     }
   }
 
+  async function respondIntent(intent) {
+    const label = intentLabel(intent);
+    addMsg(log, "me", `<p><strong>${escapeHtml(label)}</strong></p>`);
+    const thinking = document.createElement("div");
+    thinking.className = "msg";
+    thinking.innerHTML =
+      `<div class="msg__role">AI</div>` +
+      `<div class="msg__bubble"><p class="msg__thinking">Thinking...</p></div>`;
+    log.appendChild(thinking);
+    log.scrollTop = log.scrollHeight;
+
+    try {
+      const out = localIntent(intent) || localAnswer(label);
+      thinking.remove();
+      addMsg(log, "ai", out.html);
+    } catch (e) {
+      console.error(e);
+      thinking.remove();
+      addMsg(log, "ai", `<p>Something went wrong rendering that option.</p>`);
+    }
+  }
+
   form.addEventListener("submit", async (e) => {
     e.preventDefault();
     const q = input.value.trim();
@@ -353,9 +468,11 @@ function initChat() {
 
   $all(".pill").forEach((b) => {
     b.addEventListener("click", async () => {
+      const intent = (b.getAttribute("data-intent") || "").trim();
+      if (intent) return respondIntent(intent);
       const q = (b.getAttribute("data-q") || "").trim();
       if (!q) return;
-      await respond(q);
+      return respond(q);
     });
   });
 }

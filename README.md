@@ -12,8 +12,15 @@ After GitHub Pages is enabled, the site will be available at:
 
 - `index.html`: main page content (resume sections)
 - `styles.css`: layout + typography + responsive styling
-- `script.js`: lightweight scroll reveal + active section highlighting
+- `script.js`: background animation + resume-only RAG chat (local retrieval) + carousel + skills bubble
 - `resume.pdf`: downloadable resume used by the page
+
+## Resume Chat (RAG)
+
+The chat is designed to answer only using resume/project excerpts embedded in `script.js`.
+
+- Default mode: local retrieval (no cloud, works on GitHub Pages)
+- Optional: set a custom endpoint in Chat Settings for a local AI server (e.g. Ollama on your laptop)
 
 ## Run Locally
 
@@ -24,6 +31,14 @@ python3 -m http.server 5173
 ```
 
 Then visit `http://localhost:5173`.
+
+## Local AI (No Cloud) Optional
+
+If you want fully local AI generation (no cloud APIs), you can run a local model and point the site to it.
+
+1. Install and run Ollama.
+2. Run a tiny local HTTP endpoint that accepts `{ question, context }` and returns `{ answer }`.
+3. Paste that endpoint URL into the site's Chat Settings.
 
 ## Deploy To GitHub Pages
 
@@ -43,4 +58,3 @@ Then visit `http://localhost:5173`.
 ## License
 
 All rights reserved (unless you choose to add an open-source license).
-
