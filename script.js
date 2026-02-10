@@ -622,6 +622,9 @@ function initModal() {
     openaiKey.value = "";
     setModeLabel();
   });
+
+  // Additional buttons can open the settings without duplicating IDs.
+  $all(".ragOpenSettings").forEach((b) => b.addEventListener("click", open));
 }
 
 function initBackground() {
@@ -857,36 +860,110 @@ function initSkillsBubble() {
   const ctx = canvas.getContext("2d");
   if (!ctx) return;
 
-  const skills = [
-    { label: "Python", icon: "python", url: "https://docs.python.org/3/" },
-    { label: "scikit-learn", icon: "scikitlearn", url: "https://scikit-learn.org/stable/" },
-    { label: "TensorFlow", icon: "tensorflow", url: "https://www.tensorflow.org/" },
-    { label: "Keras", icon: "keras", url: "https://keras.io/" },
-    { label: "Pandas", icon: "pandas", url: "https://pandas.pydata.org/docs/" },
-    { label: "NumPy", icon: "numpy", url: "https://numpy.org/doc/" },
-    { label: "Matplotlib", icon: "matplotlib", url: "https://matplotlib.org/stable/" },
-    { label: "Streamlit", icon: "streamlit", url: "https://docs.streamlit.io/" },
-    { label: "BeautifulSoup", icon: "beautifulsoup", url: "https://www.crummy.com/software/BeautifulSoup/bs4/doc/" },
-    { label: "OpenCV", icon: "opencv", url: "https://docs.opencv.org/" },
-    { label: "LangChain", icon: "langchain", url: "https://python.langchain.com/docs/" },
-    { label: "Azure", icon: "microsoftazure", url: "https://learn.microsoft.com/azure/" },
-    { label: "Linux", icon: "linux", url: "https://www.kernel.org/doc/" },
-    { label: "GitHub", icon: "github", url: "https://docs.github.com/" },
-    { label: "MongoDB", icon: "mongodb", url: "https://www.mongodb.com/docs/" },
-    { label: "MySQL", icon: "mysql", url: "https://dev.mysql.com/doc/" },
-    { label: "Power BI", icon: "powerbi", url: "https://learn.microsoft.com/power-bi/" },
-    { label: "Tableau", icon: "tableau", url: "https://help.tableau.com/" },
-    { label: "SQL", icon: "sqlite", url: "https://www.postgresql.org/docs/" },
-    { label: "Java", icon: "openjdk", url: "https://docs.oracle.com/en/java/" },
+  const DEVICON = "https://cdn.jsdelivr.net/gh/devicons/devicon/icons";
+
+  const CATS = [
+    {
+      name: "Languages",
+      ring: 0.34,
+      items: [
+        { label: "Python", icon: `${DEVICON}/python/python-original.svg`, url: "https://docs.python.org/3/" },
+        { label: "C", icon: `${DEVICON}/c/c-original.svg`, url: "https://en.cppreference.com/w/c" },
+        { label: "Java", icon: `${DEVICON}/java/java-original.svg`, url: "https://docs.oracle.com/en/java/" },
+        { label: "SQL", icon: `${DEVICON}/mysql/mysql-original.svg`, url: "https://www.postgresql.org/docs/" },
+        { label: "DSA", icon: null, url: "https://en.wikipedia.org/wiki/Data_structure" },
+        { label: "LaTeX", icon: `${DEVICON}/latex/latex-original.svg`, url: "https://www.latex-project.org/help/documentation/" },
+      ],
+    },
+    {
+      name: "Tools",
+      ring: 0.46,
+      items: [
+        { label: "Git", icon: `${DEVICON}/git/git-original.svg`, url: "https://git-scm.com/doc" },
+        { label: "Jupyter", icon: `${DEVICON}/jupyter/jupyter-original.svg`, url: "https://docs.jupyter.org/en/latest/" },
+        { label: "VS Code", icon: `${DEVICON}/vscode/vscode-original.svg`, url: "https://code.visualstudio.com/docs" },
+        { label: "Colab", icon: null, url: "https://colab.research.google.com/" },
+        { label: "Kaggle", icon: `${DEVICON}/kaggle/kaggle-original.svg`, url: "https://www.kaggle.com/docs" },
+        { label: "Eclipse", icon: `${DEVICON}/eclipse/eclipse-original.svg`, url: "https://help.eclipse.org/" },
+        { label: "Power BI", icon: null, url: "https://learn.microsoft.com/power-bi/" },
+        { label: "Tableau", icon: null, url: "https://help.tableau.com/" },
+      ],
+    },
+    {
+      name: "Computer Vision",
+      ring: 0.58,
+      items: [
+        { label: "YOLOv8", icon: null, url: "https://docs.ultralytics.com/" },
+        { label: "YOLOv12", icon: null, url: "https://docs.ultralytics.com/" },
+        { label: "Object Detection", icon: null, url: "https://en.wikipedia.org/wiki/Object_detection" },
+        { label: "Image Classification", icon: null, url: "https://en.wikipedia.org/wiki/Statistical_classification" },
+      ],
+    },
+    {
+      name: "Libraries/Frameworks",
+      ring: 0.70,
+      items: [
+        { label: "Streamlit", icon: `${DEVICON}/streamlit/streamlit-original.svg`, url: "https://docs.streamlit.io/" },
+        { label: "Matplotlib", icon: `${DEVICON}/matplotlib/matplotlib-original.svg`, url: "https://matplotlib.org/stable/" },
+        { label: "OpenCV", icon: `${DEVICON}/opencv/opencv-original.svg`, url: "https://docs.opencv.org/" },
+        { label: "BeautifulSoup", icon: null, url: "https://www.crummy.com/software/BeautifulSoup/bs4/doc/" },
+        { label: "Keras", icon: `${DEVICON}/keras/keras-original.svg`, url: "https://keras.io/" },
+        { label: "Pandas", icon: `${DEVICON}/pandas/pandas-original.svg`, url: "https://pandas.pydata.org/docs/" },
+        { label: "NumPy", icon: `${DEVICON}/numpy/numpy-original.svg`, url: "https://numpy.org/doc/" },
+        { label: "TensorFlow", icon: `${DEVICON}/tensorflow/tensorflow-original.svg`, url: "https://www.tensorflow.org/" },
+        { label: "Generative AI", icon: null, url: "https://platform.openai.com/docs" },
+      ],
+    },
+    {
+      name: "Cloud",
+      ring: 0.82,
+      items: [
+        { label: "Azure", icon: `${DEVICON}/azure/azure-original.svg`, url: "https://learn.microsoft.com/azure/" },
+        { label: "App Services", icon: `${DEVICON}/azure/azure-original.svg`, url: "https://learn.microsoft.com/azure/app-service/" },
+        { label: "VMs", icon: `${DEVICON}/azure/azure-original.svg`, url: "https://learn.microsoft.com/azure/virtual-machines/" },
+        { label: "Blob Storage", icon: `${DEVICON}/azure/azure-original.svg`, url: "https://learn.microsoft.com/azure/storage/blobs/" },
+      ],
+    },
+    {
+      name: "ML Algorithms",
+      ring: 0.94,
+      items: [
+        { label: "Linear Regression", icon: null, url: "https://scikit-learn.org/stable/modules/linear_model.html" },
+        { label: "Logistic Regression", icon: null, url: "https://scikit-learn.org/stable/modules/linear_model.html" },
+        { label: "Clustering", icon: null, url: "https://scikit-learn.org/stable/modules/clustering.html" },
+        { label: "Random Forest", icon: null, url: "https://scikit-learn.org/stable/modules/ensemble.html" },
+        { label: "KNN", icon: null, url: "https://scikit-learn.org/stable/modules/neighbors.html" },
+        { label: "ANN", icon: null, url: "https://www.tensorflow.org/guide/keras" },
+      ],
+    },
+    {
+      name: "Databases",
+      ring: 1.06,
+      items: [
+        { label: "MySQL", icon: `${DEVICON}/mysql/mysql-original.svg`, url: "https://dev.mysql.com/doc/" },
+        { label: "MongoDB", icon: `${DEVICON}/mongodb/mongodb-original.svg`, url: "https://www.mongodb.com/docs/" },
+      ],
+    },
+    {
+      name: "Systems",
+      ring: 1.18,
+      items: [
+        { label: "Windows", icon: `${DEVICON}/windows8/windows8-original.svg`, url: "https://learn.microsoft.com/windows/" },
+        { label: "Linux", icon: `${DEVICON}/linux/linux-original.svg`, url: "https://www.kernel.org/doc/" },
+        { label: "macOS", icon: null, url: "https://support.apple.com/macos" },
+      ],
+    },
   ];
 
   const iconCache = new Map();
-  function loadIcon(slug) {
-    if (iconCache.has(slug)) return iconCache.get(slug);
+  function loadIcon(url) {
+    if (!url) return null;
+    if (iconCache.has(url)) return iconCache.get(url);
     const img = new Image();
-    // Simple Icons CDN. If a slug doesn't exist, the image will error and we fall back to a circle.
-    img.src = `https://cdn.simpleicons.org/${encodeURIComponent(slug)}/16121e`;
-    iconCache.set(slug, img);
+    img.referrerPolicy = "no-referrer";
+    img.crossOrigin = "anonymous";
+    img.src = url;
+    iconCache.set(url, img);
     return img;
   }
 
@@ -905,62 +982,75 @@ function initSkillsBubble() {
   resize();
   window.addEventListener("resize", resize);
 
-  const pointer = { x: -9999, y: -9999, down: false };
+  const pointer = { x: -9999, y: -9999, inside: false };
   canvas.addEventListener("pointermove", (e) => {
     const r = canvas.getBoundingClientRect();
     pointer.x = e.clientX - r.left;
     pointer.y = e.clientY - r.top;
+    pointer.inside = true;
   });
   canvas.addEventListener("pointerleave", () => {
     pointer.x = -9999;
     pointer.y = -9999;
+    pointer.inside = false;
   });
 
   const center = () => ({ x: w / 2, y: h / 2 });
 
-  const nodes = skills.map((s, i) => {
-    const a = (i / skills.length) * Math.PI * 2;
-    const rad = 0.16 + (i % 5) * 0.05;
+  // Flatten categorized nodes. Each category maps to a ring.
+  const items = [];
+  for (const cat of CATS) {
+    for (const it of cat.items) items.push({ ...it, cat: cat.name, ring: cat.ring });
+  }
+
+  const nodes = items.map((s, i) => {
+    const a = (i / items.length) * Math.PI * 2;
+    const base = 18 + (i % 5) * 2;
     return {
       ...s,
-      x: w / 2 + Math.cos(a) * w * 0.22,
-      y: h / 2 + Math.sin(a) * h * 0.22,
+      x: w / 2,
+      y: h / 2,
       vx: 0,
       vy: 0,
       a,
-      r: 26 + (i % 3) * 4,
-      orbit: rad,
+      r: base,
+      speed: 0.0018 + (i % 7) * 0.00018,
     };
   });
+
+  let paused = false;
+  canvas.addEventListener("pointerenter", () => (paused = true));
+  canvas.addEventListener("pointerleave", () => (paused = false));
 
   function draw() {
     ctx.clearRect(0, 0, w, h);
 
-    // big bubble
+    // Central glass orb
     const c = center();
-    const R = Math.min(w, h) * 0.44;
-    const g = ctx.createRadialGradient(c.x, c.y, R * 0.05, c.x, c.y, R);
-    g.addColorStop(0, "rgba(255,255,255,0.55)");
-    g.addColorStop(1, "rgba(255,255,255,0.20)");
-    ctx.fillStyle = g;
+    const R = Math.min(w, h) * 0.32;
+    const g0 = ctx.createRadialGradient(c.x - R * 0.2, c.y - R * 0.2, 0, c.x, c.y, R);
+    g0.addColorStop(0, "rgba(255,255,255,0.18)");
+    g0.addColorStop(1, "rgba(255,255,255,0.04)");
+    ctx.fillStyle = g0;
     ctx.beginPath();
     ctx.arc(c.x, c.y, R, 0, Math.PI * 2);
     ctx.fill();
-    ctx.strokeStyle = "rgba(22,18,30,0.12)";
+    ctx.strokeStyle = "rgba(255,255,255,0.16)";
     ctx.lineWidth = 2;
     ctx.stroke();
 
-    // physics
-    const repelR = 90;
+    // Physics/orbits (paused on hover)
+    const repelR = 86;
     for (const n of nodes) {
-      // orbit target
-      n.a += 0.006 + n.orbit * 0.004;
-      const tx = c.x + Math.cos(n.a) * (R * (0.18 + n.orbit));
-      const ty = c.y + Math.sin(n.a) * (R * (0.18 + n.orbit));
+      if (!paused) n.a += n.speed;
+
+      const ring = R * (0.38 + n.ring * 0.58);
+      const tx = c.x + Math.cos(n.a) * ring;
+      const ty = c.y + Math.sin(n.a) * ring;
 
       // spring towards orbit
-      n.vx += (tx - n.x) * 0.0026;
-      n.vy += (ty - n.y) * 0.0026;
+      n.vx += (tx - n.x) * 0.0031;
+      n.vy += (ty - n.y) * 0.0031;
 
       // cursor dodge
       const dx = n.x - pointer.x;
@@ -973,11 +1063,11 @@ function initSkillsBubble() {
         n.vy += (dy / d) * f;
       }
 
-      // keep inside bubble
+      // keep within a max radius around the orb
       const dxC = n.x - c.x;
       const dyC = n.y - c.y;
       const dC = Math.max(1, Math.sqrt(dxC * dxC + dyC * dyC));
-      const maxD = R - n.r - 10;
+      const maxD = R * 1.34 - n.r - 10;
       if (dC > maxD) {
         const over = dC - maxD;
         n.vx -= (dxC / dC) * over * 0.012;
@@ -993,15 +1083,15 @@ function initSkillsBubble() {
 
     // render nodes
     for (const n of nodes) {
-      // bubble chip
+      // glass chip
       const chip = ctx.createRadialGradient(n.x - n.r * 0.3, n.y - n.r * 0.3, 0, n.x, n.y, n.r);
-      chip.addColorStop(0, "rgba(255,255,255,0.70)");
-      chip.addColorStop(1, "rgba(255,255,255,0.28)");
+      chip.addColorStop(0, "rgba(255,255,255,0.22)");
+      chip.addColorStop(1, "rgba(255,255,255,0.06)");
       ctx.fillStyle = chip;
       ctx.beginPath();
       ctx.arc(n.x, n.y, n.r, 0, Math.PI * 2);
       ctx.fill();
-      ctx.strokeStyle = "rgba(22,18,30,0.14)";
+      ctx.strokeStyle = "rgba(255,255,255,0.16)";
       ctx.lineWidth = 1.5;
       ctx.stroke();
 
@@ -1013,16 +1103,16 @@ function initSkillsBubble() {
         ctx.drawImage(img, n.x - s / 2, n.y - s / 2, s, s);
       } else {
         // fallback glyph
-        ctx.fillStyle = "rgba(22,18,30,0.86)";
-        ctx.font = "900 14px Space Grotesk, system-ui";
+        ctx.fillStyle = "rgba(255,255,255,0.88)";
+        ctx.font = "900 12px Space Grotesk, system-ui";
         ctx.textAlign = "center";
         ctx.textBaseline = "middle";
         ctx.fillText(n.label.slice(0, 2).toUpperCase(), n.x, n.y);
       }
 
       // label under
-      ctx.fillStyle = "rgba(22,18,30,0.84)";
-      ctx.font = "800 12px Space Grotesk, system-ui";
+      ctx.fillStyle = "rgba(255,255,255,0.80)";
+      ctx.font = "800 11px Space Grotesk, system-ui";
       ctx.textAlign = "center";
       ctx.textBaseline = "top";
       ctx.fillText(n.label, n.x, n.y + n.r + 8);
