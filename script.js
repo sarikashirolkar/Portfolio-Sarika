@@ -357,13 +357,17 @@ function initChat() {
 }
 
 function initNavActive() {
-  const root = $(".snap");
+  const rootEl = $(".snap");
   const links = $all('.nav__links a[href^="#"]');
-  if (!root || !links.length) return;
+  if (!links.length) return;
   const targets = links.map((a) => $(a.getAttribute("href"))).filter(Boolean);
   if (!targets.length) return;
 
   const map = new Map(targets.map((t, i) => [t, links[i]]));
+  // If the main container isn't a scroller, let IntersectionObserver use the viewport.
+  const rootStyle = rootEl ? getComputedStyle(rootEl) : null;
+  const root =
+    rootEl && rootStyle && rootStyle.overflowY !== "visible" && rootStyle.overflowY !== "unset" ? rootEl : null;
   const io = new IntersectionObserver(
     (entries) => {
       const v = entries
@@ -378,6 +382,45 @@ function initNavActive() {
     { root, threshold: [0.25, 0.4, 0.6], rootMargin: "-10% 0px -70% 0px" }
   );
   targets.forEach((t) => io.observe(t));
+}
+
+function initReveal() {
+  const reduce = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const rootEl = $(".snap");
+  const rootStyle = rootEl ? getComputedStyle(rootEl) : null;
+  const root =
+    rootEl && rootStyle && rootStyle.overflowY !== "visible" && rootStyle.overflowY !== "unset" ? rootEl : null;
+
+  const els = [
+    ...$all(".hero__copy"),
+    ...$all(".chat"),
+    ...$all(".panel"),
+    ...$all(".sectionHead"),
+    ...$all(".card"),
+    ...$all(".tile"),
+    ...$all(".skillStage"),
+    ...$all(".contactCard"),
+  ];
+  if (!els.length) return;
+
+  els.forEach((el) => el.classList.add("reveal"));
+
+  if (reduce) {
+    els.forEach((el) => el.classList.add("is-in"));
+    return;
+  }
+
+  const io = new IntersectionObserver(
+    (entries) => {
+      for (const e of entries) {
+        if (!e.isIntersecting) continue;
+        e.target.classList.add("is-in");
+        io.unobserve(e.target);
+      }
+    },
+    { root, threshold: 0.12, rootMargin: "0px 0px -12% 0px" }
+  );
+  els.forEach((el) => io.observe(el));
 }
 
 function initCarousel() {
@@ -818,6 +861,7 @@ function initYear() {
 
 document.addEventListener("DOMContentLoaded", () => {
   initYear();
+  initReveal();
   initBackground();
   initNavActive();
   initCarousel();

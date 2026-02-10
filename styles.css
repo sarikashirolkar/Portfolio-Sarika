@@ -17,10 +17,11 @@
   --vio:#7f6db8;
   --mint:#5aa07a;
 
-  --r:22px;
-  --r2:16px;
-  --shadow:0 24px 80px rgba(18,12,30,.14);
-  --shadow2:0 18px 60px rgba(18,12,30,.10);
+  --r:26px;
+  --r2:18px;
+  --shadow:0 32px 100px rgba(18,12,30,.12);
+  --shadow2:0 18px 60px rgba(18,12,30,.08);
+  --shadow3:0 10px 30px rgba(18,12,30,.06);
 
   --max:1180px;
 }
@@ -32,9 +33,9 @@ body{
   font-family:"Space Grotesk",ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif;
   color:var(--ink);
   background:
-    radial-gradient(1200px 820px at 14% 16%, rgba(234,230,247,.95), transparent 60%),
-    radial-gradient(1200px 820px at 86% 24%, rgba(255,255,255,.82), transparent 62%),
-    radial-gradient(1100px 760px at 68% 92%, rgba(243,240,240,.92), transparent 58%),
+    radial-gradient(1100px 760px at 10% 10%, rgba(234,230,247,.92), transparent 60%),
+    radial-gradient(1000px 720px at 86% 14%, rgba(255,255,255,.84), transparent 62%),
+    radial-gradient(1000px 760px at 78% 92%, rgba(243,240,240,.92), transparent 58%),
     linear-gradient(180deg, var(--paper3), var(--paper));
   overflow-x:hidden;
 }
@@ -81,7 +82,7 @@ canvas#bg{
   background:rgba(243,240,240,.62);
   backdrop-filter: blur(14px) saturate(160%);
   -webkit-backdrop-filter: blur(14px) saturate(160%);
-  box-shadow:0 14px 40px rgba(18,12,30,.12);
+  box-shadow:var(--shadow3);
   z-index:3;
 }
 .nav__brand{
@@ -137,15 +138,17 @@ canvas#bg{
 
 /* Scroll snap pages */
 .snap{
-  scroll-snap-type:y mandatory;
-  height:100vh;
-  overflow-y:auto;
+  /* Prefer natural page scroll; keep the element for JS hooks. */
+  scroll-snap-type:none;
+  height:auto;
+  overflow:visible;
 }
 .page{
-  min-height:100vh;
-  scroll-snap-align:start;
+  min-height:auto;
+  scroll-snap-align:none;
   display:flex;
-  padding:94px 18px 24px;
+  padding:110px 18px 46px;
+  scroll-margin-top: 96px;
 }
 .wrap{
   width:100%;
@@ -281,6 +284,38 @@ canvas#bg{
   background:linear-gradient(180deg, rgba(255,255,255,.74), rgba(255,255,255,.44));
   box-shadow:var(--shadow);
 }
+
+/* Identity row (monogram + soft badge text) */
+.idRow{
+  margin:10px 0 14px;
+  display:flex;
+  align-items:center;
+  gap:12px;
+  padding:10px 12px;
+  border-radius:999px;
+  border:1px solid rgba(30,24,44,.10);
+  background:rgba(255,255,255,.40);
+  width:fit-content;
+  max-width:100%;
+}
+.idRow__mark{
+  width:40px;height:40px;
+  border-radius:999px;
+  display:grid;place-items:center;
+  font-family:"Fraunces",ui-serif,Georgia,serif;
+  font-weight:750;
+  letter-spacing:-.02em;
+  border:1px solid rgba(30,24,44,.10);
+  background:
+    radial-gradient(22px 22px at 30% 30%, rgba(202,160,90,.22), transparent 62%),
+    radial-gradient(26px 26px at 70% 70%, rgba(127,109,184,.18), transparent 62%),
+    rgba(255,255,255,.54);
+  box-shadow:0 10px 22px rgba(18,12,30,.07);
+}
+.idRow__meta{display:grid;line-height:1.05}
+.idRow__name{font-weight:950;letter-spacing:-.01em;overflow-wrap:anywhere}
+.idRow__role{margin-top:2px;color:var(--muted);font-weight:750;font-size:.92rem}
+
 .hero__pills{display:flex;flex-wrap:wrap;gap:10px;margin-top:14px}
 .pill{
   appearance:none;
@@ -621,4 +656,15 @@ canvas#skills{
   .snap{scroll-snap-type:none}
   .pill,.tile,.nav__links a,.contactCard{transition:none}
   .chat__spark{animation:none}
+}
+
+/* Scroll reveal */
+.reveal{
+  opacity:0;
+  transform: translateY(12px);
+  transition: opacity 520ms ease, transform 520ms ease;
+}
+.reveal.is-in{
+  opacity:1;
+  transform: translateY(0);
 }
