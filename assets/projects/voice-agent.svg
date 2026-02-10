@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1400" height="900" viewBox="0 0 1400 900">
+  <defs>
+    <linearGradient id="g" x1="0" y1="1" x2="1" y2="0">
+      <stop offset="0" stop-color="#081018"/>
+      <stop offset="0.55" stop-color="#1a1630"/>
+      <stop offset="1" stop-color="#0a0f16"/>
+    </linearGradient>
+    <radialGradient id="r" cx="70%" cy="40%" r="65%">
+      <stop offset="0" stop-color="#9ccfd8" stop-opacity="0.55"/>
+      <stop offset="1" stop-color="#9ccfd8" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <rect width="1400" height="900" fill="url(#g)"/>
+  <rect width="1400" height="900" fill="url(#r)"/>
+  <g fill="none" stroke="rgba(255,255,255,0.16)" stroke-width="2">
+    <path d="M280 560 C 280 420, 380 320, 520 320 L 760 320 C 900 320, 1000 420, 1000 560 C 1000 700, 900 800, 760 800 L 520 800 C 380 800, 280 700, 280 560 Z" />
+    <path d="M560 540 C 560 500, 600 460, 640 460 C 680 460, 720 500, 720 540 C 720 580, 680 620, 640 620 C 600 620, 560 580, 560 540 Z" />
+    <path d="M780 540 C 780 470, 840 410, 910 410" opacity="0.8"/>
+    <path d="M780 540 C 780 430, 870 340, 980 340" opacity="0.55"/>
+  </g>
+  <g font-family="ui-sans-serif, system-ui, -apple-system, Segoe UI" fill="rgba(255,255,255,0.86)">
+    <text x="96" y="120" font-size="42" font-weight="800">Project Screenshot Placeholder</text>
+    <text x="96" y="165" font-size="22" fill="rgba(255,255,255,0.7)">Replace with assets/projects/voice-agent.jpg</text>
+  </g>
+</svg>
+

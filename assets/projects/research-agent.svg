@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1400" height="900" viewBox="0 0 1400 900">
+  <defs>
+    <linearGradient id="g" x1="0" y1="1" x2="1" y2="0">
+      <stop offset="0" stop-color="#071019"/>
+      <stop offset="0.55" stop-color="#1b2a3b"/>
+      <stop offset="1" stop-color="#0a0f16"/>
+    </linearGradient>
+    <radialGradient id="r" cx="72%" cy="34%" r="70%">
+      <stop offset="0" stop-color="#cba6f7" stop-opacity="0.30"/>
+      <stop offset="1" stop-color="#cba6f7" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <rect width="1400" height="900" fill="url(#g)"/>
+  <rect width="1400" height="900" fill="url(#r)"/>
+  <g fill="none" stroke="rgba(255,255,255,0.16)" stroke-width="2">
+    <rect x="150" y="150" width="1100" height="600" rx="28"/>
+    <rect x="220" y="230" width="520" height="180" rx="22"/>
+    <rect x="220" y="430" width="520" height="260" rx="22"/>
+    <rect x="770" y="230" width="410" height="460" rx="22"/>
+  </g>
+  <g font-family="ui-sans-serif, system-ui, -apple-system, Segoe UI" fill="rgba(255,255,255,0.86)">
+    <text x="96" y="120" font-size="42" font-weight="800">Project Screenshot Placeholder</text>
+    <text x="96" y="165" font-size="22" fill="rgba(255,255,255,0.7)">Replace with assets/projects/research-agent.jpg</text>
+  </g>
+</svg>
+
