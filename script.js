@@ -243,6 +243,7 @@ function answerFromChunks(opts) {
 
 function intentLabel(intent) {
   const m = {
+    who_am_i: "Who am I?",
     professional_summary: "Professional summary",
     outside_resume: "Outside the resume",
     ml_projects: "ML projects",
@@ -259,6 +260,13 @@ function localIntent(intent) {
   const pick = (ids) => ids.map((id) => byId.get(id)).filter(Boolean);
 
   switch (intent) {
+    case "who_am_i":
+      return answerFromChunks({
+        title: "Who am I? (from resume)",
+        intro:
+          "A quick snapshot of what I do and the environments where I've shipped work. (Grounded in resume excerpts below.)",
+        chunks: pick(["exp_jmle_now", "exp_jmle_pipelines", "exp_cloud_azure", "exp_bel", "lead_ieee_cis_chair"]),
+      });
     case "professional_summary":
       return answerFromChunks({
         title: "Professional summary (from resume)",
