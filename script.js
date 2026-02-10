@@ -386,21 +386,7 @@ function initNavActive() {
 
 function initReveal() {
   const reduce = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-  const rootEl = $(".snap");
-  const rootStyle = rootEl ? getComputedStyle(rootEl) : null;
-  const root =
-    rootEl && rootStyle && rootStyle.overflowY !== "visible" && rootStyle.overflowY !== "unset" ? rootEl : null;
-
-  const els = [
-    ...$all(".hero__copy"),
-    ...$all(".chat"),
-    ...$all(".panel"),
-    ...$all(".sectionHead"),
-    ...$all(".card"),
-    ...$all(".tile"),
-    ...$all(".skillStage"),
-    ...$all(".contactCard"),
-  ];
+  const els = $all("[data-reveal]");
   if (!els.length) return;
 
   els.forEach((el) => el.classList.add("reveal"));
@@ -418,7 +404,7 @@ function initReveal() {
         io.unobserve(e.target);
       }
     },
-    { root, threshold: 0.12, rootMargin: "0px 0px -12% 0px" }
+    { root: null, threshold: 0.12, rootMargin: "0px 0px -12% 0px" }
   );
   els.forEach((el) => io.observe(el));
 }
