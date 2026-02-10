@@ -1209,6 +1209,117 @@ function initSkillsBubble() {
   });
 }
 
+function initSkillsMarquee() {
+  const t1 = $("#skills-track-1");
+  const t2 = $("#skills-track-2");
+  if (!t1 || !t2) return;
+
+  const DEVICON = "https://cdn.jsdelivr.net/gh/devicons/devicon/icons";
+  const dev = (name, variant = "original") => `${DEVICON}/${encodeURIComponent(name)}/${encodeURIComponent(name)}-${variant}.svg`;
+  const si = (slug, color = "111827") => `https://cdn.simpleicons.org/${encodeURIComponent(slug)}/${color}`;
+
+  // Card-style skills list (reference-like). Links go to official docs.
+  const skills = [
+    { label: "Spark", icon: si("apachespark"), url: "https://spark.apache.org/docs/latest/" },
+    { label: "CrewAI", icon: si("crewai"), url: "https://docs.crewai.com/" },
+    { label: "Streamlit", icon: dev("streamlit"), url: "https://docs.streamlit.io/" },
+    { label: "Ollama", icon: si("ollama"), url: "https://ollama.com/" },
+    { label: "LangChain", icon: si("langchain"), url: "https://python.langchain.com/docs/" },
+    { label: "Docker", icon: dev("docker"), url: "https://docs.docker.com/" },
+    { label: "FastAPI", icon: si("fastapi"), url: "https://fastapi.tiangolo.com/" },
+    { label: "Flask", icon: dev("flask"), url: "https://flask.palletsprojects.com/" },
+    { label: "HTML", icon: dev("html5"), url: "https://developer.mozilla.org/docs/Web/HTML" },
+    { label: "CSS", icon: dev("css3"), url: "https://developer.mozilla.org/docs/Web/CSS" },
+    { label: "JavaScript", icon: dev("javascript"), url: "https://developer.mozilla.org/docs/Web/JavaScript" },
+    { label: "TypeScript", icon: dev("typescript"), url: "https://www.typescriptlang.org/docs/" },
+    { label: "React.js", icon: dev("react"), url: "https://react.dev/learn" },
+    { label: "Three.js", icon: si("threedotjs"), url: "https://threejs.org/docs/" },
+    { label: "Framer", icon: si("framer"), url: "https://www.framer.com/learn/" },
+
+    { label: "Python", icon: dev("python"), url: "https://docs.python.org/3/" },
+    { label: "C", icon: dev("c"), url: "https://en.cppreference.com/w/c" },
+    { label: "Java", icon: dev("java"), url: "https://docs.oracle.com/en/java/" },
+    { label: "NumPy", icon: dev("numpy"), url: "https://numpy.org/doc/" },
+    { label: "Pandas", icon: dev("pandas"), url: "https://pandas.pydata.org/docs/" },
+    { label: "Matplotlib", icon: dev("matplotlib"), url: "https://matplotlib.org/stable/" },
+    { label: "scikit-learn", icon: si("scikitlearn"), url: "https://scikit-learn.org/stable/" },
+    { label: "TensorFlow", icon: dev("tensorflow"), url: "https://www.tensorflow.org/" },
+    { label: "Keras", icon: si("keras"), url: "https://keras.io/" },
+    { label: "OpenCV", icon: dev("opencv"), url: "https://docs.opencv.org/" },
+    { label: "Azure", icon: dev("azure"), url: "https://learn.microsoft.com/azure/" },
+    { label: "GitHub", icon: dev("github"), url: "https://docs.github.com/" },
+    { label: "MySQL", icon: dev("mysql"), url: "https://dev.mysql.com/doc/" },
+    { label: "MongoDB", icon: dev("mongodb"), url: "https://www.mongodb.com/docs/" },
+  ];
+
+  function resolveIcon(url, iconColor) {
+    const u = String(url || "");
+    if (!u) return "";
+    // Simple Icons: swap to theme-aware color by rewriting the URL.
+    if (u.includes("cdn.simpleicons.org/")) {
+      const m = u.match(/cdn\.simpleicons\.org\/([^/]+)/);
+      const slug = m && m[1] ? m[1] : "";
+      if (!slug) return u;
+      return si(slug, iconColor);
+    }
+    return u;
+  }
+
+  function makeCard(s, iconColor) {
+    const a = document.createElement("a");
+    a.className = "sCard";
+    a.href = s.url;
+    a.target = "_blank";
+    a.rel = "noopener noreferrer";
+    a.title = s.label;
+
+    const icon = document.createElement("span");
+    icon.className = "sCard__icon";
+
+    const img = document.createElement("img");
+    img.alt = "";
+    img.decoding = "async";
+    img.loading = "lazy";
+    img.referrerPolicy = "no-referrer";
+
+    // For Simple Icons, pick color based on theme so icons remain visible.
+    img.src = resolveIcon(s.icon, iconColor);
+
+    const fb = document.createElement("span");
+    fb.className = "sCard__fallback";
+    fb.textContent = (s.label || "?").slice(0, 2).toUpperCase();
+
+    img.addEventListener("error", () => {
+      img.remove();
+      icon.appendChild(fb);
+    });
+
+    icon.appendChild(img);
+
+    const label = document.createElement("div");
+    label.className = "sCard__label";
+    label.textContent = s.label;
+
+    a.appendChild(icon);
+    a.appendChild(label);
+    return a;
+  }
+
+  function fill(track, list, reverse = false) {
+    track.innerHTML = "";
+    const iconColor = getComputedStyle(document.documentElement).getPropertyValue("--skillCardInk").includes("245") ? "f5f7ff" : "111827";
+    const base = reverse ? [...list].reverse() : list;
+    // Duplicate to make a seamless -50% marquee.
+    const doubled = base.concat(base);
+    for (const s of doubled) track.appendChild(makeCard(s, iconColor));
+  }
+
+  // Split into two rows for nicer density.
+  const mid = Math.ceil(skills.length / 2);
+  fill(t1, skills.slice(0, mid), false);
+  fill(t2, skills.slice(mid), true);
+}
+
 function initYear() {
   const y = $("#year");
   if (y) y.textContent = String(new Date().getFullYear());
@@ -1269,5 +1380,5 @@ document.addEventListener("DOMContentLoaded", () => {
   initCarousel();
   initModal();
   initChat();
-  initSkillsBubble();
+  initSkillsMarquee();
 });

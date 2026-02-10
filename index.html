@@ -24,12 +24,11 @@
       <span class="nav__brandText">Sarika</span>
     </a>
     <div class="nav__links">
-      <a href="#page-1">Home</a>
+      <a href="#page-1">Chat</a>
       <a href="#page-2">Profile</a>
-      <a href="#page-3">Experience</a>
-      <a href="#page-5">Skills</a>
-      <a href="#page-8">RAG</a>
+      <a href="#page-3">Companies</a>
       <a href="#page-4">Projects</a>
+      <a href="#page-5">Skills</a>
       <a href="#page-6">Education</a>
       <a href="#page-7">Contact</a>
     </div>
@@ -42,15 +41,16 @@
       <div class="wrap hero">
         <header class="hero__copy">
           <p class="eyebrow">Resume-first portfolio</p>
-          <h1 class="heroName">Sarika S Shirolkar</h1>
-          <p class="heroTag">Your person for anything AI / ML</p>
+          <h1 class="title">
+            Ask about my work.
+            <span class="title__accent">Get answers grounded in my resume.</span>
+          </h1>
           <p class="lede">
-            I build ML systems, AI agents, and Azure deployments.
-            Ask questions and get answers grounded in my resume (plus links to the exact sources).
+            choose one <3
           </p>
           <div class="hero__pills">
-            <button class="pill pill--prime" data-intent="who_am_i">Who am I?</button>
             <button class="pill pill--prime" data-intent="professional_summary">Professional summary</button>
+            <button class="pill" data-intent="who_am_i">Who am i</button>
             <button class="pill" data-intent="ml_projects">ML projects</button>
             <button class="pill" data-intent="azure_projects">Azure projects</button>
             <button class="pill" data-intent="agentic_ai_projects">Agentic AI projects</button>
@@ -59,8 +59,7 @@
             <button class="pill" data-intent="outside_resume">Outside the resume</button>
           </div>
           <p class="fine">
-            Tip: You can enable AI-generated answers by setting a chat endpoint or bringing your own API key. Without it, the chat still returns relevant resume excerpts.
-          </p>
+            ask away!
         </header>
 
         <section class="chat" aria-label="Chat">
@@ -151,161 +150,44 @@
     </section>
 
     <!-- PAGE 3: Companies -->
-    <section class="page" id="page-3" aria-label="Experience">
+    <section class="page" id="page-3" aria-label="Companies">
       <div class="wrap">
         <header class="sectionHead">
-          <h2 class="h2">Experience</h2>
-          <p class="muted">Roles, teams, and shipped work (from my resume).</p>
+          <h2 class="h2">Companies I've Worked With</h2>
+          <p class="muted">A snapshot of the teams and environments where I shipped work.</p>
         </header>
 
-        <section class="timeline" aria-label="Experience timeline">
-          <article class="tItem">
-            <div class="tDate" aria-label="Date">Oct 2025 – Present</div>
-            <div class="tCard">
-              <h3 class="h3">
-                Junior Machine Learning Engineer —
-                <a class="link" href="https://aiworkflowautomate.com" target="_blank" rel="noreferrer">AI Workflow Automation</a>
-              </h3>
-              <ul class="bullets">
-                <li>AI voice scheduling agent (Retell AI, n8n, Google Calendar).</li>
-                <li>scikit-learn models to predict key business drivers.</li>
-                <li>Automated pipelines: web scraping + SQL + preprocessing.</li>
-              </ul>
-            </div>
+        <div class="cards">
+          <article class="card">
+            <h3 class="h3">
+              <a class="link" href="https://aiworkflowautomate.com" target="_blank" rel="noreferrer">AI Workflow Automation</a>
+            </h3>
+            <p class="muted">Junior Machine Learning Engineer (Oct 2025 – Present), Software Engineer (Cloud Applications) (Mar 2025 – Sep 2025)</p>
+            <ul class="bullets">
+              <li>AI voice scheduling agent (Retell AI, n8n, Google Calendar).</li>
+              <li>scikit-learn models to predict key business drivers.</li>
+              <li>Automated pipelines: web scraping + SQL + preprocessing.</li>
+              <li>Azure deployments (Linux VMs, App Services) with secure configuration.</li>
+            </ul>
           </article>
 
-          <article class="tItem">
-            <div class="tDate" aria-label="Date">Mar 2025 – Sep 2025</div>
-            <div class="tCard">
-              <h3 class="h3">
-                Software Engineer (Cloud Applications) —
-                <a class="link" href="https://aiworkflowautomate.com" target="_blank" rel="noreferrer">AI Workflow Automation</a>
-              </h3>
-              <ul class="bullets">
-                <li>Azure deployments (Linux VMs, App Services) with secure configuration.</li>
-                <li>Designed, deployed, and maintained Python applications with reliable ops practices.</li>
-              </ul>
-            </div>
+          <article class="card">
+            <h3 class="h3">Bharat Electronics Limited</h3>
+            <p class="muted">AI &amp; ML Intern (Jul 2025 – Sep 2025)</p>
+            <ul class="bullets">
+              <li>Built and evaluated deep learning computer vision systems.</li>
+              <li>Dataset preprocessing, training/validation, and error analysis for real-world robustness.</li>
+            </ul>
           </article>
 
-          <article class="tItem">
-            <div class="tDate" aria-label="Date">Jul 2025 – Sep 2025</div>
-            <div class="tCard">
-              <h3 class="h3">AI &amp; ML Intern — Bharat Electronics Limited</h3>
-              <ul class="bullets">
-                <li>Built and evaluated deep learning computer vision systems.</li>
-                <li>Dataset preprocessing, training/validation, and error analysis for real-world robustness.</li>
-              </ul>
-            </div>
+          <article class="card">
+            <h3 class="h3">IEEE IAMPro'25</h3>
+            <p class="muted">Project Intern (Apr 2025 – Sep 2025)</p>
+            <ul class="bullets">
+              <li>Worked on project execution with IEEE team and timelines.</li>
+            </ul>
           </article>
-
-          <article class="tItem">
-            <div class="tDate" aria-label="Date">Apr 2025 – Sep 2025</div>
-            <div class="tCard">
-              <h3 class="h3">Project Intern — IEEE IAMPro'25</h3>
-              <ul class="bullets">
-                <li>Worked on project execution with IEEE team and timelines.</li>
-              </ul>
-            </div>
-          </article>
-        </section>
-      </div>
-    </section>
-
-    <!-- PAGE 5: Skills Bubble -->
-    <section class="page" id="page-5" aria-label="Skills">
-      <div class="wrap">
-        <header class="sectionHead">
-          <h2 class="h2">Skills</h2>
-          <p class="muted">Skill Sphere. Orbiting nodes grouped by category (tap a skill to open docs).</p>
-        </header>
-
-        <section class="skillSphere">
-          <canvas id="skills" aria-label="Skill Sphere visualization"></canvas>
-
-          <section class="skillsFallback" aria-label="Skills list">
-            <div class="skillsFallback__k">Mobile fallback</div>
-            <div class="skillsFallback__grid">
-              <div class="skillsFallback__item">Python</div>
-              <div class="skillsFallback__item">C</div>
-              <div class="skillsFallback__item">Java</div>
-              <div class="skillsFallback__item">SQL</div>
-              <div class="skillsFallback__item">DSA</div>
-              <div class="skillsFallback__item">LaTeX</div>
-
-              <div class="skillsFallback__item">Git</div>
-              <div class="skillsFallback__item">Jupyter Notebook</div>
-              <div class="skillsFallback__item">VS Code</div>
-              <div class="skillsFallback__item">Google Colab</div>
-              <div class="skillsFallback__item">Kaggle</div>
-              <div class="skillsFallback__item">Eclipse</div>
-              <div class="skillsFallback__item">Power BI</div>
-              <div class="skillsFallback__item">Tableau</div>
-
-              <div class="skillsFallback__item">YOLOv8</div>
-              <div class="skillsFallback__item">YOLOv12</div>
-              <div class="skillsFallback__item">Object Detection</div>
-              <div class="skillsFallback__item">Image Classification</div>
-
-              <div class="skillsFallback__item">Streamlit</div>
-              <div class="skillsFallback__item">Matplotlib</div>
-              <div class="skillsFallback__item">OpenCV</div>
-              <div class="skillsFallback__item">BeautifulSoup</div>
-              <div class="skillsFallback__item">Keras</div>
-              <div class="skillsFallback__item">Pandas</div>
-              <div class="skillsFallback__item">NumPy</div>
-              <div class="skillsFallback__item">TensorFlow</div>
-              <div class="skillsFallback__item">Generative AI (Prompt Engineering, LLMs)</div>
-
-              <div class="skillsFallback__item">Microsoft Azure (App Services, VMs, Blob Storage)</div>
-
-              <div class="skillsFallback__item">Linear Regression</div>
-              <div class="skillsFallback__item">Logistic Regression</div>
-              <div class="skillsFallback__item">Clustering</div>
-              <div class="skillsFallback__item">Random Forest</div>
-              <div class="skillsFallback__item">KNN</div>
-              <div class="skillsFallback__item">ANN</div>
-
-              <div class="skillsFallback__item">MySQL</div>
-              <div class="skillsFallback__item">MongoDB</div>
-              <div class="skillsFallback__item">Linux</div>
-              <div class="skillsFallback__item">Windows</div>
-              <div class="skillsFallback__item">macOS</div>
-            </div>
-          </section>
-        </section>
-      </div>
-    </section>
-
-    <!-- PAGE 8: RAG Model -->
-    <section class="page" id="page-8" aria-label="RAG Model">
-      <div class="wrap">
-        <header class="sectionHead">
-          <h2 class="h2">Resume RAG Model</h2>
-          <p class="muted">Local-first. This chat is grounded in resume excerpts and links.</p>
-        </header>
-
-        <section class="panel">
-          <header class="panel__head">
-            <h3 class="h3">How it works</h3>
-            <p class="muted">Retrieval picks the most relevant resume excerpts, then answers using only those sources.</p>
-          </header>
-          <div class="stack">
-            <div class="summary">
-              <h3 class="h3">Safety</h3>
-              <ul class="bullets">
-                <li>Never hallucinates outside the resume context.</li>
-                <li>If something isn’t in the resume, it explicitly says “not in resume”.</li>
-                <li>Citations show exactly which excerpt(s) matched.</li>
-              </ul>
-            </div>
-            <div class="now">
-              <h3 class="h3">Optional settings</h3>
-              <p class="muted">You can connect a local AI endpoint (recommended) or use resume-only mode.</p>
-              <button class="btn2 btn2--ghost ragOpenSettings" type="button">Open Chat Settings</button>
-            </div>
-          </div>
-        </section>
+        </div>
       </div>
     </section>
 
@@ -370,6 +252,25 @@
         <p class="note">
           When you send your real screenshots, I’ll drop them into <code>assets/projects/</code> and the tiles will automatically look like a proper portfolio grid.
         </p>
+      </div>
+    </section>
+
+    <!-- PAGE 5: Skills -->
+    <section class="page" id="page-5" aria-label="Skills">
+      <div class="wrap">
+        <header class="sectionHead">
+          <h2 class="h2">Skills</h2>
+          <p class="muted">Tap any skill to open official docs. Hover to pause.</p>
+        </header>
+
+        <section class="skillsMarquee" aria-label="Scrolling skills">
+          <div class="skillsMarquee__row" style="--dur: 44s;">
+            <div class="skillsMarquee__track" id="skills-track-1" aria-hidden="false"></div>
+          </div>
+          <div class="skillsMarquee__row skillsMarquee__row--reverse" style="--dur: 52s;">
+            <div class="skillsMarquee__track" id="skills-track-2" aria-hidden="false"></div>
+          </div>
+        </section>
       </div>
     </section>
 

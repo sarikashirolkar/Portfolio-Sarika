@@ -735,6 +735,129 @@ html[data-theme="light"] .sNode__label{
   .sphere[data-mode="grid"] .sphere__tooltip{display:none}
 }
 
+/* Skills marquee (like reference) */
+.skillsMarquee{
+  border:1px solid var(--stroke);
+  border-radius:var(--r);
+  background:var(--panelBg);
+  box-shadow:var(--shadow);
+  overflow:hidden;
+  padding:18px 14px;
+}
+.skillsMarquee__row{
+  position:relative;
+  overflow:hidden;
+  padding:18px 0;
+
+  /* edge fade */
+  -webkit-mask-image: linear-gradient(90deg, transparent, #000 10%, #000 90%, transparent);
+  mask-image: linear-gradient(90deg, transparent, #000 10%, #000 90%, transparent);
+}
+.skillsMarquee__track{
+  display:flex;
+  gap:16px;
+  width:max-content;
+  align-items:center;
+  will-change: transform;
+  animation: skills-marquee var(--dur, 46s) linear infinite;
+}
+.skillsMarquee__row--reverse .skillsMarquee__track{
+  animation-direction: reverse;
+}
+.skillsMarquee:hover .skillsMarquee__track{
+  animation-play-state: paused;
+}
+
+@keyframes skills-marquee{
+  from{transform: translate3d(0,0,0)}
+  to{transform: translate3d(-50%,0,0)}
+}
+
+:root{
+  --skillCardBg: rgba(245,247,255,.94);
+  --skillCardInk: rgba(10,14,22,.92);
+  --skillCardStroke: rgba(10,14,22,.10);
+}
+html[data-theme="light"]{
+  --skillCardBg: rgba(10,14,22,.90);
+  --skillCardInk: rgba(245,247,255,.94);
+  --skillCardStroke: rgba(255,255,255,.14);
+}
+
+.sCard{
+  flex:0 0 auto;
+  width:120px;
+  height:92px;
+  border-radius:16px;
+  background: var(--skillCardBg);
+  border:1px solid var(--skillCardStroke);
+  box-shadow:0 16px 42px rgba(0,0,0,.26);
+  text-decoration:none;
+  color: var(--skillCardInk);
+  display:grid;
+  place-items:center;
+  padding:12px 10px 10px;
+  transition: transform 160ms ease, filter 160ms ease;
+}
+.sCard:hover{
+  transform: translateY(-2px) scale(1.02);
+  filter: brightness(1.02);
+}
+.sCard__icon{
+  width:34px;
+  height:34px;
+  display:grid;
+  place-items:center;
+}
+.sCard__icon img{
+  width:34px;
+  height:34px;
+  display:block;
+}
+.sCard__fallback{
+  width:34px;
+  height:34px;
+  border-radius:12px;
+  display:grid;
+  place-items:center;
+  font-weight:950;
+  letter-spacing:-.02em;
+  background: rgba(10,14,22,.08);
+  border:1px solid rgba(10,14,22,.12);
+}
+html[data-theme="light"] .sCard__fallback{
+  background: rgba(245,247,255,.10);
+  border-color: rgba(245,247,255,.16);
+}
+.sCard__label{
+  margin-top:10px;
+  font-weight:900;
+  font-size:.78rem;
+  letter-spacing:-.01em;
+  text-align:center;
+  width:100%;
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+}
+
+@media (max-width: 720px){
+  .sCard{width:108px;height:88px}
+  .skillsMarquee__track{gap:12px}
+}
+
+@media (prefers-reduced-motion: reduce){
+  .skillsMarquee__track{
+    animation:none;
+    transform:none;
+  }
+  .skillsMarquee__row{
+    overflow-x:auto;
+    -webkit-mask-image:none;
+    mask-image:none;
+  }
+}
+
 /* Carousel */
 .carousel{padding:14px 16px 16px}
 .carousel__stage{
