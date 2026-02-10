@@ -316,7 +316,7 @@ function initChat() {
     thinking.className = "msg";
     thinking.innerHTML =
       `<div class="msg__role">AI</div>` +
-      `<div class="msg__bubble"><p style="color: rgba(255,255,255,.72); font-weight: 800;">Thinking...</p></div>`;
+      `<div class="msg__bubble"><p class="msg__thinking">Thinking...</p></div>`;
     log.appendChild(thinking);
     log.scrollTop = log.scrollHeight;
 
@@ -480,12 +480,12 @@ function initBackground() {
   resize();
   window.addEventListener("resize", resize);
 
+  // Light theme: softer pigments with multiply blending so the paper background still reads.
   const colors = [
-    // Brighter alphas so blobs read clearly against the background.
-    { r: 246, g: 193, b: 119, a: 0.28 },
-    { r: 156, g: 207, b: 216, a: 0.24 },
-    { r: 203, g: 166, b: 247, a: 0.18 },
-    { r: 166, g: 227, b: 161, a: 0.18 },
+    { r: 202, g: 160, b: 90, a: 0.12 }, // warm gold
+    { r: 90, g: 167, b: 179, a: 0.11 }, // ice teal
+    { r: 127, g: 109, b: 184, a: 0.11 }, // violet
+    { r: 90, g: 160, b: 122, a: 0.09 }, // mint
   ];
 
   // Fewer, larger blobs look more intentional than many tiny ones.
@@ -517,8 +517,8 @@ function initBackground() {
     ctx.arc(o.x, o.y, o.r, 0, Math.PI * 2);
     ctx.fill();
 
-    // Subtle crisp outline so shapes don't disappear on bright gradients.
-    ctx.strokeStyle = `rgba(255,255,255,0.08)`;
+    // Subtle outline so shapes don't disappear on bright paper gradients.
+    ctx.strokeStyle = `rgba(22,18,30,0.06)`;
     ctx.lineWidth = 1;
     ctx.stroke();
   }
@@ -526,10 +526,17 @@ function initBackground() {
   function step() {
     ctx.clearRect(0, 0, w, h);
 
-    // subtle vignette
-    const vg = ctx.createRadialGradient(w / 2, h / 2, Math.min(w, h) * 0.12, w / 2, h / 2, Math.min(w, h) * 0.72);
-    vg.addColorStop(0, "rgba(0,0,0,0)");
-    vg.addColorStop(1, "rgba(0,0,0,0.22)");
+    // Soft paper vignette (lightly brightens edges for a "gallery" feel).
+    const vg = ctx.createRadialGradient(
+      w / 2,
+      h / 2,
+      Math.min(w, h) * 0.12,
+      w / 2,
+      h / 2,
+      Math.min(w, h) * 0.78
+    );
+    vg.addColorStop(0, "rgba(255,255,255,0)");
+    vg.addColorStop(1, "rgba(255,255,255,0.16)");
     ctx.fillStyle = vg;
     ctx.fillRect(0, 0, w, h);
 
@@ -538,8 +545,8 @@ function initBackground() {
     const repelR = 190;
     const repelR2 = repelR * repelR;
 
-    // Make overlaps pop a bit (more visible) while drawing blobs.
-    ctx.globalCompositeOperation = "lighter";
+    // Multiply keeps pigments subtle on a light background.
+    ctx.globalCompositeOperation = "multiply";
     for (const o of objs) {
       // cursor dodge / repulsion
       if (pointer.active) {
@@ -578,7 +585,7 @@ function initBackground() {
 
     // faint connecting lines for a "network" feel
     ctx.lineWidth = 1;
-    ctx.strokeStyle = "rgba(255,255,255,0.10)";
+    ctx.strokeStyle = "rgba(22,18,30,0.08)";
     for (let i = 0; i < objs.length; i++) {
       for (let j = i + 1; j < objs.length; j++) {
         const a = objs[i];
@@ -639,7 +646,7 @@ function initSkillsBubble() {
     if (iconCache.has(slug)) return iconCache.get(slug);
     const img = new Image();
     // Simple Icons CDN. If a slug doesn't exist, the image will error and we fall back to a circle.
-    img.src = `https://cdn.simpleicons.org/${encodeURIComponent(slug)}/ffffff`;
+    img.src = `https://cdn.simpleicons.org/${encodeURIComponent(slug)}/16121e`;
     iconCache.set(slug, img);
     return img;
   }
@@ -694,13 +701,13 @@ function initSkillsBubble() {
     const c = center();
     const R = Math.min(w, h) * 0.44;
     const g = ctx.createRadialGradient(c.x, c.y, R * 0.05, c.x, c.y, R);
-    g.addColorStop(0, "rgba(255,255,255,0.06)");
-    g.addColorStop(1, "rgba(255,255,255,0.02)");
+    g.addColorStop(0, "rgba(255,255,255,0.55)");
+    g.addColorStop(1, "rgba(255,255,255,0.20)");
     ctx.fillStyle = g;
     ctx.beginPath();
     ctx.arc(c.x, c.y, R, 0, Math.PI * 2);
     ctx.fill();
-    ctx.strokeStyle = "rgba(255,255,255,0.14)";
+    ctx.strokeStyle = "rgba(22,18,30,0.12)";
     ctx.lineWidth = 2;
     ctx.stroke();
 
@@ -749,13 +756,13 @@ function initSkillsBubble() {
     for (const n of nodes) {
       // bubble chip
       const chip = ctx.createRadialGradient(n.x - n.r * 0.3, n.y - n.r * 0.3, 0, n.x, n.y, n.r);
-      chip.addColorStop(0, "rgba(255,255,255,0.12)");
-      chip.addColorStop(1, "rgba(255,255,255,0.04)");
+      chip.addColorStop(0, "rgba(255,255,255,0.70)");
+      chip.addColorStop(1, "rgba(255,255,255,0.28)");
       ctx.fillStyle = chip;
       ctx.beginPath();
       ctx.arc(n.x, n.y, n.r, 0, Math.PI * 2);
       ctx.fill();
-      ctx.strokeStyle = "rgba(255,255,255,0.18)";
+      ctx.strokeStyle = "rgba(22,18,30,0.14)";
       ctx.lineWidth = 1.5;
       ctx.stroke();
 
@@ -767,7 +774,7 @@ function initSkillsBubble() {
         ctx.drawImage(img, n.x - s / 2, n.y - s / 2, s, s);
       } else {
         // fallback glyph
-        ctx.fillStyle = "rgba(255,255,255,0.86)";
+        ctx.fillStyle = "rgba(22,18,30,0.86)";
         ctx.font = "900 14px Space Grotesk, system-ui";
         ctx.textAlign = "center";
         ctx.textBaseline = "middle";
@@ -775,7 +782,7 @@ function initSkillsBubble() {
       }
 
       // label under
-      ctx.fillStyle = "rgba(255,255,255,0.86)";
+      ctx.fillStyle = "rgba(22,18,30,0.84)";
       ctx.font = "800 12px Space Grotesk, system-ui";
       ctx.textAlign = "center";
       ctx.textBaseline = "top";
