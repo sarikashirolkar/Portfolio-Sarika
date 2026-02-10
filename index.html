@@ -12,7 +12,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,650;9..144,750&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet" />
 </head>
 <body>
-  <a class="skip" href="#page-2">Skip to content</a>
+  <a class="skip" href="#page-1">Skip to content</a>
 
   <!-- Ambient background -->
   <canvas id="bg" aria-hidden="true"></canvas>
@@ -24,78 +24,20 @@
       <span class="nav__brandText">Sarika</span>
     </a>
     <div class="nav__links">
-      <a href="#page-1">Chat</a>
-      <a href="#page-2">Profile</a>
-      <a href="#page-3">Companies</a>
-      <a href="#page-4">Projects</a>
-      <a href="#page-5">Skills</a>
-      <a href="#page-6">Education</a>
+      <a href="#page-1">Profile</a>
+      <a href="#page-2">Companies</a>
+      <a href="#page-3">Projects</a>
+      <a href="#page-4">Skills</a>
+      <a href="#page-5">Education</a>
+      <a href="#page-6">Chat</a>
       <a href="#page-7">Contact</a>
     </div>
     <a class="nav__cta" href="resume.pdf" target="_blank" rel="noreferrer">Resume (PDF)</a>
   </nav>
 
   <main class="snap" id="top" aria-label="Content">
-    <!-- PAGE 1: Chat -->
-    <section class="page" id="page-1" aria-label="Resume Chat">
-      <div class="wrap hero">
-        <header class="hero__copy">
-          <p class="eyebrow">Resume-first portfolio</p>
-          <h1 class="title">
-            Ask about my work.
-            <span class="title__accent">Get answers grounded in my resume.</span>
-          </h1>
-          <p class="lede">
-            choose one <3
-          </p>
-          <div class="hero__pills">
-            <button class="pill pill--prime" data-intent="professional_summary">Professional summary</button>
-            <button class="pill" data-intent="who_am_i">Who am i</button>
-            <button class="pill" data-intent="ml_projects">ML projects</button>
-            <button class="pill" data-intent="azure_projects">Azure projects</button>
-            <button class="pill" data-intent="agentic_ai_projects">Agentic AI projects</button>
-            <button class="pill" data-intent="ieee_publications">IEEE paper publications</button>
-            <button class="pill" data-intent="chair_ieee_cis_svit">Chair, IEEE CIS SVIT</button>
-            <button class="pill" data-intent="outside_resume">Outside the resume</button>
-          </div>
-          <p class="fine">
-            ask away!
-        </header>
-
-        <section class="chat" aria-label="Chat">
-          <div class="chat__top">
-            <div class="chat__badge">
-              <span class="chat__spark"></span>
-              <span>Resume RAG Chat</span>
-            </div>
-            <button class="chat__gear" id="chat-settings" type="button" aria-label="Chat settings">
-              Settings
-            </button>
-          </div>
-
-          <div class="chat__log" id="chat-log" role="log" aria-live="polite" aria-relevant="additions"></div>
-
-          <form class="chat__bar" id="chat-form">
-            <input
-              id="chat-input"
-              class="chat__input"
-              type="text"
-              placeholder="Ask: roles, projects, Azure, skills, education..."
-              autocomplete="off"
-            />
-            <button class="chat__send" type="submit">Send</button>
-          </form>
-
-          <div class="chat__foot">
-            <span class="chat__hint" id="chat-mode">Mode: Resume-only (local)</span>
-            <span class="chat__hint">No phone number is shown on this website.</span>
-          </div>
-        </section>
-      </div>
-    </section>
-
-    <!-- PAGE 2: Profile + Carousel -->
-    <section class="page" id="page-2" aria-label="Profile">
+    <!-- PAGE 1: Profile + Carousel -->
+    <section class="page" id="page-1" aria-label="Profile">
       <div class="wrap two">
         <section class="panel">
           <header class="panel__head">
@@ -149,8 +91,8 @@
       </div>
     </section>
 
-    <!-- PAGE 3: Companies -->
-    <section class="page" id="page-3" aria-label="Companies">
+    <!-- PAGE 2: Companies -->
+    <section class="page" id="page-2" aria-label="Companies">
       <div class="wrap">
         <header class="sectionHead">
           <h2 class="h2">Companies I've Worked With</h2>
@@ -191,8 +133,8 @@
       </div>
     </section>
 
-    <!-- PAGE 4: Projects -->
-    <section class="page" id="page-4" aria-label="Projects">
+    <!-- PAGE 3: Projects -->
+    <section class="page" id="page-3" aria-label="Projects">
       <div class="wrap">
         <header class="sectionHead">
           <h2 class="h2">Projects</h2>
@@ -255,8 +197,8 @@
       </div>
     </section>
 
-    <!-- PAGE 5: Skills -->
-    <section class="page" id="page-5" aria-label="Skills">
+    <!-- PAGE 4: Skills -->
+    <section class="page" id="page-4" aria-label="Skills">
       <div class="wrap">
         <header class="sectionHead">
           <h2 class="h2">Skills</h2>
@@ -274,8 +216,8 @@
       </div>
     </section>
 
-    <!-- PAGE 6: Education -->
-    <section class="page" id="page-6" aria-label="Education">
+    <!-- PAGE 5: Education -->
+    <section class="page" id="page-5" aria-label="Education">
       <div class="wrap">
         <header class="sectionHead">
           <h2 class="h2">Education</h2>
@@ -299,6 +241,64 @@
             <p class="muted">96.1%</p>
           </article>
         </div>
+      </div>
+    </section>
+
+    <!-- PAGE 6: Chat -->
+    <section class="page" id="page-6" aria-label="Resume Chat">
+      <div class="wrap hero">
+        <header class="hero__copy">
+          <p class="eyebrow">Resume-first portfolio</p>
+          <h1 class="title">
+            Ask about my work.
+            <span class="title__accent">Get answers grounded in my resume.</span>
+          </h1>
+          <p class="lede">
+            choose one <3
+          </p>
+          <div class="hero__pills">
+            <button class="pill pill--prime" data-intent="professional_summary">Professional summary</button>
+            <button class="pill" data-intent="who_am_i">Who am i</button>
+            <button class="pill" data-intent="ml_projects">ML projects</button>
+            <button class="pill" data-intent="azure_projects">Azure projects</button>
+            <button class="pill" data-intent="agentic_ai_projects">Agentic AI projects</button>
+            <button class="pill" data-intent="ieee_publications">IEEE paper publications</button>
+            <button class="pill" data-intent="chair_ieee_cis_svit">Chair, IEEE CIS SVIT</button>
+            <button class="pill" data-intent="outside_resume">Outside the resume</button>
+          </div>
+          <p class="fine">
+            ask away!
+        </header>
+
+        <section class="chat" aria-label="Chat">
+          <div class="chat__top">
+            <div class="chat__badge">
+              <span class="chat__spark"></span>
+              <span>Resume RAG Chat</span>
+            </div>
+            <button class="chat__gear" id="chat-settings" type="button" aria-label="Chat settings">
+              Settings
+            </button>
+          </div>
+
+          <div class="chat__log" id="chat-log" role="log" aria-live="polite" aria-relevant="additions"></div>
+
+          <form class="chat__bar" id="chat-form">
+            <input
+              id="chat-input"
+              class="chat__input"
+              type="text"
+              placeholder="Ask: roles, projects, Azure, skills, education..."
+              autocomplete="off"
+            />
+            <button class="chat__send" type="submit">Send</button>
+          </form>
+
+          <div class="chat__foot">
+            <span class="chat__hint" id="chat-mode">Mode: Resume-only (local)</span>
+            <span class="chat__hint">No phone number is shown on this website.</span>
+          </div>
+        </section>
       </div>
     </section>
 
@@ -327,7 +327,7 @@
 
         <footer class="footer">
           <span class="muted">&copy; <span id="year"></span> Sarika S Shirolkar</span>
-          <a class="muted link" href="#page-1">Back to top</a>
+          <a class="muted link" href="#top">Back to top</a>
         </footer>
       </div>
     </section>
