@@ -250,6 +250,21 @@ h3 {
   transform: translate(-2px, -2px);
 }
 
+.card-link {
+  text-decoration: none;
+  color: inherit;
+  display: block;
+}
+
+.card-link h3 {
+  margin-top: 0;
+}
+
+.card-link:focus-visible {
+  outline: 3px solid #006bff;
+  outline-offset: 2px;
+}
+
 .chips {
   display: flex;
   flex-wrap: wrap;
