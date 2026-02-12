@@ -1,30 +1,21 @@
 # Portfolio-Sarika
 
-A clean, single-page resume website for Sarika S Shirolkar. This is a static site (plain HTML/CSS/JS) designed to be deployed on GitHub Pages.
+A static single-page portfolio for Sarika S Shirolkar, built with plain HTML, CSS, and JavaScript.
 
 ## Live Site
 
-After GitHub Pages is enabled, the site will be available at:
-
 - `https://sarikashirolkar.github.io/Portfolio-Sarika/`
 
-## What's Included
+## Project Files
 
-- `index.html`: main page content (resume sections)
-- `styles.css`: layout + typography + responsive styling
-- `script.js`: background animation + resume-only RAG chat (local retrieval) + carousel + skills bubble
-- `resume.pdf`: downloadable resume used by the page
-
-## Resume Chat (RAG)
-
-The chat is designed to answer only using resume/project excerpts embedded in `script.js`.
-
-- Default mode: local retrieval (no cloud, works on GitHub Pages)
-- Optional: set a custom endpoint in Chat Settings for a local AI server (e.g. Ollama on your laptop)
+- `index.html`: page structure and resume content
+- `styles.css`: visual design, layout, and responsive behavior
+- `script.js`: scroll reveal, active nav state, sticky header behavior
+- `resume.pdf`: downloadable resume
 
 ## Run Locally
 
-Open `index.html` directly in a browser, or run a local server (recommended):
+Open `index.html` directly or run a local server:
 
 ```sh
 python3 -m http.server 5173
@@ -32,29 +23,16 @@ python3 -m http.server 5173
 
 Then visit `http://localhost:5173`.
 
-## Local AI (No Cloud) Optional
+## Deploy to GitHub Pages
 
-If you want fully local AI generation (no cloud APIs), you can run a local model and point the site to it.
+1. Go to repository `Settings` -> `Pages`.
+2. Set source to `Deploy from a branch`.
+3. Select `main` and folder `/ (root)`.
+4. Save and wait for deployment.
 
-1. Install and run Ollama.
-2. Run a tiny local HTTP endpoint that accepts `{ question, context }` and returns `{ answer }`.
-3. Paste that endpoint URL into the site's Chat Settings.
+## Updating Content
 
-## Deploy To GitHub Pages
-
-1. In the GitHub repo, go to `Settings` -> `Pages`.
-2. Under "Build and deployment":
-   - Source: `Deploy from a branch`
-   - Branch: `main`
-   - Folder: `/ (root)`
-3. Save and wait for GitHub to publish the site.
-
-## Update Content
-
-- Edit resume content: `index.html`
-- Update styling/theme: `styles.css`
-- Replace resume PDF: overwrite `resume.pdf` (keep the same filename so the button keeps working)
-
-## License
-
-All rights reserved (unless you choose to add an open-source license).
+- Resume text and sections: `index.html`
+- Styling/theme: `styles.css`
+- Interactions: `script.js`
+- New resume file: replace `resume.pdf` (same filename)
