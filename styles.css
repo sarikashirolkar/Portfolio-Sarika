@@ -132,6 +132,17 @@ main {
   border-top: 0;
 }
 
+.hero-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1.1fr) minmax(260px, 0.72fr);
+  align-items: center;
+  gap: 2rem;
+}
+
+.hero-content {
+  max-width: 760px;
+}
+
 .eyebrow {
   text-transform: uppercase;
   letter-spacing: 0.12em;
@@ -159,6 +170,24 @@ h3 {
   max-width: 68ch;
   font-size: 1.08rem;
   color: #272220;
+}
+
+.hero-photo {
+  margin: 0;
+  justify-self: end;
+  width: min(100%, 360px);
+  border: 2px solid var(--border);
+  background: #fff;
+  padding: 0.6rem;
+  box-shadow: 10px 10px 0 var(--accent-soft);
+}
+
+.hero-photo img {
+  width: 100%;
+  aspect-ratio: 4 / 5;
+  object-fit: cover;
+  display: block;
+  border: 2px solid var(--border);
 }
 
 .hero-cta {
@@ -280,6 +309,16 @@ h3 {
 
   .card {
     grid-column: span 12;
+  }
+
+  .hero-layout {
+    grid-template-columns: 1fr;
+    gap: 1.1rem;
+  }
+
+  .hero-photo {
+    justify-self: start;
+    width: min(74vw, 320px);
   }
 }
 
