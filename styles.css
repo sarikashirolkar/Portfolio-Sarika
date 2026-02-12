@@ -235,6 +235,7 @@ h3 {
   display: grid;
   grid-template-columns: repeat(12, 1fr);
   gap: 0.9rem;
+  align-items: start;
 }
 
 .card {
@@ -242,7 +243,8 @@ h3 {
   border: 2px solid var(--border);
   background: #fff;
   padding: 1rem;
-  min-height: 180px;
+  min-height: 0;
+  height: fit-content;
   transition: transform 0.2s ease;
 }
 
