@@ -86,8 +86,7 @@ if (projectsCarousel && projectArrows.length) {
 }
 
 const chatWindow = document.querySelector('#chat-window');
-const chatForm = document.querySelector('#chat-form');
-const chatQuestionSelect = document.querySelector('#chat-question-select');
+const chatQuestions = document.querySelector('#chat-questions');
 
 const qaPairs = {
   intro: {
@@ -156,27 +155,35 @@ const appendTypingIndicator = () => {
   return msg;
 };
 
-if (chatWindow && chatForm && chatQuestionSelect) {
+if (chatWindow && chatQuestions) {
   appendChatMessage(
     'assistant',
-    'Hi, I am Sarika\'s Recruiter Q&A Assistant. Pick a question from the dropdown and click Ask.'
+    'Hi, I am Sarika\'s Recruiter Q&A Assistant. Click any question button below to get my answer.'
   );
 
-  chatForm.addEventListener('submit', async (event) => {
-    event.preventDefault();
-    const selectedKey = chatQuestionSelect.value;
+  const setQuestionButtonsDisabled = (disabled) => {
+    chatQuestions.querySelectorAll('.chat-q-btn').forEach((btn) => {
+      btn.disabled = disabled;
+    });
+  };
+
+  chatQuestions.addEventListener('click', async (event) => {
+    const clicked = event.target.closest('.chat-q-btn');
+    if (!clicked) return;
+
+    const selectedKey = clicked.dataset.q;
     const selectedItem = qaPairs[selectedKey];
     if (!selectedItem) return;
 
     appendChatMessage('user', selectedItem.question);
-    chatQuestionSelect.disabled = true;
+    setQuestionButtonsDisabled(true);
 
     const typingNode = appendTypingIndicator();
     await new Promise((resolve) => setTimeout(resolve, 800));
     if (typingNode) typingNode.remove();
     appendChatMessage('assistant', selectedItem.answer);
 
-    chatQuestionSelect.disabled = false;
-    chatQuestionSelect.focus();
+    setQuestionButtonsDisabled(false);
+    clicked.focus();
   });
 }
