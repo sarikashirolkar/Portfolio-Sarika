@@ -276,19 +276,41 @@ h3 {
   outline-offset: 2px;
 }
 
-.chips {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.6rem;
+.skills-marquee {
   margin-top: 1.4rem;
+  overflow: hidden;
 }
 
-.chips span {
+.skills-belt {
+  display: flex;
+  width: max-content;
+  animation: skills-scroll 48s linear infinite;
+}
+
+.skills-row {
+  display: flex;
+  gap: 0.6rem;
+  padding-right: 0.6rem;
+}
+
+.skill-chip {
+  display: inline-flex;
+  align-items: center;
   border: 2px solid var(--border);
   background: #fff;
   padding: 0.4rem 0.7rem;
   font-size: 0.9rem;
   font-weight: 500;
+  white-space: nowrap;
+}
+
+@keyframes skills-scroll {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
 }
 
 .contact-links {
@@ -360,5 +382,27 @@ h3 {
   .hero-copy,
   .lead {
     font-size: 1rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .skills-marquee {
+    overflow: visible;
+  }
+
+  .skills-belt {
+    animation: none;
+    width: auto;
+    flex-wrap: wrap;
+    gap: 0.6rem;
+  }
+
+  .skills-row {
+    flex-wrap: wrap;
+    padding-right: 0;
+  }
+
+  .skills-row[aria-hidden="true"] {
+    display: none;
   }
 }
