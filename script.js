@@ -107,7 +107,7 @@ const qaPairs = {
   hobbies: {
     question: 'What are your hobbies?',
     answer:
-      'I enjoy exploring new AI tools, experimenting with machine learning ideas, and participating in technical communities like IEEE workshops and hackathons. Outside of engineering, I like mentoring peers, learning emerging technologies, and continuously improving my problem-solving skills through hands-on projects.'
+      'Outside of tech, I enjoy trekking and going on adventures in the wild - staying intact with nature! On the technical side, I regularly attend tech events and communities such as Microsoft, GDG, IEEE, and other meetups to keep learning, networking, and staying updated with the latest innovations.'
   },
   ieee: {
     question: 'Can you explain your IEEE research project and what problem it solved?',
@@ -155,6 +155,17 @@ const appendTypingIndicator = () => {
   return msg;
 };
 
+const appendHobbyImages = () => {
+  if (!chatWindow) return;
+  const media = document.createElement('div');
+  media.className = 'chat-media-grid';
+  media.innerHTML =
+    '<img src="hobby-trekking.jpg" alt="Sarika trekking outdoors" loading="lazy" />' +
+    '<img src="hobby-gdg.jpg" alt="Sarika at GDG tech event" loading="lazy" />';
+  chatWindow.appendChild(media);
+  chatWindow.scrollTop = chatWindow.scrollHeight;
+};
+
 if (chatWindow && chatQuestions) {
   appendChatMessage(
     'assistant',
@@ -182,6 +193,9 @@ if (chatWindow && chatQuestions) {
     await new Promise((resolve) => setTimeout(resolve, 800));
     if (typingNode) typingNode.remove();
     appendChatMessage('assistant', selectedItem.answer);
+    if (selectedKey === 'hobbies') {
+      appendHobbyImages();
+    }
 
     setQuestionButtonsDisabled(false);
     clicked.focus();

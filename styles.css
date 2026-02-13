@@ -316,14 +316,14 @@ h3 {
 }
 
 .chat-questions {
-  display: flex;
-  flex-wrap: wrap;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 0.5rem;
   border-top: 2px solid #d4cabf;
   padding: 0.7rem;
   max-height: 170px;
   overflow-y: auto;
-  align-content: flex-start;
+  align-content: start;
 }
 
 .chat-q-btn {
@@ -340,6 +340,24 @@ h3 {
   transition: transform 0.2s ease, background 0.2s ease, box-shadow 0.2s ease;
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.55);
   max-width: 100%;
+  width: 100%;
+  text-align: left;
+}
+
+.chat-media-grid {
+  align-self: flex-start;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.45rem;
+  width: min(100%, 320px);
+}
+
+.chat-media-grid img {
+  width: 100%;
+  aspect-ratio: 4 / 5;
+  object-fit: cover;
+  border: 2px solid var(--border);
+  background: #fff;
 }
 
 .chat-q-btn:hover:not(:disabled) {
@@ -685,6 +703,10 @@ h3 {
 
   .chat-shell {
     height: 520px;
+  }
+
+  .chat-questions {
+    grid-template-columns: 1fr;
   }
 
   .assistant-chat {
