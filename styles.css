@@ -276,6 +276,44 @@ h3 {
   outline-offset: 2px;
 }
 
+.projects-marquee {
+  margin-top: 1.4rem;
+  overflow: hidden;
+}
+
+.projects-belt {
+  display: flex;
+  width: max-content;
+  animation: projects-scroll 75s linear infinite;
+}
+
+.projects-row {
+  display: flex;
+  gap: 0.9rem;
+  padding-right: 0.9rem;
+}
+
+.project-card {
+  width: min(82vw, 420px);
+  border: 2px solid var(--border);
+  background: #fff;
+  padding: 1rem;
+  flex: 0 0 auto;
+  transition: transform 0.2s ease;
+}
+
+.project-card:hover {
+  transform: translate(-2px, -2px);
+}
+
+.project-card h3 {
+  margin: 0 0 0.45rem;
+}
+
+.project-card p {
+  margin: 0;
+}
+
 .skills-marquee {
   margin-top: 1.4rem;
   overflow: hidden;
@@ -305,6 +343,15 @@ h3 {
 }
 
 @keyframes skills-scroll {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+@keyframes projects-scroll {
   from {
     transform: translateX(0);
   }
@@ -386,6 +433,26 @@ h3 {
 }
 
 @media (prefers-reduced-motion: reduce) {
+  .projects-marquee {
+    overflow: visible;
+  }
+
+  .projects-belt {
+    animation: none;
+    width: auto;
+    flex-wrap: wrap;
+    gap: 0.9rem;
+  }
+
+  .projects-row {
+    flex-wrap: wrap;
+    padding-right: 0;
+  }
+
+  .projects-row[aria-hidden="true"] {
+    display: none;
+  }
+
   .skills-marquee {
     overflow: visible;
   }
