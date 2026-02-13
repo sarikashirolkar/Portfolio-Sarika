@@ -16,13 +16,14 @@
     />
     <link rel="stylesheet" href="styles.css" />
   </head>
-  <body>
+  <body data-chat-api-url="">
     <div class="bg-ambient" aria-hidden="true"></div>
 
     <header class="site-header" id="top">
       <a class="brand" href="https://aiworkflowautomate.com" target="_blank" rel="noopener">Intern@a2w</a>
       <nav class="main-nav" aria-label="Main navigation">
         <a href="#about">About</a>
+        <a href="#assistant">AI Assistant</a>
         <a href="#experience">Experience</a>
         <a href="#projects">Projects</a>
         <a href="#skills">Skills</a>
@@ -62,6 +63,33 @@
           I combine applied machine learning, AI workflow automation, and cloud engineering to deliver practical systems.
           My recent work includes an AI voice scheduling agent for clinics, risk prediction tooling, and published computer vision research.
         </p>
+      </section>
+
+      <section class="section assistant-section" id="assistant">
+        <div class="section-head reveal">
+          <p class="eyebrow">AI Assistant</p>
+          <h2>AI About Me Assistant</h2>
+        </div>
+        <div class="assistant-layout">
+          <figure class="assistant-photo reveal">
+            <img src="profile.jpg" alt="Sarika S Shirolkar portrait" />
+            <figcaption>Ask about my projects, AI work, skills, and experience.</figcaption>
+          </figure>
+          <div class="assistant-chat reveal">
+            <div class="chat-shell">
+              <div class="chat-header">
+                <p class="chat-title">Sarika Assistant</p>
+                <p class="chat-subtitle">Resume-grounded answers only</p>
+              </div>
+              <div class="chat-window" id="chat-window" aria-live="polite"></div>
+              <form class="chat-form" id="chat-form">
+                <label class="sr-only" for="chat-input">Ask a question</label>
+                <input id="chat-input" name="question" type="text" maxlength="280" placeholder="Ask me anything about my resume..." autocomplete="off" required />
+                <button class="btn btn-small" type="submit">Send</button>
+              </form>
+            </div>
+          </div>
+        </div>
       </section>
 
       <section class="section" id="experience">
