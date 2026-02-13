@@ -23,6 +23,9 @@
   --ambient-glow-1: rgba(116, 84, 255, 0.24);
   --ambient-glow-2: rgba(255, 106, 58, 0.18);
   --ambient-glow-3: rgba(58, 102, 196, 0.2);
+  --ambient-glow-4: rgba(83, 184, 255, 0.18);
+  --dot-blue: rgba(120, 188, 255, 0.42);
+  --dot-orange: rgba(255, 142, 100, 0.28);
   --max: 1120px;
 }
 
@@ -50,7 +53,10 @@ body.theme-light {
   --bg-grad-end: #f1e8de;
   --ambient-glow-1: rgba(255, 176, 120, 0.2);
   --ambient-glow-2: rgba(250, 154, 108, 0.18);
-  --ambient-glow-3: rgba(255, 223, 190, 0.2);
+  --ambient-glow-3: rgba(255, 223, 190, 0.24);
+  --ambient-glow-4: rgba(90, 175, 255, 0.26);
+  --dot-blue: rgba(79, 156, 255, 0.42);
+  --dot-orange: rgba(255, 136, 85, 0.32);
 }
 
 * {
@@ -78,6 +84,7 @@ body {
   background:
     radial-gradient(circle at 14% 10%, var(--aura-1) 0%, transparent 32%),
     radial-gradient(circle at 88% 14%, var(--aura-2) 0%, transparent 30%),
+    radial-gradient(circle at 80% 62%, var(--aura-1) 0%, transparent 38%),
     radial-gradient(circle at 50% 120%, var(--aura-3) 0%, transparent 44%),
     linear-gradient(180deg, var(--bg-grad-start) 0%, var(--bg-grad-end) 100%);
 }
@@ -94,18 +101,31 @@ body {
   background:
     radial-gradient(520px 300px at 12% 72%, var(--ambient-glow-1), transparent 64%),
     radial-gradient(620px 320px at 84% 72%, var(--ambient-glow-2), transparent 66%),
-    radial-gradient(680px 340px at 52% -6%, var(--ambient-glow-3), transparent 68%);
-  filter: blur(8px);
+    radial-gradient(680px 340px at 52% -6%, var(--ambient-glow-3), transparent 68%),
+    radial-gradient(420px 240px at 88% 42%, var(--ambient-glow-4), transparent 67%);
+  filter: blur(10px);
   animation: aura-drift 16s ease-in-out infinite alternate;
 }
 
 .bg-ambient::after {
   background:
+    radial-gradient(circle, var(--dot-blue) 0.8px, transparent 1.6px),
+    radial-gradient(circle, var(--dot-orange) 0.8px, transparent 1.6px),
     linear-gradient(var(--grid-line) 1px, transparent 1px),
     linear-gradient(90deg, var(--grid-line) 1px, transparent 1px);
-  background-size: 52px 52px;
-  mask-image: radial-gradient(circle at 50% 46%, black 48%, transparent 96%);
-  opacity: 0.45;
+  background-size:
+    86px 86px,
+    64px 64px,
+    52px 52px,
+    52px 52px;
+  background-position:
+    0 0,
+    18px 26px,
+    0 0,
+    0 0;
+  mask-image: radial-gradient(circle at 50% 50%, black 62%, transparent 98%);
+  opacity: 0.55;
+  animation: aura-sparkle 22s linear infinite;
 }
 
 @keyframes aura-drift {
@@ -114,6 +134,23 @@ body {
   }
   100% {
     transform: translate3d(1.2%, -0.8%, 0) scale(1.035);
+  }
+}
+
+@keyframes aura-sparkle {
+  0% {
+    background-position:
+      0 0,
+      18px 26px,
+      0 0,
+      0 0;
+  }
+  100% {
+    background-position:
+      120px -80px,
+      -70px 110px,
+      0 0,
+      0 0;
   }
 }
 
@@ -880,6 +917,10 @@ h3 {
 
 @media (prefers-reduced-motion: reduce) {
   .bg-ambient::before {
+    animation: none;
+  }
+
+  .bg-ambient::after {
     animation: none;
   }
 
