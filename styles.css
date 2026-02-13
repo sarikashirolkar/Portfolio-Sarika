@@ -294,24 +294,55 @@ h3 {
 }
 
 .project-card {
-  width: min(82vw, 420px);
+  width: min(84vw, 460px);
   border: 2px solid var(--border);
-  background: #fff;
-  padding: 1rem;
+  background: #fffaf4;
+  border-radius: 14px;
+  overflow: hidden;
   flex: 0 0 auto;
-  transition: transform 0.2s ease;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  box-shadow: 8px 8px 0 #f0c595;
 }
 
 .project-card:hover {
   transform: translate(-2px, -2px);
+  box-shadow: 12px 12px 0 #edb679;
+}
+
+.project-preview {
+  width: calc(100% - 1.5rem);
+  margin: 0.75rem;
+  height: 230px;
+  object-fit: contain;
+  object-position: center;
+  display: block;
+  border: 2px solid var(--border);
+  border-radius: 8px;
+  background: #f0efe9;
 }
 
 .project-card h3 {
-  margin: 0 0 0.45rem;
+  margin: 0.2rem 1rem 0.45rem;
 }
 
 .project-card p {
-  margin: 0;
+  margin: 0 1rem 0.6rem;
+}
+
+.project-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin: 0.8rem 1rem 1rem;
+}
+
+.project-tags span {
+  border: 2px solid var(--border);
+  background: #fff;
+  padding: 0.2rem 0.52rem;
+  font-size: 0.82rem;
+  font-weight: 700;
+  white-space: nowrap;
 }
 
 .skills-marquee {

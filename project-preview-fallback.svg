@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630" fill="none">
+  <rect width="1200" height="630" fill="#F0EFE9"/>
+  <rect x="40" y="40" width="1120" height="550" rx="18" fill="#FFF9F2" stroke="#2A2522" stroke-width="6"/>
+  <text x="600" y="290" text-anchor="middle" fill="#171515" font-family="Arial, sans-serif" font-size="58" font-weight="700">Project Preview</text>
+  <text x="600" y="355" text-anchor="middle" fill="#564F4A" font-family="Arial, sans-serif" font-size="30">Image unavailable, click to open repository</text>
+</svg>
