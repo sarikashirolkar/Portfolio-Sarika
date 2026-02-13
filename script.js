@@ -7,11 +7,15 @@ const projectArrows = document.querySelectorAll('.projects-arrow');
 const themeToggle = document.querySelector('#theme-toggle');
 const themeToggleText = document.querySelector('.theme-toggle-text');
 const themeToggleKnob = document.querySelector('.theme-toggle-knob');
+const heroProfileImage = document.querySelector('.hero-photo img');
 const THEME_STORAGE_KEY = 'portfolio-theme';
 
 const applyTheme = (theme) => {
   const isLight = theme === 'light';
   document.body.classList.toggle('theme-light', isLight);
+  if (heroProfileImage) {
+    heroProfileImage.src = isLight ? 'profile.jpg' : 'profile-dark.jpg';
+  }
   if (!themeToggle) return;
   if (themeToggleText) {
     themeToggleText.textContent = isLight ? 'DAY MODE' : 'NIGHT MODE';
