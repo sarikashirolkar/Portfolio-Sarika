@@ -158,7 +158,7 @@ const appendTypingIndicator = () => {
 if (chatWindow && chatQuestions) {
   appendChatMessage(
     'assistant',
-    'Hi, I am Sarika\'s Recruiter Q&A Assistant. Click any question button below to get my answer.'
+    'hi there - ask your questions and get instant insights about sarika.'
   );
 
   const setQuestionButtonsDisabled = (disabled) => {
