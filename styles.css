@@ -3,6 +3,9 @@
   --ink: #171515;
   --accent: #da4d21;
   --accent-soft: #f2c28f;
+  --aura-1: rgba(255, 199, 150, 0.42);
+  --aura-2: rgba(255, 163, 120, 0.24);
+  --aura-3: rgba(255, 236, 214, 0.6);
   --card: #fff9f2;
   --border: #2a2522;
   --muted: #564f4a;
@@ -32,9 +35,45 @@ body {
   inset: 0;
   z-index: -1;
   background:
-    radial-gradient(circle at 18% 9%, #ffdcb9 0%, transparent 27%),
-    radial-gradient(circle at 84% 16%, #ffc49d 0%, transparent 26%),
+    radial-gradient(circle at 14% 10%, var(--aura-1) 0%, transparent 32%),
+    radial-gradient(circle at 88% 14%, var(--aura-2) 0%, transparent 30%),
+    radial-gradient(circle at 50% 120%, var(--aura-3) 0%, transparent 44%),
     linear-gradient(180deg, #fffaf4 0%, #f1e8de 100%);
+}
+
+.bg-ambient::before,
+.bg-ambient::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.bg-ambient::before {
+  background:
+    radial-gradient(520px 300px at 12% 72%, rgba(255, 176, 120, 0.2), transparent 64%),
+    radial-gradient(620px 320px at 84% 72%, rgba(250, 154, 108, 0.18), transparent 66%),
+    radial-gradient(680px 340px at 52% -6%, rgba(255, 223, 190, 0.2), transparent 68%);
+  filter: blur(8px);
+  animation: aura-drift 16s ease-in-out infinite alternate;
+}
+
+.bg-ambient::after {
+  background:
+    linear-gradient(rgba(42, 37, 34, 0.035) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(42, 37, 34, 0.03) 1px, transparent 1px);
+  background-size: 52px 52px;
+  mask-image: radial-gradient(circle at 50% 46%, black 48%, transparent 96%);
+  opacity: 0.45;
+}
+
+@keyframes aura-drift {
+  0% {
+    transform: translate3d(-1.4%, 0.6%, 0) scale(1);
+  }
+  100% {
+    transform: translate3d(1.2%, -0.8%, 0) scale(1.035);
+  }
 }
 
 .site-header {
@@ -739,6 +778,10 @@ h3 {
 }
 
 @media (prefers-reduced-motion: reduce) {
+  .bg-ambient::before {
+    animation: none;
+  }
+
   .projects-carousel {
     scroll-behavior: auto;
   }
