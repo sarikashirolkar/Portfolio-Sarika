@@ -187,23 +187,62 @@ body {
 
 .theme-toggle {
   border: 2px solid var(--border);
-  background: var(--surface-1);
+  background: #000;
   color: var(--ink);
   font: inherit;
-  font-size: 0.88rem;
+  font-size: 0.95rem;
   font-weight: 700;
-  padding: 0.5rem 0.75rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  min-width: 198px;
+  height: 56px;
+  border-radius: 999px;
+  padding: 0 0.5rem 0 1rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.7rem;
   cursor: pointer;
-  transition: transform 0.2s ease, background 0.2s ease;
+  transition: transform 0.2s ease, background 0.25s ease, color 0.25s ease;
+}
+
+.theme-toggle-text {
+  white-space: nowrap;
+}
+
+.theme-toggle-knob {
+  width: 46px;
+  height: 46px;
+  border-radius: 999px;
+  border: 2px solid var(--border);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  line-height: 1;
+  background: #fff;
+  color: #111;
+  transition: transform 0.25s ease, background 0.25s ease, color 0.25s ease;
 }
 
 .theme-toggle:hover {
-  transform: translate(-2px, -2px);
+  transform: translateY(-1px);
 }
 
 .theme-toggle:focus-visible {
   outline: 3px solid #006bff;
   outline-offset: 2px;
+}
+
+body.theme-light .theme-toggle {
+  background: #e8e8eb;
+  color: #111;
+}
+
+body.theme-light .theme-toggle .theme-toggle-knob {
+  transform: translateX(-2px);
+  background: #fff;
+  color: #222;
 }
 
 .btn-small {

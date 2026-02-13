@@ -5,13 +5,20 @@ const header = document.querySelector('.site-header');
 const projectsCarousel = document.querySelector('#projects-carousel');
 const projectArrows = document.querySelectorAll('.projects-arrow');
 const themeToggle = document.querySelector('#theme-toggle');
+const themeToggleText = document.querySelector('.theme-toggle-text');
+const themeToggleKnob = document.querySelector('.theme-toggle-knob');
 const THEME_STORAGE_KEY = 'portfolio-theme';
 
 const applyTheme = (theme) => {
   const isLight = theme === 'light';
   document.body.classList.toggle('theme-light', isLight);
   if (!themeToggle) return;
-  themeToggle.textContent = isLight ? 'Dark' : 'Light';
+  if (themeToggleText) {
+    themeToggleText.textContent = isLight ? 'DAY MODE' : 'NIGHT MODE';
+  }
+  if (themeToggleKnob) {
+    themeToggleKnob.textContent = isLight ? '☀' : '☾';
+  }
   themeToggle.setAttribute('aria-label', isLight ? 'Switch to dark theme' : 'Switch to light theme');
 };
 
