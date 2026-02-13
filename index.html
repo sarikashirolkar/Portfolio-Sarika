@@ -55,13 +55,24 @@
             <div class="chat-shell">
               <div class="chat-header">
                 <p class="chat-title">Sarika Assistant</p>
-                <p class="chat-subtitle">Resume-grounded answers only</p>
+                <p class="chat-subtitle">Recruiter Q&A Assistant</p>
               </div>
               <div class="chat-window" id="chat-window" aria-live="polite"></div>
               <form class="chat-form" id="chat-form">
-                <label class="sr-only" for="chat-input">Ask a question</label>
-                <input id="chat-input" name="question" type="text" maxlength="280" placeholder="Ask me anything about my resume..." autocomplete="off" required />
-                <button class="btn btn-small" type="submit">Send</button>
+                <label class="sr-only" for="chat-question-select">Choose a recruiter question</label>
+                <select id="chat-question-select" name="question" required>
+                  <option value="" selected>Choose a recruiter question...</option>
+                  <option value="intro">Can you give me a quick introduction about yourself and your AI/ML background?</option>
+                  <option value="a2w">What kind of work have you done at AI Workflow Automation?</option>
+                  <option value="voice-agent">Tell me about the AI voice scheduling agent you built - how does it work?</option>
+                  <option value="hobbies">What are your hobbies?</option>
+                  <option value="ieee">Can you explain your IEEE research project and what problem it solved?</option>
+                  <option value="azure">What experience do you have deploying applications on Azure or cloud environments?</option>
+                  <option value="proud">Which project are you most proud of and why?</option>
+                  <option value="stack">What tools, frameworks, and programming languages do you work with regularly?</option>
+                  <option value="approach">How do you approach solving a new technical problem or learning a new technology?</option>
+                </select>
+                <button class="btn btn-small" type="submit">Ask</button>
               </form>
             </div>
           </div>

@@ -316,14 +316,19 @@ h3 {
 }
 
 .chat-form input {
+.chat-form input,
+.chat-form select {
   border: 2px solid var(--border);
   background: #fff;
   color: var(--ink);
   padding: 0.6rem 0.7rem;
   font: inherit;
+  width: 100%;
 }
 
 .chat-form input:focus-visible {
+.chat-form input:focus-visible,
+.chat-form select:focus-visible {
   outline: 3px solid #006bff;
   outline-offset: 2px;
 }

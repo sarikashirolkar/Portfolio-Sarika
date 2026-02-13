@@ -87,30 +87,54 @@ if (projectsCarousel && projectArrows.length) {
 
 const chatWindow = document.querySelector('#chat-window');
 const chatForm = document.querySelector('#chat-form');
-const chatInput = document.querySelector('#chat-input');
-const CHAT_API_URL = window.CHAT_API_URL || document.body.dataset.chatApiUrl || '';
+const chatQuestionSelect = document.querySelector('#chat-question-select');
 
-const localResumeFacts = {
-  projects:
-    'I have worked on appointo.ai, IBM-Sales-Risk-Prediction-Model, Amazon-Business-Risk-Prediction-Model, retell-calendar-mvp, DAWNVision, Crater-Detection, AI-Research-Agent, and Portfolio-Sarika.',
-  ai:
-    'My AI work includes AI voice scheduling systems with Retell AI, ML risk prediction pipelines, computer vision work with YOLO, and an AI research agent using LangChain and Streamlit.',
-  skills:
-    'My skills include Python, SQL, Java, C, TensorFlow, Keras, OpenCV, Pandas, NumPy, LangChain, Azure, Power BI, Tableau, MySQL, MongoDB, Linux, Windows, and macOS.',
-  experience:
-    'I am a Software Engineer at AI Workflow Automation (AI Agents/ML Systems), previously a Cloud Applications Engineer at the same company, and an AI/ML intern at Bharat Electronics Limited, plus project internship work under IEEE IAMPro.',
-  hobbies:
-    'My hobbies are not listed in my current resume or portfolio. If needed, I can add a hobbies section.'
-};
-
-const getLocalFallback = (question) => {
-  const q = question.toLowerCase();
-  if (q.includes('project')) return localResumeFacts.projects;
-  if (q.includes('ai') || q.includes('ml') || q.includes('machine learning')) return localResumeFacts.ai;
-  if (q.includes('skill') || q.includes('tech stack')) return localResumeFacts.skills;
-  if (q.includes('experience') || q.includes('work')) return localResumeFacts.experience;
-  if (q.includes('hobbies') || q.includes('hobby')) return localResumeFacts.hobbies;
-  return 'I can answer questions about my experience, projects, AI work, and skills based on my resume and portfolio.';
+const qaPairs = {
+  intro: {
+    question: 'Can you give me a quick introduction about yourself and your AI/ML background?',
+    answer:
+      'I am an AI and ML engineer focused on building practical intelligent systems, especially AI agents, computer vision solutions, and cloud-based applications. My experience includes developing ML pipelines, deploying services on Azure, and working on research projects like YOLO-based object detection published at an IEEE conference. I enjoy turning complex AI ideas into real-world, production-ready tools.'
+  },
+  a2w: {
+    question: 'What kind of work have you done at AI Workflow Automation?',
+    answer:
+      'At AI Workflow Automation, I worked on designing AI agents, building Python-based data pipelines, and developing ML systems for forecasting and decision-making. I also deployed backend services on Azure Linux VMs and improved development workflows through structured deployment and monitoring practices. My role combined engineering, AI experimentation, and cloud deployment.'
+  },
+  'voice-agent': {
+    question: 'Tell me about the AI voice scheduling agent you built - how does it work?',
+    answer:
+      'I developed an AI voice scheduling agent for a dental clinic that automates appointment booking through phone conversations. It integrates Retell AI, n8n workflows, and Google Calendar to manage real-time availability, rescheduling, and cancellations. The system uses structured AI outputs and webhook-driven automation to ensure reliable updates and smooth user interactions.'
+  },
+  hobbies: {
+    question: 'What are your hobbies?',
+    answer:
+      'I enjoy exploring new AI tools, experimenting with machine learning ideas, and participating in technical communities like IEEE workshops and hackathons. Outside of engineering, I like mentoring peers, learning emerging technologies, and continuously improving my problem-solving skills through hands-on projects.'
+  },
+  ieee: {
+    question: 'Can you explain your IEEE research project and what problem it solved?',
+    answer:
+      'My IEEE research focused on secure object identification using YOLOv8 for autonomous systems operating in challenging weather conditions. The goal was to improve real-time detection accuracy and reliability through benchmarking and error analysis. The project demonstrated how deep learning models can perform robustly in real-world environments.'
+  },
+  azure: {
+    question: 'What experience do you have deploying applications on Azure or cloud environments?',
+    answer:
+      'I have deployed backend services and applications on Azure Linux VMs and Azure App Services, focusing on scalability, stability, and secure configurations. My work included environment setup, monitoring basics, and optimizing deployment workflows to improve development speed and system reliability.'
+  },
+  proud: {
+    question: 'Which project are you most proud of and why?',
+    answer:
+      'One of my proudest projects is the AI voice scheduling agent because it combines LLM workflows, automation, and real-time integrations into a production-ready system. It demonstrates how AI can move beyond experimentation into solving real operational problems for businesses.'
+  },
+  stack: {
+    question: 'What tools, frameworks, and programming languages do you work with regularly?',
+    answer:
+      'I primarily work with Python, SQL, and Java along with frameworks like TensorFlow, scikit-learn, and LangChain. My workflow includes tools such as Git, Streamlit, Azure services, and data libraries like Pandas and NumPy for building AI pipelines, dashboards, and cloud-ready applications.'
+  },
+  approach: {
+    question: 'How do you approach solving a new technical problem or learning a new technology?',
+    answer:
+      'I start by understanding the problem deeply and breaking it into smaller technical components. Then I prototype quickly, test different approaches, and refine solutions through experimentation and error analysis. Continuous learning through research, documentation, and real-world implementation helps me adapt quickly to new technologies.'
+  }
 };
 
 const appendChatMessage = (role, text) => {
@@ -132,57 +156,27 @@ const appendTypingIndicator = () => {
   return msg;
 };
 
-const askAssistant = async (question) => {
-  if (!CHAT_API_URL) {
-    return getLocalFallback(question);
-  }
-
-  const response = await fetch(CHAT_API_URL, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ question })
-  });
-
-  if (!response.ok) {
-    throw new Error('Chat request failed');
-  }
-
-  const data = await response.json();
-  if (typeof data.answer !== 'string' || !data.answer.trim()) {
-    throw new Error('Invalid chat response');
-  }
-  return data.answer.trim();
-};
-
-if (chatWindow && chatForm && chatInput) {
+if (chatWindow && chatForm && chatQuestionSelect) {
   appendChatMessage(
     'assistant',
-    'Hi, I am Sarika\'s AI About Me Assistant. Ask me about projects, AI work, skills, experience, or hobbies.'
+    'Hi, I am Sarika\'s Recruiter Q&A Assistant. Pick a question from the dropdown and click Ask.'
   );
 
   chatForm.addEventListener('submit', async (event) => {
     event.preventDefault();
-    const question = chatInput.value.trim();
-    if (!question) return;
+    const selectedKey = chatQuestionSelect.value;
+    const selectedItem = qaPairs[selectedKey];
+    if (!selectedItem) return;
 
-    appendChatMessage('user', question);
-    chatInput.value = '';
-    chatInput.disabled = true;
+    appendChatMessage('user', selectedItem.question);
+    chatQuestionSelect.disabled = true;
 
     const typingNode = appendTypingIndicator();
-    try {
-      const answer = await askAssistant(question);
-      if (typingNode) typingNode.remove();
-      appendChatMessage('assistant', answer);
-    } catch {
-      if (typingNode) typingNode.remove();
-      appendChatMessage(
-        'assistant',
-        'I could not reach the live assistant right now. I can still answer from resume context: ' + getLocalFallback(question)
-      );
-    } finally {
-      chatInput.disabled = false;
-      chatInput.focus();
-    }
+    await new Promise((resolve) => setTimeout(resolve, 800));
+    if (typingNode) typingNode.remove();
+    appendChatMessage('assistant', selectedItem.answer);
+
+    chatQuestionSelect.disabled = false;
+    chatQuestionSelect.focus();
   });
 }
