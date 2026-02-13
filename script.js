@@ -4,6 +4,28 @@ const sections = document.querySelectorAll('main section[id]');
 const header = document.querySelector('.site-header');
 const projectsCarousel = document.querySelector('#projects-carousel');
 const projectArrows = document.querySelectorAll('.projects-arrow');
+const themeToggle = document.querySelector('#theme-toggle');
+const THEME_STORAGE_KEY = 'portfolio-theme';
+
+const applyTheme = (theme) => {
+  const isLight = theme === 'light';
+  document.body.classList.toggle('theme-light', isLight);
+  if (!themeToggle) return;
+  themeToggle.textContent = isLight ? 'Dark' : 'Light';
+  themeToggle.setAttribute('aria-label', isLight ? 'Switch to dark theme' : 'Switch to light theme');
+};
+
+const savedTheme = localStorage.getItem(THEME_STORAGE_KEY);
+applyTheme(savedTheme === 'light' ? 'light' : 'dark');
+
+if (themeToggle) {
+  themeToggle.addEventListener('click', () => {
+    const isCurrentlyLight = document.body.classList.contains('theme-light');
+    const nextTheme = isCurrentlyLight ? 'dark' : 'light';
+    applyTheme(nextTheme);
+    localStorage.setItem(THEME_STORAGE_KEY, nextTheme);
+  });
+}
 
 const revealObserver = new IntersectionObserver(
   (entries, observer) => {
