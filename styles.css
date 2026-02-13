@@ -6,6 +6,7 @@
   --aura-1: rgba(111, 77, 255, 0.18);
   --aura-2: rgba(255, 106, 58, 0.16);
   --aura-3: rgba(58, 102, 196, 0.22);
+  --aura-4: rgba(84, 198, 255, 0.12);
   --card: #181d27;
   --border: #e3d2bb;
   --muted: #c4b7a6;
@@ -34,9 +35,10 @@ body.theme-light {
   --ink: #171515;
   --accent: #da4d21;
   --accent-soft: #f2c28f;
-  --aura-1: rgba(255, 199, 150, 0.42);
-  --aura-2: rgba(255, 163, 120, 0.24);
-  --aura-3: rgba(255, 236, 214, 0.6);
+  --aura-1: rgba(255, 176, 110, 0.56);
+  --aura-2: rgba(88, 162, 255, 0.34);
+  --aura-3: rgba(255, 224, 196, 0.72);
+  --aura-4: rgba(76, 173, 255, 0.26);
   --card: #fff9f2;
   --border: #2a2522;
   --muted: #564f4a;
@@ -51,12 +53,12 @@ body.theme-light {
   --grid-line: rgba(42, 37, 34, 0.035);
   --bg-grad-start: #fffaf4;
   --bg-grad-end: #f1e8de;
-  --ambient-glow-1: rgba(255, 176, 120, 0.2);
-  --ambient-glow-2: rgba(250, 154, 108, 0.18);
-  --ambient-glow-3: rgba(255, 223, 190, 0.24);
-  --ambient-glow-4: rgba(90, 175, 255, 0.26);
-  --dot-blue: rgba(79, 156, 255, 0.42);
-  --dot-orange: rgba(255, 136, 85, 0.32);
+  --ambient-glow-1: rgba(255, 166, 98, 0.36);
+  --ambient-glow-2: rgba(250, 126, 84, 0.32);
+  --ambient-glow-3: rgba(255, 214, 176, 0.35);
+  --ambient-glow-4: rgba(74, 170, 255, 0.34);
+  --dot-blue: rgba(58, 141, 255, 0.56);
+  --dot-orange: rgba(255, 121, 64, 0.44);
 }
 
 * {
@@ -84,6 +86,7 @@ body {
   background:
     radial-gradient(circle at 14% 10%, var(--aura-1) 0%, transparent 32%),
     radial-gradient(circle at 88% 14%, var(--aura-2) 0%, transparent 30%),
+    radial-gradient(circle at 20% 76%, var(--aura-4) 0%, transparent 40%),
     radial-gradient(circle at 80% 62%, var(--aura-1) 0%, transparent 38%),
     radial-gradient(circle at 50% 120%, var(--aura-3) 0%, transparent 44%),
     linear-gradient(180deg, var(--bg-grad-start) 0%, var(--bg-grad-end) 100%);
@@ -126,6 +129,16 @@ body {
   mask-image: radial-gradient(circle at 50% 50%, black 62%, transparent 98%);
   opacity: 0.55;
   animation: aura-sparkle 22s linear infinite;
+}
+
+body.theme-light .bg-ambient::before {
+  filter: blur(6px) saturate(115%);
+  opacity: 0.95;
+}
+
+body.theme-light .bg-ambient::after {
+  opacity: 0.82;
+  mask-image: radial-gradient(circle at 50% 50%, black 78%, transparent 99%);
 }
 
 @keyframes aura-drift {
