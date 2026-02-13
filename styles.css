@@ -276,21 +276,64 @@ h3 {
   outline-offset: 2px;
 }
 
-.projects-marquee {
-  margin-top: 1.4rem;
-  overflow: hidden;
-}
-
-.projects-belt {
+.section-head-projects {
   display: flex;
-  width: max-content;
-  animation: projects-scroll 75s linear infinite;
+  justify-content: space-between;
+  align-items: flex-end;
+  gap: 1rem;
 }
 
-.projects-row {
+.projects-controls {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+.projects-arrow {
+  border: 2px solid var(--border);
+  background: #fff;
+  color: var(--ink);
+  width: 2.5rem;
+  height: 2.5rem;
+  font-size: 1.1rem;
+  line-height: 1;
+  font-weight: 700;
+  cursor: pointer;
+  transition: transform 0.2s ease, background 0.2s ease;
+}
+
+.projects-arrow:hover:not(:disabled) {
+  transform: translate(-2px, -2px);
+  background: #fff4e6;
+}
+
+.projects-arrow:disabled {
+  opacity: 0.45;
+  cursor: default;
+}
+
+.projects-arrow:focus-visible {
+  outline: 3px solid #006bff;
+  outline-offset: 2px;
+}
+
+.projects-carousel {
+  margin-top: 1.4rem;
+  overflow-x: auto;
+  overflow-y: hidden;
+  scroll-behavior: smooth;
+  scrollbar-width: none;
+  padding-bottom: 0.3rem;
+}
+
+.projects-carousel::-webkit-scrollbar {
+  display: none;
+}
+
+.projects-track {
   display: flex;
   gap: 0.9rem;
-  padding-right: 0.9rem;
+  width: max-content;
 }
 
 .project-card {
@@ -384,15 +427,6 @@ h3 {
   }
 }
 
-@keyframes projects-scroll {
-  from {
-    transform: translateX(0);
-  }
-  to {
-    transform: translateX(-50%);
-  }
-}
-
 .contact-links {
   display: grid;
   gap: 0.5rem;
@@ -448,6 +482,15 @@ h3 {
     justify-self: start;
     width: min(74vw, 320px);
   }
+
+  .section-head-projects {
+    align-items: center;
+  }
+
+  .projects-arrow {
+    width: 2.2rem;
+    height: 2.2rem;
+  }
 }
 
 @media (max-width: 520px) {
@@ -466,24 +509,8 @@ h3 {
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .projects-marquee {
-    overflow: visible;
-  }
-
-  .projects-belt {
-    animation: none;
-    width: auto;
-    flex-wrap: wrap;
-    gap: 0.9rem;
-  }
-
-  .projects-row {
-    flex-wrap: wrap;
-    padding-right: 0;
-  }
-
-  .projects-row[aria-hidden="true"] {
-    display: none;
+  .projects-carousel {
+    scroll-behavior: auto;
   }
 
   .skills-marquee {
