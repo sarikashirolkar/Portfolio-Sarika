@@ -142,7 +142,9 @@ const appendChatMessage = (role, text) => {
   msg.className = `chat-msg ${role}`;
   msg.textContent = text;
   chatWindow.appendChild(msg);
-  chatWindow.scrollTop = chatWindow.scrollHeight;
+  requestAnimationFrame(() => {
+    chatWindow.scrollTop = chatWindow.scrollHeight;
+  });
 };
 
 const appendTypingIndicator = () => {
@@ -151,7 +153,9 @@ const appendTypingIndicator = () => {
   msg.className = 'chat-msg assistant typing';
   msg.innerHTML = '<div class="typing-dots"><span></span><span></span><span></span></div>';
   chatWindow.appendChild(msg);
-  chatWindow.scrollTop = chatWindow.scrollHeight;
+  requestAnimationFrame(() => {
+    chatWindow.scrollTop = chatWindow.scrollHeight;
+  });
   return msg;
 };
 
@@ -163,7 +167,18 @@ const appendHobbyImages = () => {
     '<img src="hobby-trekking.jpg" alt="Sarika trekking outdoors" loading="lazy" />' +
     '<img src="hobby-gdg.jpg" alt="Sarika at GDG tech event" loading="lazy" />';
   chatWindow.appendChild(media);
-  chatWindow.scrollTop = chatWindow.scrollHeight;
+  media.querySelectorAll('img').forEach((img) => {
+    img.addEventListener(
+      'load',
+      () => {
+        chatWindow.scrollTop = chatWindow.scrollHeight;
+      },
+      { once: true }
+    );
+  });
+  requestAnimationFrame(() => {
+    chatWindow.scrollTop = chatWindow.scrollHeight;
+  });
 };
 
 if (chatWindow && chatQuestions) {
