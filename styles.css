@@ -436,40 +436,47 @@ h3 {
   color: var(--text-soft);
 }
 
+.about-section {
+  position: relative;
+  overflow: hidden;
+}
+
 .about-layout {
+  position: relative;
+  z-index: 1;
   display: grid;
-  grid-template-columns: minmax(0, 1.2fr) minmax(260px, 0.8fr);
-  gap: 1.4rem;
-  align-items: center;
+  grid-template-columns: 1fr;
 }
 
 .about-copy {
   display: grid;
   gap: 0.82rem;
+  max-width: 76ch;
 }
 
 .about-copy .section-head {
   margin-bottom: 0.2rem;
 }
 
-.about-line {
-  margin: 0;
+.about-copy .section-head h2 {
+  max-width: 24ch;
 }
 
-.about-bubble-wrap {
-  min-width: 0;
+.about-line {
+  margin: 0;
+  max-width: 72ch;
+  text-align: justify;
+  text-align-last: left;
 }
 
 .about-bubble-field {
-  height: 390px;
-  border: 2px solid var(--border);
-  background:
-    radial-gradient(circle at 14% 18%, rgba(94, 172, 255, 0.18) 0%, transparent 48%),
-    radial-gradient(circle at 80% 76%, rgba(255, 134, 84, 0.18) 0%, transparent 46%),
-    radial-gradient(circle at 64% 22%, rgba(255, 117, 186, 0.2) 0%, transparent 44%),
-    var(--surface-soft);
-  position: relative;
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  width: min(44%, 460px);
   overflow: hidden;
+  z-index: 0;
 }
 
 .about-bubble {
@@ -1017,7 +1024,8 @@ h3 {
   }
 
   .about-bubble-field {
-    height: 260px;
+    width: 100%;
+    opacity: 0.7;
   }
 
   .hero-left .hero-photo {
