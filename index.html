@@ -61,19 +61,26 @@
             <div class="chat-shell">
               <div class="chat-header">
                 <p class="chat-title">Talk to Sarika's Assistant</p>
-                <p class="chat-subtitle">Choose a Question!</p>
+                <p class="chat-subtitle">Ask a question or choose a prompt.</p>
               </div>
               <div class="chat-window" id="chat-window" aria-live="polite"></div>
-              <div class="chat-questions" id="chat-questions" aria-label="Recruiter questions">
-                <button class="chat-q-btn" type="button" data-q="intro">Quick introduction and AI/ML background</button>
-                <button class="chat-q-btn" type="button" data-q="a2w">Work at AI Workflow Automation</button>
-                <button class="chat-q-btn" type="button" data-q="voice-agent">AI voice scheduling agent details</button>
-                <button class="chat-q-btn" type="button" data-q="hobbies">What are your hobbies?</button>
-                <button class="chat-q-btn" type="button" data-q="ieee">IEEE research project explanation</button>
-                <button class="chat-q-btn" type="button" data-q="azure">Azure/cloud deployment experience</button>
-                <button class="chat-q-btn" type="button" data-q="proud">Project you are most proud of</button>
-                <button class="chat-q-btn" type="button" data-q="stack">Tools, frameworks, and languages</button>
-                <button class="chat-q-btn" type="button" data-q="approach">How you solve new technical problems</button>
+              <form class="chat-input-wrap" id="chat-form">
+                <input
+                  class="chat-input"
+                  id="chat-input"
+                  type="text"
+                  placeholder="Ask about experience, projects, skills..."
+                  autocomplete="off"
+                  aria-label="Type your question"
+                />
+                <button class="chat-send-btn" type="submit">Send</button>
+              </form>
+              <div class="chat-suggestions" id="chat-suggestions" aria-label="Suggested questions">
+                <button class="chat-q-btn" type="button" data-q="Give me a quick introduction">Quick introduction and AI/ML background</button>
+                <button class="chat-q-btn" type="button" data-q="Tell me about work at AI Workflow Automation">Work at AI Workflow Automation</button>
+                <button class="chat-q-btn" type="button" data-q="Tell me about your IEEE research project">IEEE research project</button>
+                <button class="chat-q-btn" type="button" data-q="What is your education background">Education background</button>
+                <button class="chat-q-btn" type="button" data-q="What is your skill stack">Skills and stack</button>
               </div>
             </div>
           </div>
@@ -255,6 +262,7 @@
       <p>Portfolio of Sarika S Shirolkar</p>
     </footer>
 
+    <script src="https://unpkg.com/compromise@latest/builds/compromise.min.js"></script>
     <script src="script.js"></script>
   </body>
 </html>

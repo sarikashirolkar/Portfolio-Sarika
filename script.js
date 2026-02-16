@@ -119,133 +119,116 @@ if (projectsCarousel && projectArrows.length) {
 }
 
 const chatWindow = document.querySelector('#chat-window');
-const chatQuestions = document.querySelector('#chat-questions');
+const chatForm = document.querySelector('#chat-form');
+const chatInput = document.querySelector('#chat-input');
+const chatSuggestions = document.querySelector('#chat-suggestions');
 
-const qaPairs = {
-  intro: {
-    question: 'Can you give me a quick introduction about yourself and your AI/ML background?',
-    answer:
-      'I am an AI and ML engineer focused on building practical intelligent systems, especially AI agents, computer vision solutions, and cloud-based applications. My experience includes developing ML pipelines, deploying services on Azure, and working on research projects like YOLO-based object detection published at an IEEE conference. I enjoy turning complex AI ideas into real-world, production-ready tools.'
-  },
-  a2w: {
-    question: 'What kind of work have you done at AI Workflow Automation?',
-    answer:
-      'At AI Workflow Automation, I worked on designing AI agents, building Python-based data pipelines, and developing ML systems for forecasting and decision-making. I also deployed backend services on Azure Linux VMs and improved development workflows through structured deployment and monitoring practices. My role combined engineering, AI experimentation, and cloud deployment.'
-  },
-  'voice-agent': {
-    question: 'Tell me about the AI voice scheduling agent you built - how does it work?',
-    answer:
-      'I developed an AI voice scheduling agent for a dental clinic that automates appointment booking through phone conversations. It integrates Retell AI, n8n workflows, and Google Calendar to manage real-time availability, rescheduling, and cancellations. The system uses structured AI outputs and webhook-driven automation to ensure reliable updates and smooth user interactions.'
-  },
-  hobbies: {
-    question: 'What are your hobbies?',
-    answer:
-      'Outside of tech, I enjoy trekking and going on adventures in the wild - staying intact with nature! On the technical side, I regularly attend tech events and communities such as Microsoft, GDG, IEEE, and other meetups to keep learning, networking, and staying updated with the latest innovations.'
-  },
-  ieee: {
-    question: 'Can you explain your IEEE research project and what problem it solved?',
-    answer:
-      'My IEEE research focused on secure object identification using YOLOv8 for autonomous systems operating in challenging weather conditions. The goal was to improve real-time detection accuracy and reliability through benchmarking and error analysis. The project demonstrated how deep learning models can perform robustly in real-world environments.'
-  },
-  azure: {
-    question: 'What experience do you have deploying applications on Azure or cloud environments?',
-    answer:
-      'I have deployed backend services and applications on Azure Linux VMs and Azure App Services, focusing on scalability, stability, and secure configurations. My work included environment setup, monitoring basics, and optimizing deployment workflows to improve development speed and system reliability.'
-  },
-  proud: {
-    question: 'Which project are you most proud of and why?',
-    answer:
-      'One of my proudest projects is the AI voice scheduling agent because it combines LLM workflows, automation, and real-time integrations into a production-ready system. It demonstrates how AI can move beyond experimentation into solving real operational problems for businesses.'
-  },
-  stack: {
-    question: 'What tools, frameworks, and programming languages do you work with regularly?',
-    answer:
-      'I primarily work with Python, SQL, and Java along with frameworks like TensorFlow, scikit-learn, and LangChain. My workflow includes tools such as Git, Streamlit, Azure services, and data libraries like Pandas and NumPy for building AI pipelines, dashboards, and cloud-ready applications.'
-  },
-  approach: {
-    question: 'How do you approach solving a new technical problem or learning a new technology?',
-    answer:
-      'I start by understanding the problem deeply and breaking it into smaller technical components. Then I prototype quickly, test different approaches, and refine solutions through experimentation and error analysis. Continuous learning through research, documentation, and real-world implementation helps me adapt quickly to new technologies.'
-  }
+const knowledgeBase = {
+  introduction:
+    'I am Sarika S Shirolkar, an Engineer and IEEE Leader focused on practical AI and ML systems.',
+  experience:
+    'I am currently a Data Analyst and ML Engineer at AI Workflow Automation (October 2025 to Present). Earlier, I worked there as an Azure Cloud Engineer (March 2025 to September 2025).',
+  education:
+    'I am pursuing a B.Tech in Computer Science (AI and ML) at Sai Vidya Institute of Technology, Bangalore.',
+  projects:
+    'My key projects include Secure Object Identification (published through IEEE) and AI voice scheduling agents.',
+  skills:
+    'My core skills include Python, Power BI, and Azure.'
 };
 
-const appendChatMessage = (role, text) => {
+const chatState = {
+  lastIntent: 'introduction'
+};
+
+const appendMessage = (role, text) => {
   if (!chatWindow) return;
   const msg = document.createElement('div');
   msg.className = `chat-msg ${role}`;
   msg.textContent = text;
   chatWindow.appendChild(msg);
-  requestAnimationFrame(() => {
-    chatWindow.scrollTop = chatWindow.scrollHeight;
-  });
+  chatWindow.scrollTop = chatWindow.scrollHeight;
 };
 
-const appendTypingIndicator = () => {
-  if (!chatWindow) return null;
-  const msg = document.createElement('div');
-  msg.className = 'chat-msg assistant typing';
-  msg.innerHTML = '<div class="typing-dots"><span></span><span></span><span></span></div>';
-  chatWindow.appendChild(msg);
-  requestAnimationFrame(() => {
-    chatWindow.scrollTop = chatWindow.scrollHeight;
-  });
-  return msg;
+const detectIntent = (userInput) => {
+  const normalized = userInput.toLowerCase();
+  const doc = typeof nlp === 'function' ? nlp(userInput) : null;
+  const hasNoun = doc ? doc.has('#Noun') : false;
+
+  if (
+    normalized.includes('work') ||
+    normalized.includes('job') ||
+    normalized.includes('company')
+  ) {
+    return 'experience';
+  }
+
+  if (
+    normalized.includes('skills') ||
+    normalized.includes('stack') ||
+    normalized.includes('python')
+  ) {
+    return 'skills';
+  }
+
+  if (
+    normalized.includes('education') ||
+    normalized.includes('college') ||
+    normalized.includes('b.tech') ||
+    normalized.includes('degree')
+  ) {
+    return 'education';
+  }
+
+  if (
+    normalized.includes('introduce') ||
+    normalized.includes('introduction') ||
+    normalized.includes('about') ||
+    normalized.includes('who')
+  ) {
+    return 'introduction';
+  }
+
+  if (
+    normalized.includes('ieee') ||
+    normalized.includes('paper') ||
+    normalized.includes('research') ||
+    hasNoun
+  ) {
+    return 'projects';
+  }
+
+  return chatState.lastIntent || 'introduction';
 };
 
-const appendHobbyImages = () => {
-  if (!chatWindow) return;
-  const media = document.createElement('div');
-  media.className = 'chat-media-grid';
-  media.innerHTML =
-    '<img src="hobby-trekking.jpg" alt="Sarika trekking outdoors" loading="lazy" />' +
-    '<img src="hobby-gdg.jpg" alt="Sarika at GDG tech event" loading="lazy" />';
-  chatWindow.appendChild(media);
-  media.querySelectorAll('img').forEach((img) => {
-    img.addEventListener(
-      'load',
-      () => {
-        chatWindow.scrollTop = chatWindow.scrollHeight;
-      },
-      { once: true }
-    );
-  });
-  requestAnimationFrame(() => {
-    chatWindow.scrollTop = chatWindow.scrollHeight;
-  });
+const respondToMessage = (userText) => {
+  const trimmed = userText.trim();
+  if (!trimmed) return;
+
+  appendMessage('user', trimmed);
+  const intent = detectIntent(trimmed);
+  chatState.lastIntent = intent;
+  appendMessage('assistant', knowledgeBase[intent]);
 };
 
-if (chatWindow && chatQuestions) {
-  appendChatMessage(
+if (chatWindow && chatForm && chatInput && chatSuggestions) {
+  appendMessage(
     'assistant',
-    'hi there - ask your questions and get instant insights about sarika.'
+    'Hi, I am Sarika\'s chatbot. Ask about my introduction, experience, education, projects, or skills.'
   );
 
-  const setQuestionButtonsDisabled = (disabled) => {
-    chatQuestions.querySelectorAll('.chat-q-btn').forEach((btn) => {
-      btn.disabled = disabled;
-    });
-  };
+  chatForm.addEventListener('submit', (event) => {
+    event.preventDefault();
+    respondToMessage(chatInput.value);
+    chatInput.value = '';
+    chatInput.focus();
+  });
 
-  chatQuestions.addEventListener('click', async (event) => {
+  chatSuggestions.addEventListener('click', (event) => {
     const clicked = event.target.closest('.chat-q-btn');
     if (!clicked) return;
-
-    const selectedKey = clicked.dataset.q;
-    const selectedItem = qaPairs[selectedKey];
-    if (!selectedItem) return;
-
-    appendChatMessage('user', selectedItem.question);
-    setQuestionButtonsDisabled(true);
-
-    const typingNode = appendTypingIndicator();
-    await new Promise((resolve) => setTimeout(resolve, 800));
-    if (typingNode) typingNode.remove();
-    appendChatMessage('assistant', selectedItem.answer);
-    if (selectedKey === 'hobbies') {
-      appendHobbyImages();
-    }
-
-    setQuestionButtonsDisabled(false);
-    clicked.focus();
+    const suggestionText = clicked.dataset.q;
+    if (!suggestionText) return;
+    respondToMessage(suggestionText);
+    chatInput.focus();
   });
 }
