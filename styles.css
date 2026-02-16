@@ -690,6 +690,16 @@ h3 {
   font-weight: 700;
 }
 
+.timeline-item .org a {
+  color: inherit;
+  text-decoration-thickness: 2px;
+}
+
+.timeline-item .org a:focus-visible {
+  outline: 3px solid #006bff;
+  outline-offset: 2px;
+}
+
 .experience-points {
   margin: 0.7rem 0 0;
   padding-left: 1.1rem;
