@@ -118,6 +118,121 @@ if (projectsCarousel && projectArrows.length) {
   updateProjectArrowState();
 }
 
+const aboutBubbleField = document.querySelector('#about-bubble-field');
+
+if (aboutBubbleField) {
+  const bubbleCount = 18;
+  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const bubblePalette = [
+    'rgba(96, 177, 255, 0.55)',
+    'rgba(255, 145, 84, 0.5)',
+    'rgba(255, 121, 188, 0.48)'
+  ];
+
+  const bubbles = [];
+  let fieldRect = aboutBubbleField.getBoundingClientRect();
+  let pointer = null;
+
+  const randomInRange = (min, max) => Math.random() * (max - min) + min;
+
+  const updateFieldRect = () => {
+    fieldRect = aboutBubbleField.getBoundingClientRect();
+  };
+
+  const createBubble = () => {
+    const size = randomInRange(20, 52);
+    const el = document.createElement('span');
+    el.className = 'about-bubble';
+    el.style.width = `${size}px`;
+    el.style.height = `${size}px`;
+    el.style.background = bubblePalette[Math.floor(Math.random() * bubblePalette.length)];
+    aboutBubbleField.appendChild(el);
+
+    return {
+      el,
+      size,
+      x: randomInRange(0, Math.max(1, fieldRect.width - size)),
+      y: randomInRange(0, Math.max(1, fieldRect.height - size)),
+      vx: randomInRange(-0.28, 0.28),
+      vy: randomInRange(-0.28, 0.28)
+    };
+  };
+
+  const placeBubble = (bubble) => {
+    bubble.el.style.transform = `translate(${bubble.x}px, ${bubble.y}px)`;
+  };
+
+  updateFieldRect();
+  for (let i = 0; i < bubbleCount; i += 1) {
+    const bubble = createBubble();
+    placeBubble(bubble);
+    bubbles.push(bubble);
+  }
+
+  const onPointerMove = (clientX, clientY) => {
+    pointer = {
+      x: clientX - fieldRect.left,
+      y: clientY - fieldRect.top
+    };
+  };
+
+  aboutBubbleField.addEventListener('mousemove', (event) => {
+    onPointerMove(event.clientX, event.clientY);
+  });
+
+  aboutBubbleField.addEventListener('touchmove', (event) => {
+    if (!event.touches[0]) return;
+    onPointerMove(event.touches[0].clientX, event.touches[0].clientY);
+  }, { passive: true });
+
+  aboutBubbleField.addEventListener('mouseleave', () => {
+    pointer = null;
+  });
+
+  window.addEventListener('resize', updateFieldRect);
+
+  if (!reduceMotion) {
+    const tick = () => {
+      for (const bubble of bubbles) {
+        if (pointer) {
+          const cx = bubble.x + bubble.size / 2;
+          const cy = bubble.y + bubble.size / 2;
+          const dx = cx - pointer.x;
+          const dy = cy - pointer.y;
+          const dist = Math.hypot(dx, dy);
+          const repelRadius = 110;
+          if (dist > 0 && dist < repelRadius) {
+            const force = (repelRadius - dist) / repelRadius;
+            bubble.vx += (dx / dist) * force * 0.7;
+            bubble.vy += (dy / dist) * force * 0.7;
+          }
+        }
+
+        bubble.x += bubble.vx;
+        bubble.y += bubble.vy;
+        bubble.vx *= 0.985;
+        bubble.vy *= 0.985;
+
+        if (bubble.x <= 0 || bubble.x >= fieldRect.width - bubble.size) {
+          bubble.vx *= -1;
+          bubble.x = Math.min(Math.max(0, bubble.x), Math.max(0, fieldRect.width - bubble.size));
+        }
+
+        if (bubble.y <= 0 || bubble.y >= fieldRect.height - bubble.size) {
+          bubble.vy *= -1;
+          bubble.y = Math.min(Math.max(0, bubble.y), Math.max(0, fieldRect.height - bubble.size));
+        }
+
+        placeBubble(bubble);
+      }
+
+      requestAnimationFrame(tick);
+    };
+
+    requestAnimationFrame(tick);
+  }
+}
+
 const chatWindow = document.querySelector('#chat-window');
 const chatForm = document.querySelector('#chat-form');
 const chatInput = document.querySelector('#chat-input');
