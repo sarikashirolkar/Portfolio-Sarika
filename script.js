@@ -395,11 +395,8 @@ const knowledgeBase = {
   }
 };
 
-module.exports = knowledgeBase;
-
-
 const chatState = {
-  lastIntent: 'introduction'
+  lastIntent: 'INTRO'
 };
 
 const appendMessage = (role, text) => {
@@ -411,8 +408,16 @@ const appendMessage = (role, text) => {
   chatWindow.scrollTop = chatWindow.scrollHeight;
 };
 
+const normalizeText = (text) => text.toLowerCase().trim();
+
+const findFaqMatch = (normalizedInput) => {
+  return knowledgeBase.faqs.find((faq) =>
+    faq.match.some((phrase) => normalizedInput.includes(phrase))
+  );
+};
+
 const detectIntent = (userInput) => {
-  const normalized = userInput.toLowerCase();
+  const normalized = normalizeText(userInput);
   const doc = typeof nlp === 'function' ? nlp(userInput) : null;
   const hasNoun = doc ? doc.has('#Noun') : false;
 
@@ -421,7 +426,7 @@ const detectIntent = (userInput) => {
     normalized.includes('job') ||
     normalized.includes('company')
   ) {
-    return 'experience';
+    return 'EXPERIENCE';
   }
 
   if (
@@ -429,25 +434,7 @@ const detectIntent = (userInput) => {
     normalized.includes('stack') ||
     normalized.includes('python')
   ) {
-    return 'skills';
-  }
-
-  if (
-    normalized.includes('education') ||
-    normalized.includes('college') ||
-    normalized.includes('b.tech') ||
-    normalized.includes('degree')
-  ) {
-    return 'education';
-  }
-
-  if (
-    normalized.includes('introduce') ||
-    normalized.includes('introduction') ||
-    normalized.includes('about') ||
-    normalized.includes('who')
-  ) {
-    return 'introduction';
+    return 'SKILLS';
   }
 
   if (
@@ -456,10 +443,75 @@ const detectIntent = (userInput) => {
     normalized.includes('research') ||
     hasNoun
   ) {
-    return 'projects';
+    return 'PROJECT_IEEE';
   }
 
-  return chatState.lastIntent || 'introduction';
+  for (const definition of knowledgeBase.intents) {
+    if (definition.keywords.some((keyword) => normalized.includes(keyword))) {
+      return definition.intent;
+    }
+  }
+
+  return chatState.lastIntent || 'INTRO';
+};
+
+const formatExperienceResponse = () => {
+  const current = knowledgeBase.roles.current;
+  const previous = knowledgeBase.roles.previous;
+  const currentLine = `${current.title} at ${current.company} (${current.start} - ${current.end}).`;
+  const previousLine = previous
+    .map((role) => `${role.title} at ${role.company} (${role.start} - ${role.end})`)
+    .join('; ');
+  return `${currentLine} Previously: ${previousLine}.`;
+};
+
+const formatEducationResponse = () => {
+  const education = knowledgeBase.education;
+  return `${education.degree}, ${education.university}. Graduation: ${education.graduationYear}, CGPA: ${education.cgpa}.`;
+};
+
+const formatSkillsResponse = () => {
+  const skills = knowledgeBase.skills;
+  return `Core skills: ${skills.programming.join(', ')}. ML: ${skills.ml.join(', ')}. Cloud: ${skills.cloud.join(', ')}. Data Viz: ${skills.dataViz.join(', ')}.`;
+};
+
+const formatProjectResponse = (projectMatcher) => {
+  const project = knowledgeBase.projects.find(projectMatcher) || knowledgeBase.projects[0];
+  if (!project) return 'I can share details about my AI, IEEE, and cloud projects.';
+  return `${project.name}: ${project.oneLiner}`;
+};
+
+const formatContactResponse = () => {
+  const contact = knowledgeBase.contact;
+  return `Email: ${contact.email} | LinkedIn: ${contact.linkedin} | Phone: ${contact.phone}`;
+};
+
+const getResponseForIntent = (intent, normalizedInput) => {
+  const faqMatch = findFaqMatch(normalizedInput);
+  if (faqMatch) return faqMatch.answer;
+
+  switch (intent) {
+    case 'INTRO':
+      return `${knowledgeBase.profile.fullName} - ${knowledgeBase.profile.headline}. ${knowledgeBase.profile.summary}`;
+    case 'EXPERIENCE':
+      return formatExperienceResponse();
+    case 'EDUCATION':
+      return formatEducationResponse();
+    case 'SKILLS':
+      return formatSkillsResponse();
+    case 'PROJECT_VOICE_AGENT':
+      return formatProjectResponse((project) =>
+        project.tags.some((tag) => tag.includes('voice') || tag.includes('retell'))
+      );
+    case 'PROJECT_IEEE':
+      return formatProjectResponse((project) =>
+        project.tags.some((tag) => tag.includes('ieee') || tag.includes('yolo'))
+      );
+    case 'CONTACT':
+      return formatContactResponse();
+    default:
+      return `${knowledgeBase.profile.summary} Ask about my experience, IEEE project, skills, or education.`;
+  }
 };
 
 const respondToMessage = (userText) => {
@@ -469,7 +521,7 @@ const respondToMessage = (userText) => {
   appendMessage('user', trimmed);
   const intent = detectIntent(trimmed);
   chatState.lastIntent = intent;
-  appendMessage('assistant', knowledgeBase[intent]);
+  appendMessage('assistant', getResponseForIntent(intent, normalizeText(trimmed)));
 };
 
 if (chatWindow && chatForm && chatInput && chatSuggestions) {
