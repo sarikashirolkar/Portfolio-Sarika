@@ -3,10 +3,10 @@
   --ink: #f3eee6;
   --accent: #ff6b3a;
   --accent-soft: #6a3f31;
-  --aura-1: rgba(111, 77, 255, 0.18);
-  --aura-2: rgba(255, 106, 58, 0.16);
-  --aura-3: rgba(58, 102, 196, 0.22);
-  --aura-4: rgba(84, 198, 255, 0.12);
+  --aura-1: rgba(73, 154, 255, 0.22);
+  --aura-2: rgba(255, 140, 76, 0.2);
+  --aura-3: rgba(255, 112, 173, 0.2);
+  --aura-4: rgba(88, 182, 255, 0.16);
   --card: #181d27;
   --border: #e3d2bb;
   --muted: #c4b7a6;
@@ -21,12 +21,13 @@
   --grid-line: rgba(227, 210, 187, 0.055);
   --bg-grad-start: #141a25;
   --bg-grad-end: #0f141d;
-  --ambient-glow-1: rgba(116, 84, 255, 0.24);
-  --ambient-glow-2: rgba(255, 106, 58, 0.18);
-  --ambient-glow-3: rgba(58, 102, 196, 0.2);
-  --ambient-glow-4: rgba(83, 184, 255, 0.18);
+  --ambient-glow-1: rgba(71, 160, 255, 0.28);
+  --ambient-glow-2: rgba(255, 142, 82, 0.24);
+  --ambient-glow-3: rgba(255, 113, 176, 0.24);
+  --ambient-glow-4: rgba(84, 188, 255, 0.22);
   --dot-blue: rgba(120, 188, 255, 0.42);
   --dot-orange: rgba(255, 142, 100, 0.28);
+  --dot-pink: rgba(255, 122, 188, 0.3);
   --max: 1120px;
 }
 
@@ -35,10 +36,10 @@ body.theme-light {
   --ink: #171515;
   --accent: #da4d21;
   --accent-soft: #f2c28f;
-  --aura-1: rgba(255, 176, 110, 0.56);
-  --aura-2: rgba(88, 162, 255, 0.34);
-  --aura-3: rgba(255, 224, 196, 0.72);
-  --aura-4: rgba(76, 173, 255, 0.26);
+  --aura-1: rgba(77, 165, 255, 0.35);
+  --aura-2: rgba(255, 151, 89, 0.34);
+  --aura-3: rgba(255, 128, 190, 0.34);
+  --aura-4: rgba(96, 184, 255, 0.28);
   --card: #fff9f2;
   --border: #2a2522;
   --muted: #564f4a;
@@ -53,12 +54,13 @@ body.theme-light {
   --grid-line: rgba(42, 37, 34, 0.035);
   --bg-grad-start: #fffaf4;
   --bg-grad-end: #f1e8de;
-  --ambient-glow-1: rgba(255, 166, 98, 0.36);
-  --ambient-glow-2: rgba(250, 126, 84, 0.32);
-  --ambient-glow-3: rgba(255, 214, 176, 0.35);
-  --ambient-glow-4: rgba(74, 170, 255, 0.34);
+  --ambient-glow-1: rgba(85, 172, 255, 0.38);
+  --ambient-glow-2: rgba(255, 141, 82, 0.36);
+  --ambient-glow-3: rgba(255, 124, 184, 0.36);
+  --ambient-glow-4: rgba(88, 185, 255, 0.35);
   --dot-blue: rgba(58, 141, 255, 0.56);
   --dot-orange: rgba(255, 121, 64, 0.44);
+  --dot-pink: rgba(255, 95, 173, 0.42);
 }
 
 * {
@@ -114,16 +116,19 @@ body {
   background:
     radial-gradient(circle, var(--dot-blue) 0.8px, transparent 1.6px),
     radial-gradient(circle, var(--dot-orange) 0.8px, transparent 1.6px),
+    radial-gradient(circle, var(--dot-pink) 0.8px, transparent 1.6px),
     linear-gradient(var(--grid-line) 1px, transparent 1px),
     linear-gradient(90deg, var(--grid-line) 1px, transparent 1px);
   background-size:
     86px 86px,
     64px 64px,
+    72px 72px,
     52px 52px,
     52px 52px;
   background-position:
     0 0,
     18px 26px,
+    34px -10px,
     0 0,
     0 0;
   mask-image: radial-gradient(circle at 50% 50%, black 62%, transparent 98%);
@@ -155,6 +160,7 @@ body.theme-light .bg-ambient::after {
     background-position:
       0 0,
       18px 26px,
+      34px -10px,
       0 0,
       0 0;
   }
@@ -162,6 +168,7 @@ body.theme-light .bg-ambient::after {
     background-position:
       120px -80px,
       -70px 110px,
+      88px 100px,
       0 0,
       0 0;
   }

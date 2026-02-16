@@ -14,7 +14,7 @@ const applyTheme = (theme) => {
   const isLight = theme === 'light';
   document.body.classList.toggle('theme-light', isLight);
   if (heroProfileImage) {
-    heroProfileImage.src = isLight ? 'profile.jpg' : 'profile-dark.jpg';
+    heroProfileImage.src = isLight ? 'profile.jpg' : 'profile-dark.png';
   }
   if (!themeToggle) return;
   if (themeToggleText) {
@@ -27,7 +27,7 @@ const applyTheme = (theme) => {
 };
 
 const savedTheme = localStorage.getItem(THEME_STORAGE_KEY);
-applyTheme(savedTheme === 'light' ? 'light' : 'dark');
+applyTheme(savedTheme === 'dark' ? 'dark' : 'light');
 
 if (themeToggle) {
   themeToggle.addEventListener('click', () => {
