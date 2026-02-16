@@ -459,8 +459,7 @@ h3 {
 
 .about-line {
   margin: 0;
-  text-align: justify;
-  text-align-last: left;
+  text-align: left;
 }
 
 .about-bubble-field {
