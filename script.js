@@ -18,7 +18,7 @@ const applyTheme = (theme) => {
   }
   if (!themeToggle) return;
   if (themeToggleText) {
-    themeToggleText.textContent = isLight ? 'DAY MODE' : 'NIGHT MODE';
+    themeToggleText.textContent = isLight ? 'LIGHT MODE' : 'DARK MODE';
   }
   if (themeToggleKnob) {
     themeToggleKnob.textContent = isLight ? '☀' : '☾';
