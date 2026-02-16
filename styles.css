@@ -451,20 +451,14 @@ h3 {
 .about-copy {
   display: grid;
   gap: 0.82rem;
-  max-width: 76ch;
 }
 
 .about-copy .section-head {
   margin-bottom: 0.2rem;
 }
 
-.about-copy .section-head h2 {
-  max-width: 24ch;
-}
-
 .about-line {
   margin: 0;
-  max-width: 72ch;
   text-align: justify;
   text-align-last: left;
 }
