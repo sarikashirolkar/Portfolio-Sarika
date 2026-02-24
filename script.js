@@ -124,7 +124,7 @@ const chatInput = document.querySelector('#chat-input');
 const chatSuggestions = document.querySelector('#chat-suggestions');
 const contactPanel = document.querySelector('#contact-panel');
 const contactBackdrop = document.querySelector('#contact-panel-backdrop');
-const contactOpenButton = document.querySelector('#contact-panel-open');
+const contactOpenButtons = document.querySelectorAll('[data-contact-open]');
 const contactCloseButton = document.querySelector('#contact-panel-close');
 const contactPanelForm = document.querySelector('#contact-panel-form');
 const contactPanelName = document.querySelector('#contact-name');
@@ -529,8 +529,10 @@ const toggleContactPanel = (shouldOpen) => {
   }
 };
 
-if (contactOpenButton && contactCloseButton && contactBackdrop && contactPanel) {
-  contactOpenButton.addEventListener('click', () => toggleContactPanel(true));
+if (contactOpenButtons.length && contactCloseButton && contactBackdrop && contactPanel) {
+  contactOpenButtons.forEach((button) => {
+    button.addEventListener('click', () => toggleContactPanel(true));
+  });
   contactCloseButton.addEventListener('click', () => toggleContactPanel(false));
   contactBackdrop.addEventListener('click', () => toggleContactPanel(false));
 

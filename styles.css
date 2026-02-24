@@ -371,6 +371,10 @@ body.theme-light .theme-toggle .theme-toggle-knob {
   font-size: 0.88rem;
 }
 
+.contact-open-btn-header {
+  white-space: nowrap;
+}
+
 .btn-ghost {
   background: transparent;
   color: var(--ink);
