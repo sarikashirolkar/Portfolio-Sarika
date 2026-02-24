@@ -557,15 +557,24 @@ if (contactPanelForm && contactPanelName && contactPanelMessage && contactPanelS
     contactPanelStatus.textContent = 'Sending your message...';
 
     try {
-      const response = await fetch(contactApiUrl, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({ name, message })
-      });
+      const isGoogleAppsScript = /script\.google\.com/i.test(contactApiUrl);
+      const requestConfig = isGoogleAppsScript
+        ? {
+            method: 'POST',
+            mode: 'no-cors',
+            body: JSON.stringify({ name, message })
+          }
+        : {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ name, message })
+          };
 
-      if (!response.ok) {
+      const response = await fetch(contactApiUrl, requestConfig);
+
+      if (!isGoogleAppsScript && !response.ok) {
         throw new Error('Unable to send message right now.');
       }
 
