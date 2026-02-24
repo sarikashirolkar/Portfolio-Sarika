@@ -16,7 +16,7 @@
     />
     <link rel="stylesheet" href="styles.css" />
   </head>
-  <body data-chat-api-url="">
+  <body data-chat-api-url="" data-contact-api-url="https://script.google.com/macros/s/AKfycbzIW3xlrOiDiYkE4RgQV3To6_vxr-k5BFo-LY6y6F4d4K0KBCT7lqpO5_8X1mlytD5oWQ/exec">
     <div class="bg-ambient" aria-hidden="true"></div>
 
     <header class="site-header" id="top">
@@ -218,31 +218,137 @@
           <p class="eyebrow">Skills</p>
           <h2>Technical stack</h2>
         </div>
-        <div class="skills-marquee reveal">
-          <div class="skills-belt">
-            <div class="skills-row">
-              <span class="skill-chip">Python</span><span class="skill-chip">C</span><span class="skill-chip">Java</span><span class="skill-chip">SQL</span><span class="skill-chip">DSA</span>
-              <span class="skill-chip">LaTeX</span><span class="skill-chip">Git</span><span class="skill-chip">Jupyter Notebook</span><span class="skill-chip">VS Code</span><span class="skill-chip">Google Colab</span>
-              <span class="skill-chip">Kaggle</span><span class="skill-chip">Eclipse</span><span class="skill-chip">Power BI</span><span class="skill-chip">Tableau</span><span class="skill-chip">YOLOv8</span>
-              <span class="skill-chip">YOLOv12</span><span class="skill-chip">Object Detection</span><span class="skill-chip">Image Classification</span><span class="skill-chip">Streamlit</span><span class="skill-chip">Matplotlib</span>
-              <span class="skill-chip">OpenCV</span><span class="skill-chip">BeautifulSoup</span><span class="skill-chip">Keras</span><span class="skill-chip">Pandas</span><span class="skill-chip">NumPy</span>
-              <span class="skill-chip">OS</span><span class="skill-chip">TensorFlow</span><span class="skill-chip">Generative AI (Prompt Engineering, LLMs)</span><span class="skill-chip">Microsoft Azure (App Services, VMs, Blob Storage)</span>
-              <span class="skill-chip">Linear Regression</span><span class="skill-chip">Logistic Regression</span><span class="skill-chip">Clustering</span><span class="skill-chip">Random Forest</span><span class="skill-chip">KNN</span>
-              <span class="skill-chip">ANN</span><span class="skill-chip">MySQL</span><span class="skill-chip">MongoDB</span><span class="skill-chip">Linux</span><span class="skill-chip">Windows</span>
-              <span class="skill-chip">MacOS</span>
+        <div class="skills-groups reveal">
+          <article class="skills-category">
+            <p class="skills-label">Languages</p>
+            <div class="skills-marquee">
+              <div class="skills-belt">
+                <div class="skills-row">
+                  <span class="skill-chip">Python</span><span class="skill-chip">C</span><span class="skill-chip">Java</span><span class="skill-chip">MySQL</span>
+                </div>
+                <div class="skills-row" aria-hidden="true">
+                  <span class="skill-chip">Python</span><span class="skill-chip">C</span><span class="skill-chip">Java</span><span class="skill-chip">MySQL</span>
+                </div>
+              </div>
             </div>
-            <div class="skills-row" aria-hidden="true">
-              <span class="skill-chip">Python</span><span class="skill-chip">C</span><span class="skill-chip">Java</span><span class="skill-chip">SQL</span><span class="skill-chip">DSA</span>
-              <span class="skill-chip">LaTeX</span><span class="skill-chip">Git</span><span class="skill-chip">Jupyter Notebook</span><span class="skill-chip">VS Code</span><span class="skill-chip">Google Colab</span>
-              <span class="skill-chip">Kaggle</span><span class="skill-chip">Eclipse</span><span class="skill-chip">Power BI</span><span class="skill-chip">Tableau</span><span class="skill-chip">YOLOv8</span>
-              <span class="skill-chip">YOLOv12</span><span class="skill-chip">Object Detection</span><span class="skill-chip">Image Classification</span><span class="skill-chip">Streamlit</span><span class="skill-chip">Matplotlib</span>
-              <span class="skill-chip">OpenCV</span><span class="skill-chip">BeautifulSoup</span><span class="skill-chip">Keras</span><span class="skill-chip">Pandas</span><span class="skill-chip">NumPy</span>
-              <span class="skill-chip">OS</span><span class="skill-chip">TensorFlow</span><span class="skill-chip">Generative AI (Prompt Engineering, LLMs)</span><span class="skill-chip">Microsoft Azure (App Services, VMs, Blob Storage)</span>
-              <span class="skill-chip">Linear Regression</span><span class="skill-chip">Logistic Regression</span><span class="skill-chip">Clustering</span><span class="skill-chip">Random Forest</span><span class="skill-chip">KNN</span>
-              <span class="skill-chip">ANN</span><span class="skill-chip">MySQL</span><span class="skill-chip">MongoDB</span><span class="skill-chip">Linux</span><span class="skill-chip">Windows</span>
-              <span class="skill-chip">MacOS</span>
+          </article>
+          <article class="skills-category">
+            <p class="skills-label">AI/ML</p>
+            <div class="skills-marquee">
+              <div class="skills-belt">
+                <div class="skills-row">
+                  <span class="skill-chip">Classification</span><span class="skill-chip">Regression</span><span class="skill-chip">Clustering</span><span class="skill-chip">Feature Engineering</span><span class="skill-chip">Model Evaluation</span><span class="skill-chip">Error Analysis</span><span class="skill-chip">Experimentation</span><span class="skill-chip">Benchmarking</span>
+                </div>
+                <div class="skills-row" aria-hidden="true">
+                  <span class="skill-chip">Classification</span><span class="skill-chip">Regression</span><span class="skill-chip">Clustering</span><span class="skill-chip">Feature Engineering</span><span class="skill-chip">Model Evaluation</span><span class="skill-chip">Error Analysis</span><span class="skill-chip">Experimentation</span><span class="skill-chip">Benchmarking</span>
+                </div>
+              </div>
             </div>
-          </div>
+          </article>
+          <article class="skills-category">
+            <p class="skills-label">GenAI / LLM Tooling</p>
+            <div class="skills-marquee">
+              <div class="skills-belt">
+                <div class="skills-row">
+                  <span class="skill-chip">LangChain</span><span class="skill-chip">Prompt-Driven Workflows</span><span class="skill-chip">LLM-Based Prototyping</span>
+                </div>
+                <div class="skills-row" aria-hidden="true">
+                  <span class="skill-chip">LangChain</span><span class="skill-chip">Prompt-Driven Workflows</span><span class="skill-chip">LLM-Based Prototyping</span>
+                </div>
+              </div>
+            </div>
+          </article>
+          <article class="skills-category">
+            <p class="skills-label">Deep Learning &amp; CV</p>
+            <div class="skills-marquee">
+              <div class="skills-belt">
+                <div class="skills-row">
+                  <span class="skill-chip">CNNs</span><span class="skill-chip">YOLOv8</span><span class="skill-chip">Transformers</span><span class="skill-chip">OpenCV</span><span class="skill-chip">Object Detection</span><span class="skill-chip">Image Classification</span>
+                </div>
+                <div class="skills-row" aria-hidden="true">
+                  <span class="skill-chip">CNNs</span><span class="skill-chip">YOLOv8</span><span class="skill-chip">Transformers</span><span class="skill-chip">OpenCV</span><span class="skill-chip">Object Detection</span><span class="skill-chip">Image Classification</span>
+                </div>
+              </div>
+            </div>
+          </article>
+          <article class="skills-category">
+            <p class="skills-label">Libraries/Frameworks</p>
+            <div class="skills-marquee">
+              <div class="skills-belt">
+                <div class="skills-row">
+                  <span class="skill-chip">scikit-learn</span><span class="skill-chip">TensorFlow</span><span class="skill-chip">Keras</span><span class="skill-chip">Pandas</span><span class="skill-chip">NumPy</span><span class="skill-chip">Matplotlib</span><span class="skill-chip">Streamlit</span><span class="skill-chip">BeautifulSoup</span>
+                </div>
+                <div class="skills-row" aria-hidden="true">
+                  <span class="skill-chip">scikit-learn</span><span class="skill-chip">TensorFlow</span><span class="skill-chip">Keras</span><span class="skill-chip">Pandas</span><span class="skill-chip">NumPy</span><span class="skill-chip">Matplotlib</span><span class="skill-chip">Streamlit</span><span class="skill-chip">BeautifulSoup</span>
+                </div>
+              </div>
+            </div>
+          </article>
+          <article class="skills-category">
+            <p class="skills-label">Cloud &amp; Deployment</p>
+            <div class="skills-marquee">
+              <div class="skills-belt">
+                <div class="skills-row">
+                  <span class="skill-chip">Microsoft Azure</span><span class="skill-chip">VMs</span><span class="skill-chip">App Services</span><span class="skill-chip">Blob Storage</span><span class="skill-chip">Linux</span><span class="skill-chip">Deployment-Ready Configuration</span>
+                </div>
+                <div class="skills-row" aria-hidden="true">
+                  <span class="skill-chip">Microsoft Azure</span><span class="skill-chip">VMs</span><span class="skill-chip">App Services</span><span class="skill-chip">Blob Storage</span><span class="skill-chip">Linux</span><span class="skill-chip">Deployment-Ready Configuration</span>
+                </div>
+              </div>
+            </div>
+          </article>
+          <article class="skills-category">
+            <p class="skills-label">Data &amp; Visualization</p>
+            <div class="skills-marquee">
+              <div class="skills-belt">
+                <div class="skills-row">
+                  <span class="skill-chip">Data Cleaning</span><span class="skill-chip">Preprocessing</span><span class="skill-chip">Analytics</span><span class="skill-chip">Power BI</span><span class="skill-chip">Tableau</span>
+                </div>
+                <div class="skills-row" aria-hidden="true">
+                  <span class="skill-chip">Data Cleaning</span><span class="skill-chip">Preprocessing</span><span class="skill-chip">Analytics</span><span class="skill-chip">Power BI</span><span class="skill-chip">Tableau</span>
+                </div>
+              </div>
+            </div>
+          </article>
+          <article class="skills-category">
+            <p class="skills-label">Databases</p>
+            <div class="skills-marquee">
+              <div class="skills-belt">
+                <div class="skills-row">
+                  <span class="skill-chip">MySQL</span><span class="skill-chip">MongoDB</span>
+                </div>
+                <div class="skills-row" aria-hidden="true">
+                  <span class="skill-chip">MySQL</span><span class="skill-chip">MongoDB</span>
+                </div>
+              </div>
+            </div>
+          </article>
+          <article class="skills-category">
+            <p class="skills-label">Tools</p>
+            <div class="skills-marquee">
+              <div class="skills-belt">
+                <div class="skills-row">
+                  <span class="skill-chip">Git</span><span class="skill-chip">VS Code</span><span class="skill-chip">Jupyter Notebook</span><span class="skill-chip">Google Colab</span><span class="skill-chip">Kaggle</span>
+                </div>
+                <div class="skills-row" aria-hidden="true">
+                  <span class="skill-chip">Git</span><span class="skill-chip">VS Code</span><span class="skill-chip">Jupyter Notebook</span><span class="skill-chip">Google Colab</span><span class="skill-chip">Kaggle</span>
+                </div>
+              </div>
+            </div>
+          </article>
+          <article class="skills-category">
+            <p class="skills-label">Operating Systems</p>
+            <div class="skills-marquee">
+              <div class="skills-belt">
+                <div class="skills-row">
+                  <span class="skill-chip">Windows</span><span class="skill-chip">Linux</span><span class="skill-chip">macOS</span>
+                </div>
+                <div class="skills-row" aria-hidden="true">
+                  <span class="skill-chip">Windows</span><span class="skill-chip">Linux</span><span class="skill-chip">macOS</span>
+                </div>
+              </div>
+            </div>
+          </article>
         </div>
       </section>
 
@@ -255,10 +361,27 @@
         <div class="contact-links reveal">
           <a href="mailto:sarikashirolkar@gmail.com">sarikashirolkar@gmail.com</a>
           <a href="https://linkedin.com/in/sarikashirolkar" target="_blank" rel="noopener">linkedin.com/in/sarikashirolkar</a>
-          <a href="tel:+919741056565">+91 9741056565</a>
         </div>
+        <button class="btn contact-open-btn reveal" id="contact-panel-open" type="button">Contact Me</button>
       </section>
     </main>
+
+    <div class="contact-panel-backdrop" id="contact-panel-backdrop" hidden></div>
+    <aside class="contact-panel" id="contact-panel" aria-hidden="true" aria-labelledby="contact-panel-title">
+      <div class="contact-panel-head">
+        <h3 id="contact-panel-title">Contact Me</h3>
+        <button class="contact-panel-close" id="contact-panel-close" type="button" aria-label="Close contact panel">Close</button>
+      </div>
+      <p class="contact-panel-copy">contact me through my email <a href="mailto:sarikashirolkar@gmail.com">sarikashirolkar@gmail.com</a> or just drop a message here!</p>
+      <form class="contact-panel-form" id="contact-panel-form">
+        <label for="contact-name">Name</label>
+        <input id="contact-name" name="name" type="text" required maxlength="120" />
+        <label for="contact-message">Message</label>
+        <textarea id="contact-message" name="message" rows="6" required maxlength="1500"></textarea>
+        <button class="btn" id="contact-submit" type="submit">Send Message</button>
+      </form>
+      <p class="contact-panel-status" id="contact-panel-status" aria-live="polite"></p>
+    </aside>
 
     <footer class="site-footer">
       <p>Portfolio of Sarika S Shirolkar</p>

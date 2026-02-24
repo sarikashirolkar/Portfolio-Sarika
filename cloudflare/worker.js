@@ -40,16 +40,70 @@ export default {
     const allowedOrigin = env.ALLOWED_ORIGIN || '*';
     const canAllowOrigin = allowedOrigin === '*' || origin === allowedOrigin;
     const headers = corsHeaders(canAllowOrigin ? (origin || '*') : allowedOrigin);
+    const jsonHeaders = { ...headers, 'Content-Type': 'application/json' };
+    const pathname = new URL(request.url).pathname;
+
+    const jsonResponse = (payload, status = 200) =>
+      new Response(JSON.stringify(payload), {
+        status,
+        headers: jsonHeaders
+      });
 
     if (request.method === 'OPTIONS') {
       return new Response(null, { headers });
     }
 
     if (request.method !== 'POST') {
-      return new Response(JSON.stringify({ error: 'Method not allowed' }), {
-        status: 405,
-        headers: { ...headers, 'Content-Type': 'application/json' }
-      });
+      return jsonResponse({ error: 'Method not allowed' }, 405);
+    }
+
+    if (pathname === '/contact') {
+      try {
+        const body = await request.json();
+        const name = String(body?.name || '').trim();
+        const message = String(body?.message || '').trim();
+
+        if (!name || !message) {
+          return jsonResponse({ error: 'Name and message are required' }, 400);
+        }
+
+        if (name.length > 120 || message.length > 1500) {
+          return jsonResponse({ error: 'Input too long' }, 400);
+        }
+
+        if (!env.RESEND_API_KEY) {
+          return jsonResponse({ error: 'Email service not configured' }, 503);
+        }
+
+        const fromEmail = env.CONTACT_FROM_EMAIL || 'sarikasharada123@gmail.com';
+        const toEmail = env.CONTACT_TO_EMAIL || 'sarikashirolkar@gmail.com';
+        const subject = `New portfolio contact query from ${name}`;
+        const text = `New message from your portfolio contact panel.\n\nName: ${name}\n\nMessage:\n${message}`;
+
+        const emailResp = await fetch('https://api.resend.com/emails', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${env.RESEND_API_KEY}`
+          },
+          body: JSON.stringify({
+            from: fromEmail,
+            to: [toEmail],
+            subject,
+            text,
+            reply_to: fromEmail
+          })
+        });
+
+        if (!emailResp.ok) {
+          const errorText = await emailResp.text();
+          return jsonResponse({ error: 'Email request failed', details: errorText }, 502);
+        }
+
+        return jsonResponse({ ok: true });
+      } catch (error) {
+        return jsonResponse({ error: 'Contact server error', details: String(error) }, 500);
+      }
     }
 
     try {
@@ -57,17 +111,11 @@ export default {
       const question = String(body?.question || '').trim();
 
       if (!question) {
-        return new Response(JSON.stringify({ error: 'Question is required' }), {
-          status: 400,
-          headers: { ...headers, 'Content-Type': 'application/json' }
-        });
+        return jsonResponse({ error: 'Question is required' }, 400);
       }
 
       if (question.length > 500) {
-        return new Response(JSON.stringify({ error: 'Question too long' }), {
-          status: 400,
-          headers: { ...headers, 'Content-Type': 'application/json' }
-        });
+        return jsonResponse({ error: 'Question too long' }, 400);
       }
 
       const model = env.OPENAI_MODEL || 'gpt-5-mini';
@@ -100,29 +148,17 @@ export default {
 
       if (!openaiResp.ok) {
         const errorText = await openaiResp.text();
-        return new Response(JSON.stringify({ error: 'OpenAI request failed', details: errorText }), {
-          status: 502,
-          headers: { ...headers, 'Content-Type': 'application/json' }
-        });
+        return jsonResponse({ error: 'OpenAI request failed', details: errorText }, 502);
       }
 
       const data = await openaiResp.json();
       const answer = (data.output_text || '').trim();
 
-      return new Response(
-        JSON.stringify({
-          answer: answer || 'I could not find that in the resume/portfolio context.'
-        }),
-        {
-          status: 200,
-          headers: { ...headers, 'Content-Type': 'application/json' }
-        }
-      );
-    } catch (error) {
-      return new Response(JSON.stringify({ error: 'Server error', details: String(error) }), {
-        status: 500,
-        headers: { ...headers, 'Content-Type': 'application/json' }
+      return jsonResponse({
+        answer: answer || 'I could not find that in the resume/portfolio context.'
       });
+    } catch (error) {
+      return jsonResponse({ error: 'Server error', details: String(error) }, 500);
     }
   }
 };

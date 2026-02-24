@@ -118,125 +118,20 @@ if (projectsCarousel && projectArrows.length) {
   updateProjectArrowState();
 }
 
-const aboutBubbleField = document.querySelector('#about-bubble-field');
-
-if (aboutBubbleField) {
-  const bubbleCount = 18;
-  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  const bubblePalette = [
-    'rgba(96, 177, 255, 0.55)',
-    'rgba(255, 145, 84, 0.5)',
-    'rgba(255, 121, 188, 0.48)'
-  ];
-
-  const bubbles = [];
-  let fieldRect = aboutBubbleField.getBoundingClientRect();
-  let pointer = null;
-
-  const randomInRange = (min, max) => Math.random() * (max - min) + min;
-
-  const updateFieldRect = () => {
-    fieldRect = aboutBubbleField.getBoundingClientRect();
-  };
-
-  const createBubble = () => {
-    const size = randomInRange(20, 52);
-    const el = document.createElement('span');
-    el.className = 'about-bubble';
-    el.style.width = `${size}px`;
-    el.style.height = `${size}px`;
-    el.style.background = bubblePalette[Math.floor(Math.random() * bubblePalette.length)];
-    aboutBubbleField.appendChild(el);
-
-    return {
-      el,
-      size,
-      x: randomInRange(0, Math.max(1, fieldRect.width - size)),
-      y: randomInRange(0, Math.max(1, fieldRect.height - size)),
-      vx: randomInRange(-0.28, 0.28),
-      vy: randomInRange(-0.28, 0.28)
-    };
-  };
-
-  const placeBubble = (bubble) => {
-    bubble.el.style.transform = `translate(${bubble.x}px, ${bubble.y}px)`;
-  };
-
-  updateFieldRect();
-  for (let i = 0; i < bubbleCount; i += 1) {
-    const bubble = createBubble();
-    placeBubble(bubble);
-    bubbles.push(bubble);
-  }
-
-  const onPointerMove = (clientX, clientY) => {
-    pointer = {
-      x: clientX - fieldRect.left,
-      y: clientY - fieldRect.top
-    };
-  };
-
-  aboutBubbleField.addEventListener('mousemove', (event) => {
-    onPointerMove(event.clientX, event.clientY);
-  });
-
-  aboutBubbleField.addEventListener('touchmove', (event) => {
-    if (!event.touches[0]) return;
-    onPointerMove(event.touches[0].clientX, event.touches[0].clientY);
-  }, { passive: true });
-
-  aboutBubbleField.addEventListener('mouseleave', () => {
-    pointer = null;
-  });
-
-  window.addEventListener('resize', updateFieldRect);
-
-  if (!reduceMotion) {
-    const tick = () => {
-      for (const bubble of bubbles) {
-        if (pointer) {
-          const cx = bubble.x + bubble.size / 2;
-          const cy = bubble.y + bubble.size / 2;
-          const dx = cx - pointer.x;
-          const dy = cy - pointer.y;
-          const dist = Math.hypot(dx, dy);
-          const repelRadius = 110;
-          if (dist > 0 && dist < repelRadius) {
-            const force = (repelRadius - dist) / repelRadius;
-            bubble.vx += (dx / dist) * force * 0.7;
-            bubble.vy += (dy / dist) * force * 0.7;
-          }
-        }
-
-        bubble.x += bubble.vx;
-        bubble.y += bubble.vy;
-        bubble.vx *= 0.985;
-        bubble.vy *= 0.985;
-
-        if (bubble.x <= 0 || bubble.x >= fieldRect.width - bubble.size) {
-          bubble.vx *= -1;
-          bubble.x = Math.min(Math.max(0, bubble.x), Math.max(0, fieldRect.width - bubble.size));
-        }
-
-        if (bubble.y <= 0 || bubble.y >= fieldRect.height - bubble.size) {
-          bubble.vy *= -1;
-          bubble.y = Math.min(Math.max(0, bubble.y), Math.max(0, fieldRect.height - bubble.size));
-        }
-
-        placeBubble(bubble);
-      }
-
-      requestAnimationFrame(tick);
-    };
-
-    requestAnimationFrame(tick);
-  }
-}
-
 const chatWindow = document.querySelector('#chat-window');
 const chatForm = document.querySelector('#chat-form');
 const chatInput = document.querySelector('#chat-input');
 const chatSuggestions = document.querySelector('#chat-suggestions');
+const contactPanel = document.querySelector('#contact-panel');
+const contactBackdrop = document.querySelector('#contact-panel-backdrop');
+const contactOpenButton = document.querySelector('#contact-panel-open');
+const contactCloseButton = document.querySelector('#contact-panel-close');
+const contactPanelForm = document.querySelector('#contact-panel-form');
+const contactPanelName = document.querySelector('#contact-name');
+const contactPanelMessage = document.querySelector('#contact-message');
+const contactPanelStatus = document.querySelector('#contact-panel-status');
+const bodyNode = document.body;
+const contactApiUrl = bodyNode?.dataset?.contactApiUrl?.trim() || '/contact';
 
 const knowledgeBase = {
   profile: {
@@ -505,13 +400,25 @@ const knowledgeBase = {
 
   contact: {
     email: "sarikashirolkar@gmail.com",
-    linkedin: "linkedin.com/in/sarikashirolkar",
-    phone: "+91 9741056565"
+    linkedin: "linkedin.com/in/sarikashirolkar"
   }
 };
 
 const chatState = {
-  lastIntent: 'INTRO'
+  lastIntent: 'introduction'
+};
+
+const chatReplies = {
+  introduction:
+    "I’m Sarika S Shirolkar, a Software Engineer focused on AI agents, ML systems, and cloud applications on Azure.",
+  experience:
+    "I’m currently a Software Engineer (AI Agents & ML Systems) at AI Workflow Automation, and I have prior experience in Cloud Applications and Computer Vision internships.",
+  skills:
+    "Core stack includes Python, C, Java, MySQL, ML workflows, YOLOv8/OpenCV, LangChain, TensorFlow/Keras, Azure, Power BI, Tableau, and MongoDB.",
+  education:
+    "I’m pursuing B.E. in CSE (AI & ML) at VTU - Sai Vidya Institute of Technology with a CGPA of 9.1 (Graduating in 2026).",
+  projects:
+    "Highlighted projects include appointo.ai, AI voice scheduling agent, IEEE object detection research, risk prediction models, and AI Research Agent."
 };
 
 const appendMessage = (role, text) => {
@@ -523,16 +430,8 @@ const appendMessage = (role, text) => {
   chatWindow.scrollTop = chatWindow.scrollHeight;
 };
 
-const normalizeText = (text) => text.toLowerCase().trim();
-
-const findFaqMatch = (normalizedInput) => {
-  return knowledgeBase.faqs.find((faq) =>
-    faq.match.some((phrase) => normalizedInput.includes(phrase))
-  );
-};
-
 const detectIntent = (userInput) => {
-  const normalized = normalizeText(userInput);
+  const normalized = userInput.toLowerCase();
   const doc = typeof nlp === 'function' ? nlp(userInput) : null;
   const hasNoun = doc ? doc.has('#Noun') : false;
 
@@ -541,7 +440,7 @@ const detectIntent = (userInput) => {
     normalized.includes('job') ||
     normalized.includes('company')
   ) {
-    return 'EXPERIENCE';
+    return 'experience';
   }
 
   if (
@@ -549,7 +448,25 @@ const detectIntent = (userInput) => {
     normalized.includes('stack') ||
     normalized.includes('python')
   ) {
-    return 'SKILLS';
+    return 'skills';
+  }
+
+  if (
+    normalized.includes('education') ||
+    normalized.includes('college') ||
+    normalized.includes('b.tech') ||
+    normalized.includes('degree')
+  ) {
+    return 'education';
+  }
+
+  if (
+    normalized.includes('introduce') ||
+    normalized.includes('introduction') ||
+    normalized.includes('about') ||
+    normalized.includes('who')
+  ) {
+    return 'introduction';
   }
 
   if (
@@ -558,75 +475,10 @@ const detectIntent = (userInput) => {
     normalized.includes('research') ||
     hasNoun
   ) {
-    return 'PROJECT_IEEE';
+    return 'projects';
   }
 
-  for (const definition of knowledgeBase.intents) {
-    if (definition.keywords.some((keyword) => normalized.includes(keyword))) {
-      return definition.intent;
-    }
-  }
-
-  return chatState.lastIntent || 'INTRO';
-};
-
-const formatExperienceResponse = () => {
-  const current = knowledgeBase.roles.current;
-  const previous = knowledgeBase.roles.previous;
-  const currentLine = `${current.title} at ${current.company} (${current.start} - ${current.end}).`;
-  const previousLine = previous
-    .map((role) => `${role.title} at ${role.company} (${role.start} - ${role.end})`)
-    .join('; ');
-  return `${currentLine} Previously: ${previousLine}.`;
-};
-
-const formatEducationResponse = () => {
-  const education = knowledgeBase.education;
-  return `${education.degree}, ${education.university}. Graduation: ${education.graduationYear}, CGPA: ${education.cgpa}.`;
-};
-
-const formatSkillsResponse = () => {
-  const skills = knowledgeBase.skills;
-  return `Core skills: ${skills.programming.join(', ')}. ML: ${skills.ml.join(', ')}. Cloud: ${skills.cloud.join(', ')}. Data Viz: ${skills.dataViz.join(', ')}.`;
-};
-
-const formatProjectResponse = (projectMatcher) => {
-  const project = knowledgeBase.projects.find(projectMatcher) || knowledgeBase.projects[0];
-  if (!project) return 'I can share details about my AI, IEEE, and cloud projects.';
-  return `${project.name}: ${project.oneLiner}`;
-};
-
-const formatContactResponse = () => {
-  const contact = knowledgeBase.contact;
-  return `Email: ${contact.email} | LinkedIn: ${contact.linkedin} | Phone: ${contact.phone}`;
-};
-
-const getResponseForIntent = (intent, normalizedInput) => {
-  const faqMatch = findFaqMatch(normalizedInput);
-  if (faqMatch) return faqMatch.answer;
-
-  switch (intent) {
-    case 'INTRO':
-      return `${knowledgeBase.profile.fullName} - ${knowledgeBase.profile.headline}. ${knowledgeBase.profile.summary}`;
-    case 'EXPERIENCE':
-      return formatExperienceResponse();
-    case 'EDUCATION':
-      return formatEducationResponse();
-    case 'SKILLS':
-      return formatSkillsResponse();
-    case 'PROJECT_VOICE_AGENT':
-      return formatProjectResponse((project) =>
-        project.tags.some((tag) => tag.includes('voice') || tag.includes('retell'))
-      );
-    case 'PROJECT_IEEE':
-      return formatProjectResponse((project) =>
-        project.tags.some((tag) => tag.includes('ieee') || tag.includes('yolo'))
-      );
-    case 'CONTACT':
-      return formatContactResponse();
-    default:
-      return `${knowledgeBase.profile.summary} Ask about my experience, IEEE project, skills, or education.`;
-  }
+  return chatState.lastIntent || 'introduction';
 };
 
 const respondToMessage = (userText) => {
@@ -636,7 +488,7 @@ const respondToMessage = (userText) => {
   appendMessage('user', trimmed);
   const intent = detectIntent(trimmed);
   chatState.lastIntent = intent;
-  appendMessage('assistant', getResponseForIntent(intent, normalizeText(trimmed)));
+  appendMessage('assistant', chatReplies[intent] || chatReplies.introduction);
 };
 
 if (chatWindow && chatForm && chatInput && chatSuggestions) {
@@ -659,5 +511,70 @@ if (chatWindow && chatForm && chatInput && chatSuggestions) {
     if (!suggestionText) return;
     respondToMessage(suggestionText);
     chatInput.focus();
+  });
+}
+
+const toggleContactPanel = (shouldOpen) => {
+  if (!contactPanel || !contactBackdrop) return;
+  const isOpen = Boolean(shouldOpen);
+  contactPanel.classList.toggle('is-open', isOpen);
+  contactBackdrop.classList.toggle('is-open', isOpen);
+  contactPanel.setAttribute('aria-hidden', isOpen ? 'false' : 'true');
+  contactBackdrop.hidden = !isOpen;
+  document.body.style.overflow = isOpen ? 'hidden' : '';
+  if (isOpen) {
+    requestAnimationFrame(() => {
+      contactPanelName?.focus();
+    });
+  }
+};
+
+if (contactOpenButton && contactCloseButton && contactBackdrop && contactPanel) {
+  contactOpenButton.addEventListener('click', () => toggleContactPanel(true));
+  contactCloseButton.addEventListener('click', () => toggleContactPanel(false));
+  contactBackdrop.addEventListener('click', () => toggleContactPanel(false));
+
+  window.addEventListener('keydown', (event) => {
+    if (event.key === 'Escape' && contactPanel.classList.contains('is-open')) {
+      toggleContactPanel(false);
+    }
+  });
+}
+
+if (contactPanelForm && contactPanelName && contactPanelMessage && contactPanelStatus) {
+  contactPanelForm.addEventListener('submit', async (event) => {
+    event.preventDefault();
+    const name = contactPanelName.value.trim();
+    const message = contactPanelMessage.value.trim();
+
+    if (!name || !message) {
+      contactPanelStatus.textContent = 'Please add your name and message.';
+      return;
+    }
+
+    const submitButton = contactPanelForm.querySelector('#contact-submit');
+    if (submitButton) submitButton.disabled = true;
+    contactPanelStatus.textContent = 'Sending your message...';
+
+    try {
+      const response = await fetch(contactApiUrl, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ name, message })
+      });
+
+      if (!response.ok) {
+        throw new Error('Unable to send message right now.');
+      }
+
+      contactPanelStatus.textContent = 'Message sent successfully.';
+      contactPanelForm.reset();
+    } catch (error) {
+      contactPanelStatus.textContent = 'Message could not be sent. Please email sarikashirolkar@gmail.com directly.';
+    } finally {
+      if (submitButton) submitButton.disabled = false;
+    }
   });
 }

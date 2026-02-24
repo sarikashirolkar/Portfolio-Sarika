@@ -6,3 +6,7 @@ compatibility_date = "2026-02-13"
 OPENAI_MODEL = "gpt-5-mini"
 # Set this to your live site URL for strict CORS, e.g. "https://sarikashirolkar.github.io"
 ALLOWED_ORIGIN = "*"
+CONTACT_FROM_EMAIL = "sarikasharada123@gmail.com"
+CONTACT_TO_EMAIL = "sarikashirolkar@gmail.com"
+# Set with: wrangler secret put OPENAI_API_KEY
+# Set with: wrangler secret put RESEND_API_KEY
