@@ -14,7 +14,7 @@ const applyTheme = (theme) => {
   const isLight = theme === 'light';
   document.body.classList.toggle('theme-light', isLight);
   if (heroProfileImage) {
-    heroProfileImage.src = isLight ? 'profile.jpg' : 'profile-dark.png';
+    heroProfileImage.src = 'profile.jpg';
   }
   if (!themeToggle) return;
   if (themeToggleText) {
