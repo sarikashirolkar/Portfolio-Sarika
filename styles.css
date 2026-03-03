@@ -193,9 +193,18 @@ body:not(.theme-light) .bg-ambient::after {
 }
 
 body.theme-light .bg-ambient::before {
+  background:
+    radial-gradient(980px 360px at 50% 34%, rgba(0, 0, 0, 0.14) 0%, transparent 70%),
+    conic-gradient(from 210deg at 60% 40%, transparent 0deg, rgba(57, 182, 255, 0.24) 84deg, transparent 145deg, rgba(52, 212, 165, 0.2) 216deg, transparent 360deg),
+    radial-gradient(700px 380px at 12% 74%, var(--ambient-glow-1), transparent 66%),
+    radial-gradient(760px 420px at 86% 74%, var(--ambient-glow-2), transparent 68%),
+    radial-gradient(860px 470px at 52% -6%, var(--ambient-glow-3), transparent 70%),
+    radial-gradient(500px 280px at 84% 34%, var(--ambient-glow-4), transparent 68%),
+    repeating-linear-gradient(28deg, transparent 0 56px, var(--mesh-line) 56px 57px, transparent 57px 112px),
+    repeating-linear-gradient(118deg, transparent 0 52px, var(--mesh-line-2) 52px 53px, transparent 53px 106px);
   filter: blur(8px) saturate(112%);
   mix-blend-mode: normal;
-  opacity: 0.88;
+  opacity: 0.93;
 }
 
 body.theme-light .bg-ambient::after {
