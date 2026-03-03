@@ -539,8 +539,8 @@ h3 {
 
 .about-body {
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 1.2rem 2.1rem;
+  grid-template-columns: 1fr;
+  gap: 0.95rem;
   align-items: start;
 }
 
@@ -1273,11 +1273,6 @@ body.theme-light .skills-card:hover {
 
   .about-layout {
     grid-template-columns: 1fr;
-  }
-
-  .about-body {
-    grid-template-columns: 1fr;
-    gap: 0.9rem;
   }
 
   .about-bubble-field {
