@@ -199,6 +199,27 @@ body.theme-light .bg-ambient::before {
 }
 
 body.theme-light .bg-ambient::after {
+  background:
+    radial-gradient(900px 340px at 52% 34%, rgba(0, 0, 0, 0.08) 0%, transparent 72%),
+    radial-gradient(circle, var(--dot-blue) 0.8px, transparent 1.7px),
+    radial-gradient(circle, var(--dot-orange) 0.85px, transparent 1.8px),
+    radial-gradient(circle, var(--dot-pink) 0.8px, transparent 1.7px),
+    repeating-linear-gradient(0deg, transparent 0 4px, var(--grain-line) 4px 5px),
+    linear-gradient(180deg, transparent 0%, transparent 72%, var(--ambient-vignette) 100%);
+  background-size:
+    100% 100%,
+    82px 82px,
+    62px 62px,
+    74px 74px,
+    100% 100%,
+    100% 100%;
+  background-position:
+    0 0,
+    0 0,
+    20px 28px,
+    32px -12px,
+    0 0,
+    0 0;
   opacity: 0.78;
   mask-image: radial-gradient(circle at 50% 44%, black 82%, transparent 100%);
 }
