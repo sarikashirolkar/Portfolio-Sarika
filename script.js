@@ -128,6 +128,8 @@ const contactOpenButtons = document.querySelectorAll('[data-contact-open]');
 const contactCloseButton = document.querySelector('#contact-panel-close');
 const contactPanelForm = document.querySelector('#contact-panel-form');
 const contactPanelName = document.querySelector('#contact-name');
+const contactPanelEmail = document.querySelector('#contact-email');
+const contactPanelPhone = document.querySelector('#contact-phone');
 const contactPanelMessage = document.querySelector('#contact-message');
 const contactPanelStatus = document.querySelector('#contact-panel-status');
 const bodyNode = document.body;
@@ -543,14 +545,16 @@ if (contactOpenButtons.length && contactCloseButton && contactBackdrop && contac
   });
 }
 
-if (contactPanelForm && contactPanelName && contactPanelMessage && contactPanelStatus) {
+if (contactPanelForm && contactPanelName && contactPanelEmail && contactPanelMessage && contactPanelStatus) {
   contactPanelForm.addEventListener('submit', async (event) => {
     event.preventDefault();
     const name = contactPanelName.value.trim();
+    const email = contactPanelEmail.value.trim();
+    const phone = contactPanelPhone ? contactPanelPhone.value.trim() : '';
     const message = contactPanelMessage.value.trim();
 
-    if (!name || !message) {
-      contactPanelStatus.textContent = 'Please add your name and message.';
+    if (!name || !email || !message) {
+      contactPanelStatus.textContent = 'Please add your name, email, and message.';
       return;
     }
 
@@ -564,14 +568,14 @@ if (contactPanelForm && contactPanelName && contactPanelMessage && contactPanelS
         ? {
             method: 'POST',
             mode: 'no-cors',
-            body: JSON.stringify({ name, message })
+            body: JSON.stringify({ name, email, phone, message })
           }
         : {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json'
             },
-            body: JSON.stringify({ name, message })
+            body: JSON.stringify({ name, email, phone, message })
           };
 
       const response = await fetch(contactApiUrl, requestConfig);

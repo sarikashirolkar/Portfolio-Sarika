@@ -1090,6 +1090,11 @@ body.theme-light .skills-card:hover {
   font-weight: 700;
 }
 
+.optional-field {
+  font-weight: 500;
+  color: var(--muted);
+}
+
 .contact-panel-form input,
 .contact-panel-form textarea {
   width: 100%;

@@ -308,7 +308,11 @@
       <p class="contact-panel-copy">contact me through my email <a href="mailto:sarikashirolkar@gmail.com">sarikashirolkar@gmail.com</a> or just drop a message here!</p>
       <form class="contact-panel-form" id="contact-panel-form">
         <label for="contact-name">Name</label>
-        <input id="contact-name" name="name" type="text" required maxlength="120" />
+        <input id="contact-name" name="name" type="text" required maxlength="120" autocomplete="name" />
+        <label for="contact-email">Email</label>
+        <input id="contact-email" name="email" type="email" required maxlength="254" autocomplete="email" />
+        <label for="contact-phone">Phone Number <span class="optional-field">(Optional)</span></label>
+        <input id="contact-phone" name="phone" type="tel" maxlength="30" autocomplete="tel" />
         <label for="contact-message">Message</label>
         <textarea id="contact-message" name="message" rows="6" required maxlength="1500"></textarea>
         <button class="btn" id="contact-submit" type="submit">Send Message</button>
