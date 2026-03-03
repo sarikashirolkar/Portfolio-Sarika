@@ -39,39 +39,39 @@
 }
 
 body.theme-light {
-  --bg: #eef9f7;
-  --ink: #0f2729;
-  --accent: #0f8f86;
-  --accent-soft: #b8efe4;
-  --aura-1: rgba(83, 170, 255, 0.32);
-  --aura-2: rgba(15, 143, 134, 0.32);
-  --aura-3: rgba(67, 204, 161, 0.3);
-  --aura-4: rgba(108, 201, 255, 0.3);
-  --card: #f8fffd;
-  --border: #1a4b52;
-  --muted: #3e6667;
-  --surface-1: #f8fffd;
-  --surface-2: #f1fffb;
-  --surface-3: #ecfcf8;
-  --surface-soft: #e6f9f4;
-  --text-soft: #1b4346;
-  --user-bubble: #d7f5ed;
+  --bg: #edf0e6;
+  --ink: #1a2a24;
+  --accent: #2b5f86;
+  --accent-soft: #c8d9cc;
+  --aura-1: rgba(67, 112, 153, 0.28);
+  --aura-2: rgba(92, 130, 77, 0.28);
+  --aura-3: rgba(153, 84, 96, 0.2);
+  --aura-4: rgba(133, 154, 108, 0.24);
+  --card: #f8f8f1;
+  --border: #2f4539;
+  --muted: #4f6255;
+  --surface-1: #f8f8f1;
+  --surface-2: #f1f4ea;
+  --surface-3: #ecf1e4;
+  --surface-soft: #e7eddf;
+  --text-soft: #2a3f34;
+  --user-bubble: #dfe8da;
   --assistant-bubble: #fff;
-  --header-line: #96c7c6;
-  --grid-line: rgba(21, 84, 89, 0.06);
-  --bg-grad-start: #f4fffc;
-  --bg-grad-end: #e6f5f3;
-  --ambient-glow-1: rgba(83, 170, 255, 0.34);
-  --ambient-glow-2: rgba(15, 143, 134, 0.33);
-  --ambient-glow-3: rgba(67, 204, 161, 0.3);
-  --ambient-glow-4: rgba(108, 201, 255, 0.32);
-  --dot-blue: rgba(43, 136, 255, 0.5);
-  --dot-orange: rgba(15, 143, 134, 0.4);
-  --dot-pink: rgba(53, 179, 146, 0.38);
-  --mesh-line: rgba(33, 142, 255, 0.09);
-  --mesh-line-2: rgba(19, 149, 126, 0.08);
-  --ambient-vignette: rgba(23, 93, 92, 0.14);
-  --grain-line: rgba(19, 97, 93, 0.05);
+  --header-line: #a6b49f;
+  --grid-line: rgba(58, 84, 68, 0.055);
+  --bg-grad-start: #f6f7ef;
+  --bg-grad-end: #e2e7da;
+  --ambient-glow-1: rgba(62, 104, 148, 0.29);
+  --ambient-glow-2: rgba(88, 126, 73, 0.3);
+  --ambient-glow-3: rgba(155, 86, 98, 0.21);
+  --ambient-glow-4: rgba(130, 151, 102, 0.26);
+  --dot-blue: rgba(56, 102, 150, 0.42);
+  --dot-orange: rgba(112, 88, 65, 0.3);
+  --dot-pink: rgba(142, 85, 96, 0.3);
+  --mesh-line: rgba(70, 110, 145, 0.08);
+  --mesh-line-2: rgba(98, 127, 78, 0.08);
+  --ambient-vignette: rgba(49, 62, 43, 0.16);
+  --grain-line: rgba(67, 96, 78, 0.05);
 }
 
 * {
