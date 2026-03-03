@@ -173,14 +173,14 @@ body:not(.theme-light) .bg-ambient::before {
 
 body:not(.theme-light) .bg-ambient::after {
   background:
-    radial-gradient(circle, rgba(225, 244, 255, 0.96) 0.8px, rgba(160, 214, 255, 0.42) 1.7px, transparent 3.2px),
-    radial-gradient(circle, rgba(183, 255, 231, 0.84) 0.75px, rgba(116, 242, 199, 0.4) 1.6px, transparent 3px),
-    radial-gradient(circle, rgba(198, 220, 255, 0.78) 0.75px, rgba(132, 178, 255, 0.34) 1.5px, transparent 2.8px),
+    radial-gradient(circle, rgba(183, 224, 255, 0.64) 0.85px, transparent 1.8px),
+    radial-gradient(circle, rgba(151, 255, 220, 0.45) 0.8px, transparent 1.7px),
+    radial-gradient(circle, rgba(132, 178, 255, 0.42) 0.8px, transparent 1.7px),
     linear-gradient(180deg, rgba(4, 9, 20, 0) 58%, rgba(2, 7, 16, 0.64) 100%);
   background-size:
-    86px 86px,
-    68px 68px,
-    76px 76px,
+    84px 84px,
+    66px 66px,
+    74px 74px,
     100% 100%;
   background-position:
     0 0,
@@ -188,8 +188,7 @@ body:not(.theme-light) .bg-ambient::after {
     38px -14px,
     0 0;
   mask-image: radial-gradient(circle at 50% 42%, black 72%, transparent 100%);
-  filter: drop-shadow(0 0 1px rgba(205, 236, 255, 0.95)) drop-shadow(0 0 6px rgba(96, 173, 255, 0.35));
-  opacity: 0.92;
+  opacity: 0.8;
   animation: aura-sparkle 34s linear infinite;
 }
 
