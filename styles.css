@@ -506,6 +506,8 @@ h3 {
 .about-section {
   position: relative;
   overflow: hidden;
+  padding-top: 6rem;
+  padding-bottom: 6rem;
 }
 
 .about-layout {
@@ -513,6 +515,8 @@ h3 {
   z-index: 1;
   display: grid;
   grid-template-columns: 1fr;
+  width: min(100%, 72rem);
+  margin-inline: auto;
 }
 
 .about-copy {
@@ -527,7 +531,7 @@ h3 {
 
 .about-copy h2 {
   margin: 0;
-  max-width: 26ch;
+  max-width: none;
   font-size: clamp(2rem, 5.3vw, 4.2rem);
   line-height: 1.08;
   letter-spacing: -0.01em;
