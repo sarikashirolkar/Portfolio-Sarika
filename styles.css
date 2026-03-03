@@ -1421,3 +1421,259 @@ body.theme-light .skills-card:hover {
     transition: none;
   }
 }
+
+body.theme-light {
+  /* Core - arctic sky */
+  --bg:             #dff4f0;
+  --ink:            #0e2a2f;
+  --accent:         #0e7c8a;
+  --accent-soft:    #a8ddd8;
+
+  /* Aurora auras - teal, violet, mint, gold */
+  --aura-1: rgba(72,  210, 200, 0.38);
+  --aura-2: rgba(186, 108, 220, 0.28);
+  --aura-3: rgba(96,  240, 180, 0.32);
+  --aura-4: rgba(255, 220, 120, 0.22);
+
+  /* Frosted-glass surfaces */
+  --card:         rgba(255, 255, 255, 0.72);
+  --border:       rgba(92,  192, 196, 0.72);
+  --muted:        #4a8a8f;
+  --surface-1:    rgba(255, 255, 255, 0.62);
+  --surface-2:    rgba(232, 250, 248, 0.74);
+  --surface-3:    rgba(218, 246, 244, 0.76);
+  --surface-soft: rgba(208, 244, 240, 0.80);
+  --text-soft:    #1c4a52;
+
+  /* Chat */
+  --user-bubble:      rgba(168, 228, 240, 0.70);
+  --assistant-bubble: rgba(255, 255, 255, 0.82);
+
+  /* Lines */
+  --header-line: rgba(100, 196, 210, 0.55);
+  --grid-line:   rgba(80,  200, 200, 0.07);
+
+  /* Sky gradient */
+  --bg-grad-start: #cef2ed;
+  --bg-grad-end:   #e8d8f8;
+
+  /* Aurora glow ribbons */
+  --ambient-glow-1: rgba(68,  218, 208, 0.45);
+  --ambient-glow-2: rgba(200, 120, 240, 0.32);
+  --ambient-glow-3: rgba(80,  240, 192, 0.38);
+  --ambient-glow-4: rgba(255, 200, 100, 0.24);
+
+  /* Dots */
+  --dot-blue:   rgba(60,  190, 220, 0.38);
+  --dot-orange: rgba(200, 110, 220, 0.24);
+  --dot-pink:   rgba(100, 240, 180, 0.28);
+
+  /* Mesh & grain */
+  --mesh-line:        rgba(60,  200, 210, 0.10);
+  --mesh-line-2:      rgba(180, 100, 240, 0.07);
+  --ambient-vignette: rgba(14,  42,  47,  0.10);
+  --grain-line:       rgba(80,  200, 200, 0.06);
+}
+
+/* Base sky wash */
+body.theme-light .bg-ambient {
+  background:
+    radial-gradient(1400px 900px at  -8%  -18%,
+      rgba(64, 224, 208, 0.52) 0%, rgba(100, 240, 200, 0.28) 38%, transparent 68%),
+    radial-gradient(1200px 800px at 108%  -12%,
+      rgba(200, 100, 240, 0.38) 0%, rgba(180, 140, 255, 0.22) 42%, transparent 66%),
+    radial-gradient(1100px 700px at  48%  116%,
+      rgba(80, 220, 160, 0.42) 0%, rgba(60, 200, 180, 0.24) 44%, transparent 70%),
+    linear-gradient(158deg,
+      #c8f5f0 0%, #dde8ff 28%, #f0d8ff 54%, #c6f2e8 78%, #d8f8f0 100%);
+}
+
+/* Aurora curtains - ::before */
+body.theme-light .bg-ambient::before {
+  background:
+    /* Wide teal ribbon */
+    radial-gradient(1800px 260px at 50% 28%,
+      rgba(72, 230, 212, 0.48) 0%, rgba(80, 200, 240, 0.30) 40%, transparent 72%),
+    /* Violet ribbon */
+    radial-gradient(1600px 220px at 62% 42%,
+      rgba(200, 110, 250, 0.36) 0%, rgba(160, 100, 255, 0.22) 44%, transparent 70%),
+    /* Mint-green ribbon */
+    radial-gradient(1600px 200px at 38% 58%,
+      rgba(80, 240, 180, 0.40) 0%, rgba(60, 220, 160, 0.24) 46%, transparent 72%),
+    /* Gold accent */
+    radial-gradient(1000px 160px at 76% 34%,
+      rgba(255, 210, 100, 0.28) 0%, rgba(255, 180, 80, 0.14) 50%, transparent 72%),
+    /* Prismatic conic shimmer */
+    conic-gradient(from 195deg at 52% 44%,
+      transparent           0deg,
+      rgba(72,  230, 212, 0.34)  40deg,
+      rgba(180, 100, 255, 0.26)  88deg,
+      transparent          130deg,
+      rgba(80,  240, 180, 0.30) 172deg,
+      rgba(255, 210, 100, 0.20) 220deg,
+      transparent          268deg,
+      rgba(72,  200, 240, 0.28) 314deg,
+      transparent          360deg),
+    repeating-linear-gradient(22deg,
+      transparent 0 58px, rgba(80, 210, 200, 0.07) 58px 59px, transparent 59px 118px),
+    repeating-linear-gradient(112deg,
+      transparent 0 54px, rgba(180, 100, 240, 0.05) 54px 55px, transparent 55px 110px);
+
+  filter: blur(10px) saturate(140%) brightness(1.06);
+  mix-blend-mode: normal;
+  opacity: 0.92;
+  animation: aurora-daylight 26s ease-in-out infinite alternate;
+}
+
+/* Iridescent sparkle field - ::after */
+body.theme-light .bg-ambient::after {
+  background:
+    radial-gradient(circle, rgba(72,  210, 200, 0.55) 0.9px,  transparent 1.9px),
+    radial-gradient(circle, rgba(200, 110, 240, 0.40) 0.8px,  transparent 1.7px),
+    radial-gradient(circle, rgba(80,  240, 180, 0.45) 0.85px, transparent 1.8px),
+    repeating-linear-gradient(0deg,
+      transparent 0 5px, rgba(80, 200, 200, 0.045) 5px 6px),
+    linear-gradient(180deg, transparent 0%, transparent 68%, rgba(14,42,47,0.08) 100%);
+  background-size:
+    80px 80px, 60px 60px, 72px 72px, 100% 100%, 100% 100%;
+  background-position:
+    0 0, 22px 26px, 34px -10px, 0 0, 0 0;
+  mask-image: radial-gradient(ellipse 90% 80% at 50% 44%, black 58%, transparent 100%);
+  opacity: 0.82;
+  animation: aurora-sparkle-day 32s linear infinite;
+}
+
+@keyframes aurora-daylight {
+  0% {
+    transform: translate3d(-1.8%, 0.6%, 0) scale(1.01) rotate(-0.8deg);
+    filter: blur(10px) saturate(140%) brightness(1.06) hue-rotate(0deg);
+  }
+  33% { filter: blur(11px) saturate(148%) brightness(1.08) hue-rotate(8deg); }
+  66% { filter: blur(9px)  saturate(136%) brightness(1.05) hue-rotate(-6deg); }
+  100% {
+    transform: translate3d(1.6%, -1.2%, 0) scale(1.05) rotate(0.9deg);
+    filter: blur(10px) saturate(144%) brightness(1.07) hue-rotate(4deg);
+  }
+}
+
+@keyframes aurora-sparkle-day {
+  0%   { background-position: 0 0, 22px 26px, 34px -10px, 0 0, 0 0; }
+  100% { background-position: 120px -80px, -68px 108px, 88px 96px, 0 0, 0 0; }
+}
+
+/* Frosted glass on all major surfaces */
+body.theme-light .site-header,
+body.theme-light .chat-shell,
+body.theme-light .chat-header,
+body.theme-light .chat-input-wrap,
+body.theme-light .chat-suggestions,
+body.theme-light .name-card,
+body.theme-light .timeline-item,
+body.theme-light .card,
+body.theme-light .skills-card,
+body.theme-light .contact-panel {
+  backdrop-filter: blur(18px) saturate(160%);
+  -webkit-backdrop-filter: blur(18px) saturate(160%);
+}
+
+body.theme-light .site-header {
+  background: rgba(220, 250, 248, 0.72);
+  border-color: rgba(100, 200, 210, 0.60);
+  box-shadow: 0 2px 24px rgba(72,210,200,0.16), 0 1px 0 rgba(255,255,255,0.60) inset;
+}
+body.theme-light .chat-shell {
+  background: rgba(232, 252, 250, 0.68);
+  border-color: rgba(100, 200, 210, 0.60);
+  box-shadow: 8px 8px 0 rgba(72,210,200,0.28), 0 0 60px rgba(80,200,240,0.12);
+}
+body.theme-light .chat-header,
+body.theme-light .chat-input-wrap {
+  background: rgba(210, 248, 244, 0.78);
+  border-color: rgba(100, 200, 210, 0.50);
+}
+body.theme-light .chat-msg.user {
+  background: rgba(160, 230, 244, 0.68);
+  border-color: rgba(80, 200, 220, 0.58);
+}
+body.theme-light .chat-msg.assistant {
+  background: rgba(255, 255, 255, 0.82);
+  border-color: rgba(100, 200, 210, 0.48);
+}
+body.theme-light .chat-q-btn {
+  background: rgba(255, 255, 255, 0.55);
+  border-color: rgba(80, 190, 210, 0.55);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.80), 0 1px 8px rgba(72,210,200,0.12);
+}
+body.theme-light .chat-q-btn:hover:not(:disabled) {
+  background: rgba(255, 255, 255, 0.72);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.90), 0 4px 16px rgba(72,210,200,0.22);
+}
+body.theme-light .name-card {
+  background: rgba(224, 252, 248, 0.74);
+  border-color: rgba(100, 200, 210, 0.60);
+  box-shadow: 6px 6px 0 rgba(72, 210, 200, 0.30);
+}
+body.theme-light .timeline-item {
+  background: rgba(255, 255, 255, 0.68);
+  border-color: rgba(100, 200, 210, 0.55);
+  box-shadow: 4px 4px 0 rgba(72, 210, 200, 0.20);
+}
+body.theme-light .card {
+  background: rgba(240, 252, 250, 0.70);
+  border-color: rgba(100, 200, 210, 0.55);
+}
+body.theme-light .card:hover {
+  transform: translate(-2px, -2px);
+  box-shadow: 6px 6px 0 rgba(160, 100, 240, 0.28);
+}
+body.theme-light .skills-card {
+  background: rgba(232, 252, 248, 0.72);
+  border-color: rgba(100, 200, 210, 0.55);
+  box-shadow: 6px 6px 0 rgba(72, 210, 200, 0.30);
+}
+body.theme-light .skills-card:hover {
+  box-shadow: 10px 10px 0 rgba(180, 100, 240, 0.28);
+}
+body.theme-light .project-card {
+  background: rgba(228, 250, 248, 0.76);
+  border-color: rgba(100, 200, 210, 0.60);
+  box-shadow: 8px 8px 0 rgba(72, 210, 200, 0.32);
+}
+body.theme-light .project-card:hover {
+  box-shadow: 12px 12px 0 rgba(180, 100, 240, 0.30);
+}
+body.theme-light .theme-toggle {
+  background: rgba(210, 248, 244, 0.84);
+  color: var(--ink);
+  border-color: rgba(100, 200, 210, 0.62);
+}
+body.theme-light .theme-toggle .theme-toggle-knob {
+  background: #fff; color: #0e2a2f;
+}
+body.theme-light .top-social-link {
+  background: rgba(220, 250, 248, 0.70);
+  border-color: rgba(100, 200, 210, 0.60);
+}
+body.theme-light .skill-chip,
+body.theme-light .project-tags span {
+  background: rgba(220, 250, 248, 0.72);
+  border-color: rgba(80, 190, 210, 0.52);
+}
+body.theme-light .hero-left .hero-photo {
+  box-shadow: 8px 8px 0 rgba(72, 210, 200, 0.36);
+  border-color: rgba(100, 200, 210, 0.62);
+  background: rgba(224, 252, 248, 0.60);
+}
+body.theme-light .contact-panel {
+  background: rgba(224, 252, 250, 0.90);
+  border-color: rgba(100, 200, 210, 0.60);
+}
+body.theme-light .contact-panel-form input,
+body.theme-light .contact-panel-form textarea {
+  background: rgba(240, 252, 250, 0.80);
+  border-color: rgba(100, 200, 210, 0.55);
+}
+body.theme-light .section,
+body.theme-light .site-footer {
+  border-top-color: rgba(100, 200, 210, 0.40);
+}
