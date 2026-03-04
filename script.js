@@ -423,6 +423,64 @@ const chatReplies = {
     "Highlighted projects include appointo.ai, AI voice scheduling agent, IEEE object detection research, risk prediction models, and AI Research Agent."
 };
 
+const normalizeText = (value) =>
+  (value || '')
+    .toLowerCase()
+    .replace(/\s+/g, ' ')
+    .trim();
+
+const tokenize = (value) => normalizeText(value).split(/[^a-z0-9+.#-]+/).filter(Boolean);
+
+const mapIntentToReplyKey = {
+  INTRO: 'introduction',
+  EXPERIENCE: 'experience',
+  SKILLS: 'skills',
+  EDUCATION: 'education',
+  PROJECT_VOICE_AGENT: 'projects',
+  PROJECT_IEEE: 'projects'
+};
+
+const inferIntentFromFaqId = (faqId = '') => {
+  const id = faqId.toLowerCase();
+  if (id.includes('intro')) return 'introduction';
+  if (id.includes('role') || id.includes('internship') || id.includes('azure')) return 'experience';
+  if (id.includes('skill')) return 'skills';
+  if (id.includes('voice') || id.includes('ieee') || id.includes('project')) return 'projects';
+  return null;
+};
+
+const findBestFaq = (userInput) => {
+  const normalized = normalizeText(userInput);
+  if (!normalized) return null;
+  const userTokens = new Set(tokenize(normalized));
+
+  let bestMatch = null;
+  let bestScore = 0;
+
+  knowledgeBase.faqs.forEach((faq) => {
+    faq.match.forEach((phrase) => {
+      const normalizedPhrase = normalizeText(phrase);
+      const phraseTokens = tokenize(normalizedPhrase);
+
+      let score = 0;
+      if (normalized.includes(normalizedPhrase)) {
+        score += 6 + Math.min(phraseTokens.length, 5);
+      }
+
+      phraseTokens.forEach((token) => {
+        if (userTokens.has(token)) score += 1;
+      });
+
+      if (score > bestScore) {
+        bestScore = score;
+        bestMatch = faq;
+      }
+    });
+  });
+
+  return bestScore >= 4 ? bestMatch : null;
+};
+
 const appendMessage = (role, text) => {
   if (!chatWindow) return;
   const msg = document.createElement('div');
@@ -433,51 +491,27 @@ const appendMessage = (role, text) => {
 };
 
 const detectIntent = (userInput) => {
-  const normalized = userInput.toLowerCase();
-  const doc = typeof nlp === 'function' ? nlp(userInput) : null;
-  const hasNoun = doc ? doc.has('#Noun') : false;
+  const normalized = normalizeText(userInput);
+  const userTokens = tokenize(normalized);
 
-  if (
-    normalized.includes('work') ||
-    normalized.includes('job') ||
-    normalized.includes('company')
-  ) {
-    return 'experience';
+  if (/^(more|tell me more|elaborate|expand|can you expand|details)\b/.test(normalized)) {
+    return chatState.lastIntent || 'introduction';
   }
 
-  if (
-    normalized.includes('skills') ||
-    normalized.includes('stack') ||
-    normalized.includes('python')
-  ) {
-    return 'skills';
-  }
+  const scoreByIntent = {};
+  knowledgeBase.intents.forEach(({ intent, keywords }) => {
+    let score = 0;
+    keywords.forEach((keyword) => {
+      const k = normalizeText(keyword);
+      if (normalized.includes(k)) score += 3;
+      else if (userTokens.some((token) => k.includes(token) || token.includes(k))) score += 1;
+    });
+    scoreByIntent[intent] = score;
+  });
 
-  if (
-    normalized.includes('education') ||
-    normalized.includes('college') ||
-    normalized.includes('b.tech') ||
-    normalized.includes('degree')
-  ) {
-    return 'education';
-  }
-
-  if (
-    normalized.includes('introduce') ||
-    normalized.includes('introduction') ||
-    normalized.includes('about') ||
-    normalized.includes('who')
-  ) {
-    return 'introduction';
-  }
-
-  if (
-    normalized.includes('ieee') ||
-    normalized.includes('paper') ||
-    normalized.includes('research') ||
-    hasNoun
-  ) {
-    return 'projects';
+  const bestIntent = Object.entries(scoreByIntent).sort((a, b) => b[1] - a[1])[0];
+  if (bestIntent && bestIntent[1] > 0) {
+    return mapIntentToReplyKey[bestIntent[0]] || 'introduction';
   }
 
   return chatState.lastIntent || 'introduction';
@@ -488,9 +522,45 @@ const respondToMessage = (userText) => {
   if (!trimmed) return;
 
   appendMessage('user', trimmed);
+  const normalized = normalizeText(trimmed);
+
+  const faq = findBestFaq(trimmed);
+  if (faq) {
+    const inferredIntent = inferIntentFromFaqId(faq.id);
+    if (inferredIntent) chatState.lastIntent = inferredIntent;
+    appendMessage('assistant', faq.answer);
+    return;
+  }
+
+  if (normalized.includes('contact') || normalized.includes('email') || normalized.includes('linkedin')) {
+    chatState.lastIntent = 'introduction';
+    appendMessage(
+      'assistant',
+      `You can reach me at ${knowledgeBase.contact.email} or LinkedIn: ${knowledgeBase.contact.linkedin}.`
+    );
+    return;
+  }
+
+  if (normalized.includes('project') && (normalized.includes('list') || normalized.includes('all') || normalized.includes('show'))) {
+    chatState.lastIntent = 'projects';
+    const topProjects = knowledgeBase.projects.slice(0, 5).map((project) => project.name).join(', ');
+    appendMessage('assistant', `Here are a few key projects: ${topProjects}.`);
+    return;
+  }
+
   const intent = detectIntent(trimmed);
   chatState.lastIntent = intent;
-  appendMessage('assistant', chatReplies[intent] || chatReplies.introduction);
+
+  const reply = chatReplies[intent] || chatReplies.introduction;
+  if (reply) {
+    appendMessage('assistant', reply);
+    return;
+  }
+
+  appendMessage(
+    'assistant',
+    'I can help with introduction, experience, projects, skills, education, or contact details. Try one of those topics.'
+  );
 };
 
 if (chatWindow && chatForm && chatInput && chatSuggestions) {
