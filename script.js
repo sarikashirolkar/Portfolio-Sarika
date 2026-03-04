@@ -373,7 +373,7 @@ const knowledgeBase = {
       id: "hobbies",
       match: ["what are your hobbies", "what do you do for fun", "hobbies", "interests outside work"],
       answer:
-        "Outside of tech, I enjoy trekking and going on adventures in the wild — it keeps me curious, resilient, and connected to nature. On the tech side, I attend meetups and conferences (Microsoft, GDG, IEEE) and I like building small AI agents and ML prototypes."
+        "I love trekking and going on outdoor adventures. I also enjoy attending IEEE events, Google events (GDG), and Microsoft events to stay connected with the builder community and keep learning."
     }
   ],
 
@@ -490,6 +490,33 @@ const appendMessage = (role, text) => {
   chatWindow.scrollTop = chatWindow.scrollHeight;
 };
 
+const appendImageMessage = (role, src, alt) => {
+  if (!chatWindow) return;
+  const msg = document.createElement('div');
+  msg.className = `chat-msg ${role} media`;
+
+  const image = document.createElement('img');
+  image.className = 'chat-media-image';
+  image.src = src;
+  image.alt = alt;
+  image.loading = 'lazy';
+  msg.appendChild(image);
+
+  chatWindow.appendChild(msg);
+  chatWindow.scrollTop = chatWindow.scrollHeight;
+};
+
+const sendHobbiesShowcase = () => {
+  const hobbiesFaq = knowledgeBase.faqs.find((faq) => faq.id === 'hobbies');
+  appendMessage(
+    'assistant',
+    hobbiesFaq?.answer ||
+      "I love trekking and attending IEEE, GDG, and Microsoft events."
+  );
+  appendImageMessage('assistant', 'hobby-trekking.jpg', 'Sarika trekking');
+  appendImageMessage('assistant', 'hobby-gdg.jpg', 'Sarika at a GDG event');
+};
+
 const detectIntent = (userInput) => {
   const normalized = normalizeText(userInput);
   const userTokens = tokenize(normalized);
@@ -528,6 +555,10 @@ const respondToMessage = (userText) => {
   if (faq) {
     const inferredIntent = inferIntentFromFaqId(faq.id);
     if (inferredIntent) chatState.lastIntent = inferredIntent;
+    if (faq.id === 'hobbies') {
+      sendHobbiesShowcase();
+      return;
+    }
     appendMessage('assistant', faq.answer);
     return;
   }

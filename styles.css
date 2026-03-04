@@ -718,6 +718,19 @@ h3 {
   width: 78px;
 }
 
+.chat-msg.media {
+  padding: 0.35rem;
+  overflow: hidden;
+}
+
+.chat-media-image {
+  display: block;
+  width: min(100%, 320px);
+  height: auto;
+  border-radius: 10px;
+  border: 2px solid var(--border);
+}
+
 .chat-input-wrap {
   border-top: 2px solid var(--header-line);
   background: var(--surface-soft);
