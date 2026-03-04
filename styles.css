@@ -721,12 +721,17 @@ h3 {
 .chat-msg.media {
   padding: 0.35rem;
   overflow: hidden;
+  width: min(86%, 340px);
+  max-width: min(86%, 340px);
+  line-height: 0;
 }
 
 .chat-media-image {
   display: block;
-  width: min(100%, 320px);
+  width: 100%;
   height: auto;
+  max-height: 260px;
+  object-fit: contain;
   border-radius: 10px;
   border: 2px solid var(--border);
 }

@@ -499,7 +499,7 @@ const appendImageMessage = (role, src, alt) => {
   image.className = 'chat-media-image';
   image.src = new URL(src, document.baseURI).toString();
   image.alt = alt;
-  image.loading = 'lazy';
+  image.loading = 'eager';
   image.decoding = 'async';
   image.onerror = () => {
     msg.remove();
