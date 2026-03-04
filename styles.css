@@ -473,26 +473,6 @@ body.theme-light .theme-toggle .theme-toggle-knob {
   color: var(--ink);
 }
 
-.btn-social {
-  background: #17395a;
-  color: #f5fbff;
-  border-color: #93bde6;
-}
-
-.btn-social:hover {
-  background: #204d78;
-}
-
-body.theme-light .btn-social {
-  background: #1e4a72;
-  color: #f8fdff;
-  border-color: #6ca8cf;
-}
-
-body.theme-light .btn-social:hover {
-  background: #275c8c;
-}
-
 main {
   width: min(100% - 2rem, var(--max));
   margin: 0 auto;
