@@ -702,6 +702,7 @@ h3 {
   padding: 0.55rem 0.72rem;
   font-size: 0.95rem;
   line-height: 1.5;
+  flex-shrink: 0;
 }
 
 .chat-msg.user {
