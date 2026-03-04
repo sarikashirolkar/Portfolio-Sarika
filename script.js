@@ -501,6 +501,10 @@ const appendImageMessage = (role, src, alt) => {
   image.alt = alt;
   image.loading = 'eager';
   image.decoding = 'async';
+  image.onload = () => {
+    if (!chatWindow) return;
+    chatWindow.scrollTop = chatWindow.scrollHeight;
+  };
   image.onerror = () => {
     msg.remove();
     appendMessage('assistant', `Could not load image: ${src}`);
