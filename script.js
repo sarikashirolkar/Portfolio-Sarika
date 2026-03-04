@@ -497,9 +497,14 @@ const appendImageMessage = (role, src, alt) => {
 
   const image = document.createElement('img');
   image.className = 'chat-media-image';
-  image.src = src;
+  image.src = new URL(src, document.baseURI).toString();
   image.alt = alt;
   image.loading = 'lazy';
+  image.decoding = 'async';
+  image.onerror = () => {
+    msg.remove();
+    appendMessage('assistant', `Could not load image: ${src}`);
+  };
   msg.appendChild(image);
 
   chatWindow.appendChild(msg);
@@ -612,6 +617,12 @@ if (chatWindow && chatForm && chatInput && chatSuggestions) {
     if (!clicked) return;
     const suggestionText = clicked.dataset.q;
     if (!suggestionText) return;
+    if (normalizeText(suggestionText).includes('hobbies')) {
+      appendMessage('user', suggestionText);
+      sendHobbiesShowcase();
+      chatInput.focus();
+      return;
+    }
     respondToMessage(suggestionText);
     chatInput.focus();
   });
