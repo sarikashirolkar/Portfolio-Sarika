@@ -133,6 +133,7 @@ const contactPanelPhone = document.querySelector('#contact-phone');
 const contactPanelMessage = document.querySelector('#contact-message');
 const contactPanelStatus = document.querySelector('#contact-panel-status');
 const bodyNode = document.body;
+const chatApiUrl = (window.CHAT_API_URL || bodyNode?.dataset?.chatApiUrl || '').trim();
 const contactApiUrl = bodyNode?.dataset?.contactApiUrl?.trim() || '/contact';
 
 const knowledgeBase = {
@@ -431,6 +432,55 @@ const normalizeText = (value) =>
 
 const tokenize = (value) => normalizeText(value).split(/[^a-z0-9+.#-]+/).filter(Boolean);
 
+const knowledgeDocuments = [
+  {
+    topic: 'profile',
+    text: `${knowledgeBase.profile.fullName} - ${knowledgeBase.profile.headline}. ${knowledgeBase.profile.summary}`
+  },
+  {
+    topic: 'education',
+    text: `${knowledgeBase.education.degree} at ${knowledgeBase.education.university}, CGPA ${knowledgeBase.education.cgpa}, graduating ${knowledgeBase.education.graduationYear}.`
+  },
+  ...[knowledgeBase.roles.current, ...knowledgeBase.roles.previous].map((role) => ({
+    topic: 'experience',
+    text: `${role.title} at ${role.company} (${role.start} to ${role.end}). ${role.highlights.join(' ')}`
+  })),
+  ...knowledgeBase.projects.map((project) => ({
+    topic: 'projects',
+    text: `${project.name}. ${project.oneLiner}${project.details?.length ? ` ${project.details.join(' ')}` : ''}`
+  })),
+  ...Object.entries(knowledgeBase.skills).map(([category, skills]) => ({
+    topic: 'skills',
+    text: `${category}: ${skills.join(', ')}.`
+  })),
+  ...knowledgeBase.leadership.ieee.map((item) => ({ topic: 'leadership', text: item })),
+  ...knowledgeBase.leadership.other.map((item) => ({ topic: 'leadership', text: item }))
+];
+
+const rankKnowledgeDocuments = (query) => {
+  const queryTokens = tokenize(query);
+  if (!queryTokens.length) return [];
+
+  return knowledgeDocuments
+    .map((doc) => {
+      const docText = normalizeText(doc.text);
+      let score = 0;
+      queryTokens.forEach((token) => {
+        if (docText.includes(token)) score += token.length > 4 ? 2 : 1;
+      });
+      return { ...doc, score };
+    })
+    .filter((doc) => doc.score > 0)
+    .sort((a, b) => b.score - a.score)
+    .slice(0, 2);
+};
+
+const buildLocalKnowledgeAnswer = (query) => {
+  const ranked = rankKnowledgeDocuments(query);
+  if (!ranked.length) return null;
+  return ranked.map((doc) => doc.text).join(' ');
+};
+
 const mapIntentToReplyKey = {
   INTRO: 'introduction',
   EXPERIENCE: 'experience',
@@ -553,7 +603,39 @@ const detectIntent = (userInput) => {
   return chatState.lastIntent || 'introduction';
 };
 
-const respondToMessage = (userText) => {
+const fetchChatApiAnswer = async (question) => {
+  if (!chatApiUrl) return null;
+  const controller = new AbortController();
+  const timeoutId = window.setTimeout(() => controller.abort(), 12000);
+
+  try {
+    const baseUrl = chatApiUrl.replace(/\/+$/, '');
+    const response = await fetch(baseUrl, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ question }),
+      signal: controller.signal
+    });
+
+    if (!response.ok) return null;
+    const payload = await response.json();
+    const answer = String(payload?.answer || '').trim();
+    const sources = Array.isArray(payload?.sources) ? payload.sources.filter(Boolean) : [];
+    if (!answer) return null;
+    return {
+      answer,
+      sources
+    };
+  } catch (error) {
+    return null;
+  } finally {
+    window.clearTimeout(timeoutId);
+  }
+};
+
+const respondToMessage = async (userText) => {
   const trimmed = userText.trim();
   if (!trimmed) return;
 
@@ -569,6 +651,19 @@ const respondToMessage = (userText) => {
       return;
     }
     appendMessage('assistant', faq.answer);
+    return;
+  }
+
+  const apiAnswer = await fetchChatApiAnswer(trimmed);
+  if (apiAnswer?.answer) {
+    const sourceText = apiAnswer.sources?.length ? `\n\nSources: ${apiAnswer.sources.join(', ')}` : '';
+    appendMessage('assistant', `${apiAnswer.answer}${sourceText}`);
+    return;
+  }
+
+  const localKnowledgeAnswer = buildLocalKnowledgeAnswer(trimmed);
+  if (localKnowledgeAnswer) {
+    appendMessage('assistant', localKnowledgeAnswer);
     return;
   }
 
@@ -609,14 +704,14 @@ if (chatWindow && chatForm && chatInput && chatSuggestions) {
     'Hi, I am Sarika\'s chatbot. Ask about my introduction, experience, education, projects, or skills.'
   );
 
-  chatForm.addEventListener('submit', (event) => {
+  chatForm.addEventListener('submit', async (event) => {
     event.preventDefault();
-    respondToMessage(chatInput.value);
+    await respondToMessage(chatInput.value);
     chatInput.value = '';
     chatInput.focus();
   });
 
-  chatSuggestions.addEventListener('click', (event) => {
+  chatSuggestions.addEventListener('click', async (event) => {
     const clicked = event.target.closest('.chat-q-btn');
     if (!clicked) return;
     const suggestionText = clicked.dataset.q;
@@ -627,7 +722,7 @@ if (chatWindow && chatForm && chatInput && chatSuggestions) {
       chatInput.focus();
       return;
     }
-    respondToMessage(suggestionText);
+    await respondToMessage(suggestionText);
     chatInput.focus();
   });
 }

@@ -12,8 +12,9 @@ A static single-page portfolio for Sarika S Shirolkar, built with plain HTML, CS
 - `styles.css`: visual design, layout, and responsive behavior
 - `script.js`: scroll reveal, active nav, projects carousel, AI assistant interactions
 - `resume.pdf`: downloadable resume
-- `cloudflare/worker.js`: secure OpenAI proxy for chatbot
+- `cloudflare/worker.js`: LangChain-based RAG worker for chatbot
 - `cloudflare/wrangler.toml.example`: Cloudflare Worker config template
+- `cloudflare/package.json`: Worker dependencies (LangChain + Wrangler)
 
 ## Run Locally
 
@@ -32,7 +33,7 @@ The site includes an AI assistant section.
 How it works:
 - Frontend chat UI is in `index.html` + `styles.css` + `script.js`
 - If no API endpoint is configured, it uses a local resume-based fallback response map
-- For live ChatGPT answers, connect to the Cloudflare Worker backend
+- For grounded AI answers, connect to the Cloudflare Worker backend (LangChain retrieval + OpenAI)
 
 ### Configure Frontend Endpoint
 
@@ -55,29 +56,35 @@ Set your Worker URL in either one:
 From `cloudflare/`:
 
 1. Copy `wrangler.toml.example` to `wrangler.toml`
-2. Install Wrangler and login:
+2. Install dependencies:
 
 ```sh
-npm i -g wrangler
+npm install
+```
+
+3. Login to Wrangler:
+
+```sh
 wrangler login
 ```
 
-3. Set your secret API key:
+4. Set your secret API key:
 
 ```sh
 wrangler secret put OPENAI_API_KEY
 ```
 
-4. Deploy:
+5. Deploy:
 
 ```sh
 wrangler deploy
 ```
 
-5. Put deployed Worker URL into `data-chat-api-url` in `index.html`
+6. Put deployed Worker URL into `data-chat-api-url` in `index.html`
 
 Optional vars in `wrangler.toml`:
 - `OPENAI_MODEL` (default: `gpt-5-mini`)
+- `EMBEDDING_MODEL` (default: `text-embedding-3-small`)
 - `ALLOWED_ORIGIN` (set to your site origin for strict CORS)
 
 ## Deploy to GitHub Pages

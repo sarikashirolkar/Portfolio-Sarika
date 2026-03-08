@@ -4,6 +4,7 @@ compatibility_date = "2026-02-13"
 
 [vars]
 OPENAI_MODEL = "gpt-5-mini"
+EMBEDDING_MODEL = "text-embedding-3-small"
 # Set this to your live site URL for strict CORS, e.g. "https://sarikashirolkar.github.io"
 ALLOWED_ORIGIN = "*"
 CONTACT_FROM_EMAIL = "sarikasharada123@gmail.com"
