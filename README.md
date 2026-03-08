@@ -35,6 +35,46 @@ How it works:
 - If no API endpoint is configured, it uses a local resume-based fallback response map
 - For grounded AI answers, connect to the Cloudflare Worker backend (LangChain retrieval + OpenAI)
 
+### Local Ollama Setup (No Paid API Key)
+
+This option runs fully local with an open-source model through Ollama.
+
+1. Start Ollama:
+
+```sh
+ollama serve
+```
+
+2. Pull a model once (example):
+
+```sh
+ollama pull llama3.2:3b
+```
+
+3. Start local backend from repo root:
+
+```sh
+python3 local_chat_server.py
+```
+
+4. Point frontend chat endpoint to local server:
+
+```html
+<body data-chat-api-url="http://127.0.0.1:8008/chat">
+```
+
+or
+
+```html
+<script>window.CHAT_API_URL = "http://127.0.0.1:8008/chat";</script>
+```
+
+Optional environment vars for the local backend:
+- `OLLAMA_MODEL` (default: `llama3.2:3b`)
+- `OLLAMA_URL` (default: `http://127.0.0.1:11434/api/generate`)
+- `CHAT_HOST` (default: `127.0.0.1`)
+- `CHAT_PORT` (default: `8008`)
+
 ### Configure Frontend Endpoint
 
 Set your Worker URL in either one:
