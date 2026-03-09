@@ -27,7 +27,7 @@ const applyTheme = (theme) => {
 };
 
 const savedTheme = localStorage.getItem(THEME_STORAGE_KEY);
-applyTheme(savedTheme === 'dark' ? 'dark' : 'light');
+applyTheme(savedTheme === 'light' ? 'light' : 'dark');
 
 if (themeToggle) {
   themeToggle.addEventListener('click', () => {
