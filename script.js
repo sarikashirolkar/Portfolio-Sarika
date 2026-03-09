@@ -26,8 +26,7 @@ const applyTheme = (theme) => {
   themeToggle.setAttribute('aria-label', isLight ? 'Switch to dark theme' : 'Switch to light theme');
 };
 
-const savedTheme = localStorage.getItem(THEME_STORAGE_KEY);
-applyTheme(savedTheme === 'light' ? 'light' : 'dark');
+applyTheme('dark');
 
 if (themeToggle) {
   themeToggle.addEventListener('click', () => {
