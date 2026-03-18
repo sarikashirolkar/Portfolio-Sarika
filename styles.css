@@ -80,7 +80,9 @@ body.theme-light {
 
 html {
   scroll-behavior: smooth;
+  scroll-snap-type: y proximity;
 }
+
 
 html,
 body {
@@ -485,6 +487,7 @@ main {
 .section {
   padding: 4.2rem 0;
   border-top: 2px solid var(--header-line);
+  scroll-snap-align: start;
 }
 
 .hero {
