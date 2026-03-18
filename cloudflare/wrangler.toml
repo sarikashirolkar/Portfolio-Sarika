@@ -1,0 +1,12 @@
+name = "sarika-portfolio-worker"
+main = "worker.js"
+compatibility_date = "2026-02-13"
+
+[vars]
+OPENAI_MODEL = "gpt-4o-mini"
+ALLOWED_ORIGIN = "*"
+CONTACT_TO_EMAIL = "sarikashirolkar@gmail.com"
+# Secrets (set via CLI, never in this file):
+# wrangler secret put OPENAI_API_KEY
+# wrangler secret put RESEND_API_KEY
+# wrangler secret put CONTACT_FROM_EMAIL
