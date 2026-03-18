@@ -700,7 +700,7 @@ const respondToMessage = async (userText) => {
 if (chatWindow && chatForm && chatInput && chatSuggestions) {
   appendMessage(
     'assistant',
-    'Hi, I am Sarika\'s chatbot. Ask about my introduction, experience, education, projects, or skills.'
+    'Hey! I\'m Sarika\'s assistant. Ask me anything about what her tech brain has been building!'
   );
 
   chatForm.addEventListener('submit', async (event) => {
