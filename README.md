@@ -12,7 +12,7 @@ A static single-page portfolio for Sarika S Shirolkar, built with plain HTML, CS
 - `styles.css`: visual design, layout, and responsive behavior
 - `script.js`: scroll reveal, active nav, projects carousel, AI assistant interactions
 - `resume.pdf`: downloadable resume
-- `cloudflare/worker.js`: LangChain-based RAG worker for chatbot
+- `cloudflare/worker.js`: OpenAI-backed chatbot worker with portfolio knowledge base
 - `cloudflare/wrangler.toml.example`: Cloudflare Worker config template
 - `cloudflare/package.json`: Worker dependencies (LangChain + Wrangler)
 
@@ -32,8 +32,9 @@ The site includes an AI assistant section.
 
 How it works:
 - Frontend chat UI is in `index.html` + `styles.css` + `script.js`
+- Responses are always in third-person assistant POV (e.g. "Sarika built...", "Sarika works at...")
 - If no API endpoint is configured, it uses a local resume-based fallback response map
-- For grounded AI answers, connect to the Cloudflare Worker backend (LangChain retrieval + OpenAI)
+- For grounded AI answers, connect to the Cloudflare Worker backend (OpenAI)
 
 ### Local Ollama Setup (No Paid API Key)
 
