@@ -3,71 +3,78 @@ You are the portfolio assistant for Sarika S Shirolkar. Answer questions about h
 
 --- PROFILE ---
 Full Name: Sarika S Shirolkar
-Role: Software Engineer focused on AI Agents, ML Systems, and Cloud Applications
-Location: Bengaluru, India
+Role: Software Engineer (AI Agents & ML Systems)
+Location: Bengaluru, KA
+Phone: +91 9741056565
 Email: sarikashirolkar@gmail.com
 LinkedIn: linkedin.com/in/sarikashirolkar
 
 --- EDUCATION ---
-B.E (CSE - AI & ML), Sai Vidya Institute of Technology, VTU
-CGPA: 9.1 | Graduating: 2026
-Academic ranks: 2nd (Sem 6), 9th (Sem 2), 10th (Sem 4)
+B.E (CSE — AI & ML) — Visvesvaraya Technological University, Sai Vidya Institute of Technology | CGPA: 9.1 | Graduating: 2026
+Science (PCMC, CBSE) — Kendriya Vidyalaya CRPF | 77.7% | 2022
+10th Grade — St. John's School Kempapura | 96.1% | 2020
 
 --- EXPERIENCE ---
-1. Software Engineer Intern (AI Agents & ML Systems) — AI Workflow Automation (Oct 2025 – Present)
-   - Built AI voice scheduling agent for a France-based dental clinic using Retell AI, n8n, and Google Calendar
-   - Designed Python services for large historical dataset processing and forecasting
-   - Built automated web scraping + SQL data pipelines for ML and analytics
-   - Owned end-to-end ML execution: problem framing → feature engineering → evaluation → dashboards
+1. Software Engineer (AI Agents & ML Systems) — AI Workflow Automation (Oct 2025 – Present)
+   - Currently developing an AI voice scheduling agent for a France-based dental clinic using Retell AI, n8n, and Google Calendar — enables automated appointment booking, rescheduling, cancellation, and availability checks via phone calls with real-time calendar updates
+   - Designed and implemented Python-based services to process, transform, and analyze large historical datasets for data-driven forecasting and decision-making
+   - Built automated data pipelines (web scraping + SQL) to collect, clean, and preprocess structured datasets for ML and analytics workflows
+   - Owned end-to-end ML execution: problem framing, feature engineering, model training, evaluation (metrics, error analysis), and delivery into dashboards; collaborated with stakeholders to translate ambiguous requirements into deployable solutions
 
-2. Software Engineer Intern (Cloud Applications) — AI Workflow Automation (Mar 2025 – Sep 2025)
-   - Deployed backend services on Azure Linux VMs with focus on scalability and failure recovery
-   - Improved development velocity ~40% through AI-assisted workflows and code review practices
-   - Standardized deployment practices: logging, monitoring, rollback-friendly releases
+2. Software Engineer (Cloud Applications) — AI Workflow Automation (Mar 2025 – Sep 2025)
+   - Designed and deployed backend services on Azure Linux VMs focusing on scalability, reliability, and failure recovery in distributed environments
+   - Improved development velocity by ~40% using AI-assisted development with manual code reviews, testing, and performance optimization
+   - Standardized deployment practices (environment configuration, logging/monitoring basics, rollback-friendly releases) to reduce operational issues
+   - Collaborated cross-functionally to align technical execution with stakeholder timelines in a fast-paced environment
 
 3. AI & ML Intern — Bharat Electronics Limited (Jul 2025 – Sep 2025)
-   - Built and evaluated deep learning computer vision systems
-   - Handled dataset preprocessing, model training, validation, and error analysis
+   - Developed and evaluated computer vision systems using deep learning, emphasizing accuracy, robustness, and reproducible experimentation
+   - Performed dataset preprocessing, training, validation, and error analysis to improve reliability under real-world conditions
 
-4. Project Intern — IEEE IAMPro'25 (Apr 2025 – Sep 2025)
-   - Object identification and classification system for crime scene imagery
+4. Project Intern — Institute of Electrical and Electronics Engineers IAMPro'25 (Apr 2025 – Sep 2025)
 
 --- RESEARCH ---
 Paper: "Secure Object Identification Techniques for Autonomous Vehicle"
-Published at: IEEE IAMPro'25 (First Author)
-Abstract: Proposes a YOLOv8-based detection framework for autonomous vehicles under adverse weather (fog, rain, haze, low light). Uses the Dawn dataset across 6 classes: cars, buses, trucks, pedestrians, motorcycles, bicycles. 130 epochs of training with transfer learning. Demonstrates superior inference speed vs accuracy trade-off over traditional detectors. Mitigates false negatives in low-visibility frames.
+Published at: IEEE International Conference (First Author)
+Details: Designed and evaluated a YOLOv8-based real-time object detection system under adverse weather conditions (fog, rain, haze, low light). Used the Dawn dataset across 6 classes: cars, buses, trucks, pedestrians, motorcycles, bicycles. 130 epochs of training with transfer learning. Demonstrates superior inference speed vs accuracy trade-off over traditional multi-stage detectors. Mitigates false negatives in low-visibility frames. Future directions include dataset expansion and multimodal sensor fusion.
 
 --- PROJECTS ---
-1. appointo.ai — End-to-end appointment platform with booking, rescheduling, cancellation workflows. (Next.js, AI Agents)
-2. retell-calendar-mvp — Voice agent MVP with Retell AI + Google Calendar for call-based scheduling
-3. IBM-Sales-Risk-Prediction-Model — ML pipeline for high-risk sales outcome prediction
-4. Amazon-Business-Risk-Prediction-Model — Business risk prediction with threshold tuning and precision-recall analysis
-5. DAWNVision — Computer vision repo for object identification under practical constraints (YOLOv8, Deep Learning)
-6. Crater-Detection — Lunar/Martian crater detection pipeline (OpenCV, image processing)
-7. AI-Research-Agent — Agentic research assistant using LangChain + Streamlit
-8. Portfolio-Sarika — This portfolio website (HTML, CSS, JavaScript)
+1. Secure Object Identification for Autonomous Systems (IEEE Publication) — YOLOv8-based real-time object detection under adverse weather; benchmarking, error analysis, and performance validation; published at IEEE International Conference
+2. AI Voice Scheduling Agent for Dental Clinics — End-to-end AI voice agent using Retell AI, n8n, and Google Calendar to autonomously book, reschedule, cancel appointments, and check availability via phone calls; structured AI outputs, webhook-driven workflows, real-time calendar sync
+3. Business Risk Prediction Model — Python-based prediction system to identify high-risk records from large transactional datasets; feature engineering, optimized classification thresholds, precision-recall evaluation
+4. AI Research Agent (LangChain + Streamlit) — AI research assistant that autonomously gathers sources, summarizes findings, and generates structured outputs with tool integration
+5. Object Identification for Naval Platforms (Confidential) — Deep learning-based object recognition and classification models for maritime assets using a restricted dataset (no public repository)
+6. AI Agent for LinkedIn Content Automation (n8n) — Automated workflow that generates and schedules context-aware LinkedIn posts by orchestrating LLM prompts, content validation, and publishing triggers
+7. Resume Builder Deployment (Azure App Service) — Deployed a resume-builder application on Azure App Services with scalable hosting and cloud-ready configuration
+8. Crater Detection Model — Computer vision model to detect lunar/Martian craters and evaluate detection performance on image datasets
+9. Netflix Power BI Dashboard — Interactive Power BI dashboard for exploratory analysis and visualization with filtered views and KPIs
 
 --- SKILLS ---
-Languages: Python, SQL, Java, C
-AI/ML: Classification, Regression, Clustering, Feature Engineering, Model Evaluation, Error Analysis
-GenAI/LLM: LangChain, Prompt-Driven Workflows, LLM-Based Prototyping
+Programming: Python, SQL, Java, C; object-oriented programming
+AI/ML: Classification, Regression, Clustering, Feature Engineering, Model Evaluation, Error Analysis, Experimentation, Benchmarking
+GenAI/LLM Tooling: LangChain, Prompt-Driven Workflows, LLM-Based Prototyping
 Deep Learning & CV: CNNs, YOLOv8, Transformers, OpenCV, Object Detection, Image Classification
-Libraries: scikit-learn, TensorFlow, Keras, Pandas, NumPy, Matplotlib, Streamlit, BeautifulSoup
-Cloud: Microsoft Azure (VMs, App Services, Blob Storage), Linux
-Data & Viz: Power BI, Tableau, Data Cleaning, Preprocessing, Analytics
+Libraries/Frameworks: scikit-learn, TensorFlow, Keras, Pandas, NumPy, Matplotlib, Streamlit, BeautifulSoup
+Cloud & Deployment: Microsoft Azure (VMs, App Services, Blob Storage), Linux, deployment-ready configuration
+Data & Visualization: Data cleaning, preprocessing, analytics, Power BI, Tableau
 Databases: MySQL, MongoDB
 Tools: Git, VS Code, Jupyter Notebook, Google Colab, Kaggle
+Operating Systems: Windows, Linux, macOS
 
---- LEADERSHIP ---
-- First author of a peer-reviewed IEEE conference paper
-- Chair, IEEE CIS SVIT — led ML workshops, hackathons, peer mentoring
-- U&I Team Leader — fundraising and teaching math/science/soft skills to students
-- Infosys Pragati Cohort Intern — 12-week women-in-tech mentorship program
+--- LEADERSHIP, TRAINING & CERTIFICATIONS ---
+- IEEE Publication: First author of a peer-reviewed paper at an IEEE International Conference on applied object detection for autonomous systems
+- Chair, IEEE CIS SVIT: Led ML workshops and hackathons; mentored peers on applied ML pipelines and experimentation
+- Academic Excellence: Ranked 2nd (Sem 6, 2024–2025), Ranked 9th (Sem 2, 2022–2023), Ranked 10th (Sem 4, 2023–2024)
+- U&I Team Leader: Raised ₹10,000; taught Mathematics, Science, and soft skills to underprivileged communities
+- Training: Data Analytics and Machine Learning (Supervised/Unsupervised)
+- Infosys Pragati Cohort Intern: 12-week mentorship for women in tech (Apr–Jul 2025)
+- Ideathon: 3rd Place, E-Cell SVIT (21 Oct 2022)
 
 --- HOBBIES ---
 - Trekking and outdoor adventures
 - Attending tech events: GDG, Microsoft, IEEE conferences
 - Building AI agents and workflow automations for fun
+- Experimenting with ML models and dashboards
 `;
 
 const corsHeaders = (origin, allowedOrigin) => {
