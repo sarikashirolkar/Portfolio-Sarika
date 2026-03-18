@@ -141,7 +141,7 @@ const knowledgeBase = {
     headline: "Software Engineer (AI Agents & ML Systems) | Data Analyst | ML Engineer | IEEE Leader",
     location: "Bengaluru, KA",
     summary:
-      "I build practical AI agents and ML systems — from voice scheduling agents to ML prediction pipelines, and I deploy cloud apps on Azure."
+      "Sarika builds practical AI agents and ML systems — from voice scheduling agents to ML prediction pipelines, and deploys cloud apps on Azure."
   },
 
   roles: {
@@ -291,7 +291,7 @@ const knowledgeBase = {
       "Experimenting with ML models and dashboards"
     ],
     whyItMatters:
-      "Trekking keeps me resilient and curious, and tech events keep me updated and connected to builders."
+      "Trekking keeps Sarika resilient and curious, and tech events keep her updated and connected to builders."
   },
 
   leadership: {
@@ -315,13 +315,13 @@ const knowledgeBase = {
       id: "intro",
       match: ["who are you", "tell me about yourself", "introduce yourself", "give me your summary"],
       answer:
-        "I’m Sarika S Shirolkar, a Software Engineer focused on AI agents and ML systems. I build practical automation — like AI voice scheduling agents — and end-to-end ML pipelines, and I deploy cloud applications on Azure."
+        "Sarika S Shirolkar is a Software Engineer focused on AI agents and ML systems. She builds practical automation — like AI voice scheduling agents — and end-to-end ML pipelines, and deploys cloud applications on Azure."
     },
     {
       id: "current-role",
       match: ["what do you do currently", "current job", "where do you work now", "your role at ai workflow automation"],
       answer:
-        "I’m a Software Engineer (AI Agents & ML Systems) at AI Workflow Automation (Oct 2025–Present), building AI voice agents and ML/data pipelines for decision-making and dashboards."
+        "Sarika is a Software Engineer (AI Agents & ML Systems) at AI Workflow Automation (Oct 2025–Present), building AI voice agents and ML/data pipelines for decision-making and dashboards."
     },
     {
       id: "voice-agent",
@@ -332,7 +332,7 @@ const knowledgeBase = {
         "retell n8n google calendar project"
       ],
       answer:
-        "I built an AI voice scheduling agent using Retell AI + n8n + Google Calendar that can book, reschedule, cancel appointments, and check availability via calls, while syncing updates to the calendar in real time using webhook-driven workflows."
+        "Sarika built an AI voice scheduling agent using Retell AI + n8n + Google Calendar that can book, reschedule, cancel appointments, and check availability via calls, while syncing updates to the calendar in real time using webhook-driven workflows."
     },
     {
       id: "ieee-paper",
@@ -343,37 +343,37 @@ const knowledgeBase = {
         "yolov8 project"
       ],
       answer:
-        "My IEEE project focuses on secure object identification for autonomous systems using YOLOv8 for real-time object detection under adverse weather, with benchmarking, error analysis, and performance validation published at an IEEE international conference."
+        "Sarika's IEEE project focuses on secure object identification for autonomous systems using YOLOv8 for real-time object detection under adverse weather, with benchmarking, error analysis, and performance validation published at an IEEE international conference."
     },
     {
       id: "azure-experience",
       match: ["azure experience", "cloud deployment experience", "what have you deployed on azure", "linux vm experience"],
       answer:
-        "I’ve deployed backend services on Azure Linux VMs and deployed cloud apps via Azure App Service. I also use Azure Blob Storage and follow deployment practices like logging/monitoring basics and rollback-friendly releases."
+        "Sarika has deployed backend services on Azure Linux VMs and cloud apps via Azure App Service. She also uses Azure Blob Storage and follows deployment practices like logging/monitoring basics and rollback-friendly releases."
     },
     {
       id: "ml-process",
       match: ["how do you build a machine learning model", "your ml workflow", "how do you approach ml projects"],
       answer:
-        "I approach ML end-to-end: define the problem and success metrics, prepare and clean data, engineer features, train and evaluate models (including error analysis), iterate on thresholds/metrics, and deliver results into dashboards or deployable outputs."
+        "Sarika approaches ML end-to-end: defining the problem and success metrics, preparing and cleaning data, engineering features, training and evaluating models (including error analysis), iterating on thresholds/metrics, and delivering results into dashboards or deployable outputs."
     },
     {
       id: "internship-bel",
       match: ["bharat electronics internship", "what did you do at bel"],
       answer:
-        "At Bharat Electronics Limited, I worked on deep learning computer vision systems — preprocessing datasets, training/validation, and doing error analysis to improve robustness in real-world conditions."
+        "At Bharat Electronics Limited, Sarika worked on deep learning computer vision systems — preprocessing datasets, training/validation, and doing error analysis to improve robustness in real-world conditions."
     },
     {
       id: "skills",
       match: ["what are your core skills", "skills", "tools you use"],
       answer:
-        "Core: Python, SQL, ML evaluation + error analysis, YOLOv8/CV, LangChain + Streamlit for prototypes, and Azure (VMs, App Service, Blob Storage). I also build dashboards in Power BI."
+        "Sarika's core stack: Python, SQL, ML evaluation + error analysis, YOLOv8/CV, LangChain + Streamlit for prototypes, and Azure (VMs, App Service, Blob Storage). She also builds dashboards in Power BI."
     },
     {
       id: "hobbies",
       match: ["what are your hobbies", "what do you do for fun", "hobbies", "interests outside work"],
       answer:
-        "I love trekking and going on outdoor adventures. I also enjoy attending IEEE events, Google events (GDG), and Microsoft events to stay connected with the builder community and keep learning."
+        "Sarika loves trekking and going on outdoor adventures. She also enjoys attending IEEE events, Google events (GDG), and Microsoft events to stay connected with the builder community and keep learning."
     }
   ],
 
@@ -412,15 +412,15 @@ const chatState = {
 
 const chatReplies = {
   introduction:
-    "I’m Sarika S Shirolkar, a Software Engineer focused on AI agents, ML systems, and cloud applications on Azure.",
+    "Sarika S Shirolkar is a Software Engineer focused on AI agents, ML systems, and cloud applications on Azure.",
   experience:
-    "I’m currently a Software Engineer (AI Agents & ML Systems) at AI Workflow Automation, and I have prior experience in Cloud Applications and Computer Vision internships.",
+    "Sarika is currently a Software Engineer (AI Agents & ML Systems) at AI Workflow Automation, with prior experience in Cloud Applications and Computer Vision internships.",
   skills:
-    "Core stack includes Python, C, Java, MySQL, ML workflows, YOLOv8/OpenCV, LangChain, TensorFlow/Keras, Azure, Power BI, Tableau, and MongoDB.",
+    "Sarika’s core stack includes Python, C, Java, MySQL, ML workflows, YOLOv8/OpenCV, LangChain, TensorFlow/Keras, Azure, Power BI, Tableau, and MongoDB.",
   education:
-    "I’m pursuing B.E. in CSE (AI & ML) at VTU - Sai Vidya Institute of Technology with a CGPA of 9.1 (Graduating in 2026).",
+    "Sarika is pursuing B.E. in CSE (AI & ML) at VTU - Sai Vidya Institute of Technology with a CGPA of 9.1 (Graduating in 2026).",
   projects:
-    "Highlighted projects include appointo.ai, AI voice scheduling agent, IEEE object detection research, risk prediction models, and AI Research Agent."
+    "Sarika’s highlighted projects include an AI voice scheduling agent, IEEE object detection research, risk prediction models, and an AI Research Agent."
 };
 
 const normalizeText = (value) =>
