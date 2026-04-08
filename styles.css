@@ -80,6 +80,7 @@ body.theme-light {
 
 html {
   scroll-behavior: smooth;
+  scroll-padding-top: 5rem;
 }
 
 
@@ -312,6 +313,8 @@ body.theme-light .bg-ambient::after {
   text-decoration: none;
   color: var(--ink);
   font-size: 0.95rem;
+  font-family: "Syne", sans-serif;
+  font-weight: 700;
 }
 
 .main-nav a.is-active {
@@ -389,6 +392,7 @@ body.theme-light .bg-ambient::after {
   color: #fff;
   border: 2px solid var(--border);
   padding: 0.66rem 1rem;
+  font-family: "Syne", sans-serif;
   font-weight: 700;
   transition: transform 0.2s ease, background 0.2s ease;
 }
@@ -409,6 +413,7 @@ body.theme-light .bg-ambient::after {
   background: #000;
   color: var(--ink);
   font: inherit;
+  font-family: "Syne", sans-serif;
   font-size: 0.84rem;
   font-weight: 700;
   letter-spacing: 0.04em;
@@ -1255,14 +1260,24 @@ body.theme-light .skills-card:hover {
 
 .reveal {
   opacity: 0;
-  transform: translateY(16px);
-  transition: opacity 0.55s ease, transform 0.55s ease;
+  transform: translateY(40px);
+  transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .reveal.show {
   opacity: 1;
   transform: translateY(0);
 }
+
+/* Stagger children inside timelines and grids */
+.timeline .reveal:nth-child(2) { transition-delay: 0.1s; }
+.timeline .reveal:nth-child(3) { transition-delay: 0.2s; }
+.timeline .reveal:nth-child(4) { transition-delay: 0.3s; }
+.skills-grid .skills-card:nth-child(2) { transition-delay: 0.05s; }
+.skills-grid .skills-card:nth-child(3) { transition-delay: 0.1s; }
+.skills-grid .skills-card:nth-child(4) { transition-delay: 0.15s; }
+.skills-grid .skills-card:nth-child(5) { transition-delay: 0.2s; }
+.skills-grid .skills-card:nth-child(6) { transition-delay: 0.25s; }
 
 @media (max-width: 860px) {
   .site-header {

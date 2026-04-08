@@ -46,7 +46,7 @@ const revealObserver = new IntersectionObserver(
       }
     });
   },
-  { threshold: 0.16 }
+  { threshold: 0.08 }
 );
 
 revealItems.forEach((item) => revealObserver.observe(item));
@@ -138,30 +138,30 @@ const contactApiUrl = bodyNode?.dataset?.contactApiUrl?.trim() || '/contact';
 const knowledgeBase = {
   profile: {
     fullName: "Sarika S Shirolkar",
-    headline: "Software Engineer (AI Agents & ML Systems) | Data Analyst | ML Engineer | IEEE Leader",
+    headline: "AI Engineer | Agentic AI · LLM Systems · Cloud Deployment",
     location: "Bengaluru, KA",
     summary:
-      "Sarika builds practical AI agents and ML systems — from voice scheduling agents to ML prediction pipelines, and deploys cloud apps on Azure."
+      "Sarika is an AI engineer and builder with end-to-end product ownership. She shipped Linkyro, a solo-built AI Chrome extension, and builds agentic AI systems, LLM orchestration, and scalable cloud deployments."
   },
 
   roles: {
     current: {
-      title: "Software Engineer (AI Agents & ML Systems)",
-      company: "AI Workflow Automation",
+      title: "AI Engineer",
+      company: "AI Workflow Automate",
       start: "Oct 2025",
       end: "Present",
       highlights: [
-        "Building an AI voice scheduling agent for a France-based dental clinic using Retell AI, n8n, and Google Calendar.",
-        "Designed Python services for large historical datasets for forecasting and decision-making.",
-        "Built automated data pipelines (web scraping + SQL) for ML/analytics.",
-        "Owned ML execution end-to-end: framing → features → training → evaluation → dashboards."
+        "Built and shipped Linkyro, a solo-built AI-powered Chrome extension (live on Chrome Web Store) for context-aware comment generation using LLMs.",
+        "Built and deployed voice scheduling agents using Retell AI + LLM orchestration with n8n, handling real-time conversations and Google Calendar integration.",
+        "Owned AI product development end-to-end: problem framing, AI pipeline design, model integration, production deployment, and iteration based on real user feedback.",
+        "Designed AI evaluation pipelines including error analysis, failure-case reduction, and performance benchmarking."
       ],
       source: "resume"
     },
     previous: [
       {
-        title: "Software Engineer (Cloud Applications)",
-        company: "AI Workflow Automation",
+        title: "Software Engineer (Cloud & AI Infrastructure)",
+        company: "AI Workflow Automate",
         start: "Mar 2025",
         end: "Sep 2025",
         highlights: [
@@ -370,6 +370,12 @@ const knowledgeBase = {
         "Sarika's core stack: Python, SQL, ML evaluation + error analysis, YOLOv8/CV, LangChain + Streamlit for prototypes, and Azure (VMs, App Service, Blob Storage). She also builds dashboards in Power BI."
     },
     {
+      id: "hackathon-wins",
+      match: ["hackathon", "hackathon wins", "hackathon win", "databricks hackathon", "agentic ai hackathon", "hackmarch", "competitions", "prizes"],
+      answer:
+        "Sarika has won two hackathons! She secured 2nd Place at the Databricks Hackathon, where she built Kisan Mitra — a dual-purpose AI assistant for farming families using Databricks and Spark SQL. She also won 1st Place at the Agentic AI Hackathon (HackMarch 2.0) with a cash prize of ₹15,000, where she built the Ebbinghaus Adaptive Memory Agent — a full-stack spaced-repetition app with AI-driven scheduling. Builder mentality validated in competitive, time-constrained environments!"
+    },
+    {
       id: "hobbies",
       match: ["what are your hobbies", "what do you do for fun", "hobbies", "interests outside work"],
       answer:
@@ -564,6 +570,17 @@ const appendImageMessage = (role, src, alt) => {
   chatWindow.scrollTop = chatWindow.scrollHeight;
 };
 
+const sendHackathonShowcase = () => {
+  const hackathonFaq = knowledgeBase.faqs.find((faq) => faq.id === 'hackathon-wins');
+  appendMessage(
+    'assistant',
+    hackathonFaq?.answer ||
+      "Sarika won 2nd Place at the Databricks Hackathon and 1st Place at the Agentic AI Hackathon (HackMarch 2.0) with a ₹15,000 prize!"
+  );
+  appendImageMessage('assistant', 'hackathon-databricks.jpg', 'Sarika at Databricks Hackathon — 2nd Place');
+  appendImageMessage('assistant', 'hackathon-agenticai.jpg', 'Sarika at Agentic AI Hackathon — 1st Place');
+};
+
 const sendHobbiesShowcase = () => {
   const hobbiesFaq = knowledgeBase.faqs.find((faq) => faq.id === 'hobbies');
   appendMessage(
@@ -649,6 +666,10 @@ const respondToMessage = async (userText) => {
       sendHobbiesShowcase();
       return;
     }
+    if (faq.id === 'hackathon-wins') {
+      sendHackathonShowcase();
+      return;
+    }
     appendMessage('assistant', faq.answer);
     return;
   }
@@ -718,6 +739,12 @@ if (chatWindow && chatForm && chatInput && chatSuggestions) {
     if (normalizeText(suggestionText).includes('hobbies')) {
       appendMessage('user', suggestionText);
       sendHobbiesShowcase();
+      chatInput.focus();
+      return;
+    }
+    if (normalizeText(suggestionText).includes('hackathon')) {
+      appendMessage('user', suggestionText);
+      sendHackathonShowcase();
       chatInput.focus();
       return;
     }
