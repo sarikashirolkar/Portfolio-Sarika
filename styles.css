@@ -128,10 +128,9 @@ body {
     radial-gradient(500px 280px at 84% 34%, var(--ambient-glow-4), transparent 68%),
     repeating-linear-gradient(28deg, transparent 0 56px, var(--mesh-line) 56px 57px, transparent 57px 112px),
     repeating-linear-gradient(118deg, transparent 0 52px, var(--mesh-line-2) 52px 53px, transparent 53px 106px);
-  filter: none;
-  mix-blend-mode: normal;
-  animation: none;
-  opacity: 0.72;
+  filter: blur(12px) saturate(110%);
+  mix-blend-mode: screen;
+  animation: aura-drift 22s ease-in-out infinite alternate;
 }
 
 .bg-ambient::after {
@@ -153,9 +152,9 @@ body {
     32px -12px,
     0 0,
     0 0;
-  mask-image: none;
+  mask-image: radial-gradient(circle at 50% 46%, black 66%, transparent 100%);
   opacity: 0.62;
-  animation: none;
+  animation: aura-sparkle 28s linear infinite;
 }
 
 body:not(.theme-light) .bg-ambient {
@@ -173,10 +172,10 @@ body:not(.theme-light) .bg-ambient::before {
     radial-gradient(760px 300px at 36% 44%, rgba(116, 85, 255, 0.24) 0%, transparent 66%),
     conic-gradient(from 210deg at 52% 34%, transparent 0deg, rgba(85, 255, 204, 0.28) 74deg, transparent 156deg, rgba(98, 165, 255, 0.24) 240deg, transparent 360deg),
     repeating-linear-gradient(24deg, transparent 0 54px, rgba(118, 192, 255, 0.08) 54px 55px, transparent 55px 110px);
-  filter: none;
-  mix-blend-mode: normal;
+  filter: blur(14px) saturate(124%);
+  mix-blend-mode: screen;
   opacity: 0.95;
-  animation: none;
+  animation: aurora-wave 24s ease-in-out infinite alternate;
 }
 
 body:not(.theme-light) .bg-ambient::after {
@@ -195,9 +194,9 @@ body:not(.theme-light) .bg-ambient::after {
     20px 30px,
     38px -14px,
     0 0;
-  mask-image: none;
+  mask-image: radial-gradient(circle at 50% 42%, black 72%, transparent 100%);
   opacity: 0.8;
-  animation: none;
+  animation: aura-sparkle 34s linear infinite;
 }
 
 body.theme-light .bg-ambient::before {
@@ -210,7 +209,7 @@ body.theme-light .bg-ambient::before {
     radial-gradient(500px 280px at 84% 34%, var(--ambient-glow-4), transparent 68%),
     repeating-linear-gradient(28deg, transparent 0 56px, var(--mesh-line) 56px 57px, transparent 57px 112px),
     repeating-linear-gradient(118deg, transparent 0 52px, var(--mesh-line-2) 52px 53px, transparent 53px 106px);
-  filter: none;
+  filter: blur(8px) saturate(112%);
   mix-blend-mode: normal;
   opacity: 0.93;
 }
@@ -238,7 +237,7 @@ body.theme-light .bg-ambient::after {
     0 0,
     0 0;
   opacity: 0.78;
-  mask-image: none;
+  mask-image: radial-gradient(circle at 50% 44%, black 82%, transparent 100%);
 }
 
 @keyframes aura-drift {
