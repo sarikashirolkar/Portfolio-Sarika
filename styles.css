@@ -81,6 +81,7 @@ body.theme-light {
 html {
   scroll-behavior: smooth;
   scroll-padding-top: 5rem;
+  scroll-snap-type: y proximity;
 }
 
 
@@ -492,6 +493,8 @@ main {
 .section {
   padding: 4.2rem 0;
   border-top: 2px solid var(--header-line);
+  scroll-snap-align: start;
+  scroll-snap-stop: normal;
 }
 
 .section:not(.hero) {
@@ -505,6 +508,7 @@ main {
   display: grid;
   align-content: center;
   border-top: 0;
+  scroll-snap-align: start;
 }
 
 .hero-assistant-layout {
@@ -1286,6 +1290,10 @@ body.theme-light .skills-card:hover {
 .skills-grid .skills-card:nth-child(6) { transition-delay: 0.25s; }
 
 @media (max-width: 860px) {
+  html {
+    scroll-snap-type: none;
+  }
+
   .site-header {
     top: 0.4rem;
     margin-top: 0.4rem;
@@ -1445,6 +1453,10 @@ body.theme-light .skills-card:hover {
 }
 
 @media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-snap-type: none;
+  }
+
   .bg-ambient::before {
     animation: none;
   }
