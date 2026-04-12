@@ -91,7 +91,7 @@ body {
 }
 
 body {
-  font-family: "Space Grotesk", sans-serif;
+  font-family: "Avenir Next", "Segoe UI", "Helvetica Neue", Arial, sans-serif;
   background: var(--bg);
   color: var(--ink);
   line-height: 1.55;
@@ -127,9 +127,10 @@ body {
     radial-gradient(500px 280px at 84% 34%, var(--ambient-glow-4), transparent 68%),
     repeating-linear-gradient(28deg, transparent 0 56px, var(--mesh-line) 56px 57px, transparent 57px 112px),
     repeating-linear-gradient(118deg, transparent 0 52px, var(--mesh-line-2) 52px 53px, transparent 53px 106px);
-  filter: blur(12px) saturate(110%);
-  mix-blend-mode: screen;
-  animation: aura-drift 22s ease-in-out infinite alternate;
+  filter: none;
+  mix-blend-mode: normal;
+  animation: none;
+  opacity: 0.72;
 }
 
 .bg-ambient::after {
@@ -151,9 +152,9 @@ body {
     32px -12px,
     0 0,
     0 0;
-  mask-image: radial-gradient(circle at 50% 46%, black 66%, transparent 100%);
+  mask-image: none;
   opacity: 0.62;
-  animation: aura-sparkle 28s linear infinite;
+  animation: none;
 }
 
 body:not(.theme-light) .bg-ambient {
@@ -171,10 +172,10 @@ body:not(.theme-light) .bg-ambient::before {
     radial-gradient(760px 300px at 36% 44%, rgba(116, 85, 255, 0.24) 0%, transparent 66%),
     conic-gradient(from 210deg at 52% 34%, transparent 0deg, rgba(85, 255, 204, 0.28) 74deg, transparent 156deg, rgba(98, 165, 255, 0.24) 240deg, transparent 360deg),
     repeating-linear-gradient(24deg, transparent 0 54px, rgba(118, 192, 255, 0.08) 54px 55px, transparent 55px 110px);
-  filter: blur(14px) saturate(124%);
-  mix-blend-mode: screen;
+  filter: none;
+  mix-blend-mode: normal;
   opacity: 0.95;
-  animation: aurora-wave 24s ease-in-out infinite alternate;
+  animation: none;
 }
 
 body:not(.theme-light) .bg-ambient::after {
@@ -193,9 +194,9 @@ body:not(.theme-light) .bg-ambient::after {
     20px 30px,
     38px -14px,
     0 0;
-  mask-image: radial-gradient(circle at 50% 42%, black 72%, transparent 100%);
+  mask-image: none;
   opacity: 0.8;
-  animation: aura-sparkle 34s linear infinite;
+  animation: none;
 }
 
 body.theme-light .bg-ambient::before {
@@ -208,7 +209,7 @@ body.theme-light .bg-ambient::before {
     radial-gradient(500px 280px at 84% 34%, var(--ambient-glow-4), transparent 68%),
     repeating-linear-gradient(28deg, transparent 0 56px, var(--mesh-line) 56px 57px, transparent 57px 112px),
     repeating-linear-gradient(118deg, transparent 0 52px, var(--mesh-line-2) 52px 53px, transparent 53px 106px);
-  filter: blur(8px) saturate(112%);
+  filter: none;
   mix-blend-mode: normal;
   opacity: 0.93;
 }
@@ -236,7 +237,7 @@ body.theme-light .bg-ambient::after {
     0 0,
     0 0;
   opacity: 0.78;
-  mask-image: radial-gradient(circle at 50% 44%, black 82%, transparent 100%);
+  mask-image: none;
 }
 
 @keyframes aura-drift {
@@ -297,7 +298,7 @@ body.theme-light .bg-ambient::after {
 }
 
 .brand {
-  font-family: "Syne", sans-serif;
+  font-family: "Avenir Next", "Segoe UI", "Helvetica Neue", Arial, sans-serif;
   font-weight: 800;
   font-size: 1.15rem;
   text-decoration: none;
@@ -313,7 +314,7 @@ body.theme-light .bg-ambient::after {
   text-decoration: none;
   color: var(--ink);
   font-size: 0.95rem;
-  font-family: "Syne", sans-serif;
+  font-family: "Avenir Next", "Segoe UI", "Helvetica Neue", Arial, sans-serif;
   font-weight: 700;
 }
 
@@ -392,7 +393,7 @@ body.theme-light .bg-ambient::after {
   color: #fff;
   border: 2px solid var(--border);
   padding: 0.66rem 1rem;
-  font-family: "Syne", sans-serif;
+  font-family: "Avenir Next", "Segoe UI", "Helvetica Neue", Arial, sans-serif;
   font-weight: 700;
   transition: transform 0.2s ease, background 0.2s ease;
 }
@@ -413,7 +414,7 @@ body.theme-light .bg-ambient::after {
   background: #000;
   color: var(--ink);
   font: inherit;
-  font-family: "Syne", sans-serif;
+  font-family: "Avenir Next", "Segoe UI", "Helvetica Neue", Arial, sans-serif;
   font-size: 0.84rem;
   font-weight: 700;
   letter-spacing: 0.04em;
@@ -493,6 +494,11 @@ main {
   border-top: 2px solid var(--header-line);
 }
 
+.section:not(.hero) {
+  content-visibility: auto;
+  contain-intrinsic-size: 1px 900px;
+}
+
 .hero {
   min-height: calc(100vh - 7.5rem);
   padding: 1.3rem 0 1.6rem;
@@ -526,7 +532,7 @@ main {
 .hero-title,
 h2,
 h3 {
-  font-family: "Syne", sans-serif;
+  font-family: "Avenir Next", "Segoe UI", "Helvetica Neue", Arial, sans-serif;
 }
 
 .hero-title {
@@ -686,7 +692,7 @@ h3 {
 
 .chat-title {
   margin: 0;
-  font-family: "Syne", sans-serif;
+  font-family: "Avenir Next", "Segoe UI", "Helvetica Neue", Arial, sans-serif;
   font-size: 1.02rem;
 }
 
